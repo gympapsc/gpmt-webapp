@@ -1,0 +1,70 @@
+name: Deploy to Azure Web Services
+
+on:
+    push:
+        branches: [ master ]
+
+env:
+    AZURE_WEBAPP_NAME: gpmt
+    AZURE_WEBAPP_PACKAGE_PATH: './out'
+    NODE_VERSION: '14.x'
+
+jobs:
+    install-deps:
+        name: Install dependencies    
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v2
+
+        - name: Use Node.js ${{ env.NODE_VERSION }}
+          uses: actions/setup-node@v1
+          with:
+            node-version: ${{ env.NODE_VERSION }}
+
+        - name: Cache node modules
+          id: cache-node
+          uses: actions/cache@v2
+          with:
+            path: node_modules
+            key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+            restore-keys: ${{ runner.os }}-node-
+
+        - name: npm install
+          if: steps.cache-node.outputs.cache-hit != 'true'
+          run: npm ci
+
+    unittest:
+        name: Testing
+        runs-on: ubuntu-latest
+        needs: install-deps
+        steps:
+        - name: Run jest unittest
+          run: npm run test
+    
+    build:
+        name: Build Next.js
+        runs-on: ubuntu-latest
+        needs: unittest
+        steps:
+        - name: Build next js application
+          run: npm run build
+    
+    deploy-prod:
+        name: Deploy to Azure
+        needs: build
+        runs-on: ubuntu-latest
+        environment: production
+        steps:
+        - name: Login with Azure
+          uses: azure/login@v1
+          with:
+            creds: '${{ env.AZURE_CREDENTIALS }}'
+
+        - name: Deploy to Azure Web Service
+          uses: azure/webapps-deploy@v2
+          with:
+            app-name: ${{ env.AZURE_WEBAPP_NAME }}
+            package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
+        - name: Sign out of Azure        
+          run: az logout
