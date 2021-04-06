@@ -38,6 +38,7 @@ jobs:
     
     deploy:
         name: Build and Deploy web app
+        needs: test
         runs-on: ubuntu-latest
         environment: production
         steps:
