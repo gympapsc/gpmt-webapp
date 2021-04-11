@@ -1,4 +1,4 @@
-name: Deploy to Azure Web Services
+name: Deploy to Azure App Services
 
 on:
     push:
@@ -10,8 +10,8 @@ env:
     NODE_VERSION: '14.x'
 
 jobs:
-    test:
-        name: Test
+    unittest:
+        name: Unittest
         runs-on: ubuntu-latest
         steps:
         - uses: actions/checkout@v2
@@ -34,8 +34,39 @@ jobs:
           run: npm ci
         
         - name: Run jest unittest
-          run: npm run test
-    
+          run: npm run test:unit
+        
+    e2e-test:
+        name: End-to-end test
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v2
+ 
+        - name: Use Node.js ${{ env.NODE_VERSION }}
+          uses: actions/setup-node@v1
+          with:
+            node-version: ${{ env.NODE_VERSION }}
+
+        - name: Cache node modules
+          id: cache-node
+          uses: actions/cache@v2
+          with:
+            path: node_modules
+            key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+            restore-keys: ${{ runner.os }}-node-
+
+        - name: npm install
+          if: steps.cache-node.outputs.cache-hit != 'true'
+          run: npm ci
+ 
+        - name: Run jest e2e test
+          run: npm run test:e2e     
+
+        - uses: actions/upload-artifact@v2
+          with:
+            name: test-results
+            path: results
+
     deploy:
         name: Build and deploy web app
         needs: test
