@@ -11,7 +11,6 @@ export default function Index() {
             </Head>
             <h1>Hello World</h1>
             <Link href="/home">Go to Home</Link>
-            <img src="/clouds.jpeg" />
         </div>
     )
 }
