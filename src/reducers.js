@@ -14,6 +14,14 @@ const reducer = (state=initialState, action) => {
                     }    
                 ]
             }
+        case "ADD_MESSAGES":
+            if (action.payload.messages.length > 0) {
+                return {
+                    ...state,
+                    messages: action.payload.messages
+                }
+            }
+            return state
         case "SET_AUTH_TOKEN":
             return {
                 ...state,

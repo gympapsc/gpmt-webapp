@@ -1,17 +1,31 @@
-export const utterMessage = (message) => ({
+export const utterMessage = (text) => ({
     type: "UTTER_MESSAGE",
     payload: {
         sender: "user",
-        message
+        text
     }
 })
 
-export const addMessage = (message, sender, timestamp) => ({
+export const addMessage = (text, sender, timestamp) => ({
     type: "ADD_MESSAGE",
     payload: {
         sender,
-        message,
+        text,
         timestamp
+    }
+})
+
+export const addMessages = messages => ({
+    type: "ADD_MESSAGES",
+    payload: {
+        messages
+    }
+})
+
+export const loadMessages = (startDate) => ({
+    type: "LOAD_MESSAGES",
+    payload: {
+        startDate
     }
 })
 

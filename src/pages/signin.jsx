@@ -15,7 +15,6 @@ const Signin = () => {
     const submit = e => {
         e.preventDefault()
         dispatch(signinUser(email, password))
-        console.log(email, password)
     }
 
     return (

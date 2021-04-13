@@ -4,24 +4,25 @@ import { eventChannel, END } from 'redux-saga'
 import {
     setAuthToken,
     addMessage,
+    addMessages,
     setUser
 } from './actions'
 
 import createIOClient from './api/io'
 import createHTTPClient from './api/http'
 let httpClient
-let dataSocket
-let messageSocket
+let socket
 
-function messageReceiver() {
+function receiver() {
     return eventChannel(emitter => {
-        if (!messageSocket) {
+        if (!socket) {
             // throw error
             emitter(END)
             return () => {}
         }
-        messageSocket.on("ADD_MESSAGE", message => {
-            emitter(message)  
+
+        socket.on("ADD_MESSAGE", message => {
+            emitter(message)
         })
     
         return () => {
@@ -31,20 +32,19 @@ function messageReceiver() {
 }
 
 function* sendMessage(action) {
-    if(!messageSocket) {
+    if(!socket) {
         // throw error
         return
     }
-    
-    const message = yield call(messageSocket.emit, "ADD_MESSAGE", {
+       
+    const message = yield call(socket.emitAsync, "ADD_MESSAGE", {
         text: action.payload.text
     })
-    yield put(addMessage(message.text, "user", message.timestamp))
-    
+    yield put(addMessage(message.text, "user", message.timestamp))    
 }
 
 function* receiveMessages() {
-    const channel = yield call(messageReceiver)
+    const channel = yield call(receiver)
     try {
         while(true) {
             let message = yield take(channel)
@@ -55,25 +55,15 @@ function* receiveMessages() {
     }
 }
 
-function dataReceiver() {
-    return eventChannel(emitter => {
-        
-        if(!dataSocket) {
-            emitter(END)
-        }
-    })
-}
-
-function* sendData() {}
-
-function* receiveData() {
-    const channel = yield call(dataReceiver)
-    try {
-        while(true) {
-            let data = yield take(channel)
-        }
-    } finally {
+function* loadMessages(action) {
+    if(!socket) {
+        return
     }
+
+    const messages = yield call(socket.emitAsync, "GET_MESSAGES", {
+        startDate: action.payload.startDate
+    })
+    yield put(addMessages(messages))
 }
 
 function* getAuthToken(action) {
@@ -93,21 +83,19 @@ function* saveAuthToken(action) {
     if(typeof window !== 'undefined') {
         localStorage.setItem('auth_token', action.payload.bearer)
         // create authorized clients
-        httpClient = createHTTPClient(action.payload.bearer)
-        // dataSocket = yield call(createIOClient, "/data", action.payload.bearer)
-        // messageSocket = yield call(createIOClient, "/chat", action.payload.bearer)
-        
-        const { data } = yield call(
-            httpClient.get,
-            "http://localhost:8089/user/"
-        )
-        yield put(setUser(data))
+        httpClient = httpClient || createHTTPClient(action.payload.bearer)
+        if(!socket) {
+            socket = yield call(createIOClient, "/", action.payload.bearer)
+        }
+
+        let user = yield call(socket.emitAsync, "GET_USER_INFO")
+        yield put(setUser(user))
+        yield fork(receiveMessages)
     }
 }
 
-
 function* signinUser(action) {
-    // use of anonymous client for sign in
+    // use anonymous client for sign in
     const anonymousClient = createHTTPClient(null)
     const { data } = yield call(
         anonymousClient.post, 
@@ -119,40 +107,32 @@ function* signinUser(action) {
     )
     if(data.bearer) {
         yield put(setAuthToken(data.bearer))
+
+        // redirect user to home page
+        let { protocol, host } = document.location
+        document.location.assign(`${protocol}//${host}/app`)
+
+
     } else {
         console.warn("Sign in failed")
     }
 }
 
-
 function* signupUser(action) {
-    const {
-        firstname,
-        surname,
-        email,
-        password,
-        birthDate,
-        weight,
-        height
-    } = action.payload
     const anonymousClient = createHTTPClient(null)
     const { data } = yield call(
         anonymousClient.post,
         "/signup",
-        {
-            firstname,
-            surname,
-            email,
-            password,
-            birthDate,
-            weight,
-            height  
-        }
+        action.payload
     )
     if(data.bearer) {
         yield put(setAuthToken(data.bearer))
+
+        // redirect user to home page
+        let { protocol, host } = document.location
+        document.location.assign(`${protocol}//${host}/app`)
     } else {
-        console.warn("Sign up faild")
+        console.warn("Sign up failed")
     }
 }
 
@@ -162,8 +142,7 @@ export default function* root() {
     yield takeLatest("SIGNUP_USER", signupUser)
     yield takeLatest("ASSIGN_USER", getAuthToken)
     
-    yield takeEvery("SEND_MESSAGE", sendMessage)
-
-    yield fork(receiveMessages)
+    yield takeEvery("UTTER_MESSAGE", sendMessage)
+    yield takeEvery("LOAD_MESSAGES", loadMessages)
 }
 

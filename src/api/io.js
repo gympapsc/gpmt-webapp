@@ -2,7 +2,7 @@ import { io } from "socket.io-client"
 
 
 export default function createIOClient(path, authToken) {
-    const socket = io(NEXT_PUBLIC_API_URL + path, {
+    const socket = io(`${process.env.NEXT_PUBLIC_API_URL}${path}`, {
         auth: {
             bearer: authToken
         },
@@ -11,15 +11,10 @@ export default function createIOClient(path, authToken) {
 
     return new Promise((res, rej) => {
         socket.on("connect", () => {
-            emit = socket.emit
-        
-            socket.emit = (event, payload, ack) => {
-                return new Promise((res, rej) => {
-                    emit(event, payload, r => {
-                        res(r)
-                    })
-                })
-            }
+
+            socket.emitAsync = (...args) => new Promise((res, rej) => {
+                socket.emit(...args, response => res(response))
+            })
 
             res(socket)
         })
