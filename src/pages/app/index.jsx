@@ -41,6 +41,7 @@ const App = () => {
             <input 
                 type="text"
                 value={message}
+                placeholder="Message"
                 onChange={e => setMessage(e.target.value)} />
             <button onClick={utter}>
                 Send
