@@ -1,5 +1,6 @@
 const initialState = {
-    messages: []
+    messages: [],
+    user: {}
 }
 
 const reducer = (state=initialState, action) => {
@@ -14,7 +15,7 @@ const reducer = (state=initialState, action) => {
                     }    
                 ]
             }
-        case "ADD_MESSAGES":
+        case "SET_MESSAGES":
             if (action.payload.messages.length > 0) {
                 return {
                     ...state,

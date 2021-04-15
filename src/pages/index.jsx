@@ -10,7 +10,6 @@ export default function Index() {
                 <title>Sample Application</title>
             </Head>
             <h1>Hello World</h1>
-            <Link href="/home">Go to Home</Link>
         </div>
     )
 }

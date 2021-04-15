@@ -22,10 +22,12 @@ const Signin = () => {
             <input 
                 type="text"
                 value={email}
+                placeholder="email"
                 onChange={e => setEmail(e.target.value)} /> <br/>
             <input
                 type="text"
                 value={password}
+                placeholder="password"
                 onChange={e => setPassword(e.target.value)} /> <br/>
             <button>
                 Sign in

@@ -15,23 +15,22 @@ export const addMessage = (text, sender, timestamp) => ({
     }
 })
 
-export const addMessages = messages => ({
-    type: "ADD_MESSAGES",
+export const setMessages = messages => ({
+    type: "SET_MESSAGES",
     payload: {
         messages
     }
 })
 
-export const loadMessages = (startDate) => ({
-    type: "LOAD_MESSAGES",
+export const getMessages = (startDate) => ({
+    type: "GET_MESSAGES",
     payload: {
         startDate
     }
 })
 
 export const assignUser = () => ({
-    type: "ASSIGN_USER",
-    payload: {}
+    type: "ASSIGN_USER"
 })
 
 export const signupUser = ({
@@ -61,6 +60,10 @@ export const signinUser = (email, password) => ({
         email,
         password
     }
+})
+
+export const signoutUser = () => ({
+    type: "SIGNOUT_USER"
 })
 
 export const setAuthToken = (bearer) => ({

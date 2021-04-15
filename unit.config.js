@@ -2,7 +2,7 @@ const path = require("path")
 
 module.exports = {
     collectCoverage: true,
-    coverageDirectory: path.resolve(__dirname, 'results'),
+    coverageDirectory: path.resolve(__dirname, 'coverage'),
     setupFiles: [
         path.resolve(__dirname, './src/polyfills.js')
     ],
@@ -11,6 +11,5 @@ module.exports = {
 	},
 	testPathIgnorePatterns: [
 		'e2e'
-	],
-
+	]
 }

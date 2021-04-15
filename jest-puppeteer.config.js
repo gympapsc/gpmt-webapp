@@ -1,8 +1,8 @@
 module.exports = {
 	launch: {
-		headless: true,
-		slowMo: false,
-		devtools: false
+		headless: false,
+		slowMo: 100,
+		devtools: true
 	},
 	server: {
     	command: 'npm run dev',

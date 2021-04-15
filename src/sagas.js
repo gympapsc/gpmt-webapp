@@ -1,148 +1,142 @@
-import { call, fork, put, take, takeEvery, takeLatest } from 'redux-saga/effects'
+import { call, apply, fork, put, take, } from 'redux-saga/effects'
 import { eventChannel, END } from 'redux-saga'
 
 import {
     setAuthToken,
     addMessage,
-    addMessages,
+    setMessages,
     setUser
 } from './actions'
 
-import createIOClient from './api/io'
-import createHTTPClient from './api/http'
-let httpClient
-let socket
+import {
+    redirect
+} from './utils'
 
-function receiver() {
+import io from './api/io'
+import api from './api/http'
+
+export function receiver() {
     return eventChannel(emitter => {
-        if (!socket) {
+        if (!io.active()) {
             // throw error
             emitter(END)
             return () => {}
         }
 
-        socket.on("ADD_MESSAGE", message => {
-            emitter(message)
+        
+        io.onMessage(message => {
+            emitter(addMessage(message.text, message.sender, message.timestamp))
         })
     
+        // TODO add more socket listeners
+        // stream events to redux store
+
         return () => {
-            messageSocket.close()
+            io.close()
         }
     })
 }
 
-function* sendMessage(action) {
-    if(!socket) {
-        // throw error
-        return
-    }
-       
-    const message = yield call(socket.emitAsync, "ADD_MESSAGE", {
-        text: action.payload.text
-    })
-    yield put(addMessage(message.text, "user", message.timestamp))    
-}
-
-function* receiveMessages() {
+export function* receive() {
     const channel = yield call(receiver)
     try {
         while(true) {
-            let message = yield take(channel)
-            yield put(addMessage(message.text, message.sender, message.timestamp))
+            let action = yield take(channel)
+            yield put(action)
         }
     } finally {
         
     }
 }
 
-function* loadMessages(action) {
-    if(!socket) {
+export function* sendMessage(action) {
+    if(!io.active()) {
+        // throw error
+        return
+    }
+       
+    const message = yield call(
+        io.addMessage,
+        action.payload.text
+    )
+    yield put(addMessage(message.text, "user", message.timestamp))    
+}
+
+export function* getMessages(action) {
+    if(!io.active()) {
         return
     }
 
-    const messages = yield call(socket.emitAsync, "GET_MESSAGES", {
-        startDate: action.payload.startDate
-    })
-    yield put(addMessages(messages))
+    const messages = yield call(
+        io.getMessages,
+        action.payload.startDate
+    )
+    yield put(setMessages(messages))
 }
 
-function* getAuthToken(action) {
+export function* getAuthToken() {
     if(typeof window !== 'undefined') {
-        const token = localStorage.getItem('auth_token')
+        const token = yield apply(localStorage, localStorage.getItem, ['auth_token'])
         if(token) {
-            yield put(setAuthToken(token))         
+            yield put(setAuthToken(token))
         } else {
             // redirect user to sign in page
-            let { protocol, host } = document.location
-            document.location.assign(`${protocol}//${host}/signin`)
+            redirect('/signin')
         }
     }
 }
 
-function* saveAuthToken(action) {
+export function* saveAuthToken(action) {
     if(typeof window !== 'undefined') {
-        localStorage.setItem('auth_token', action.payload.bearer)
-        // create authorized clients
-        httpClient = httpClient || createHTTPClient(action.payload.bearer)
-        if(!socket) {
-            socket = yield call(createIOClient, "/", action.payload.bearer)
-        }
+        yield apply(localStorage, localStorage.setItem, ['auth_token', action.payload.bearer])
+        // create authorized client
+        yield call(io.init, action.payload.bearer)
 
-        let user = yield call(socket.emitAsync, "GET_USER_INFO")
+        let user = yield call(io.getUserInfo)
         yield put(setUser(user))
-        yield fork(receiveMessages)
+        yield fork(receive)
     }
 }
 
-function* signinUser(action) {
+export function* signinUser(action) {
     // use anonymous client for sign in
-    const anonymousClient = createHTTPClient(null)
+    yield call(api.init) 
     const { data } = yield call(
-        anonymousClient.post, 
-        "/signin",
-        {
-            email: action.payload.email,
-            password: action.payload.password
-        }
+        api.signinUser,
+        action.payload.email,
+        action.payload.password
     )
     if(data.bearer) {
         yield put(setAuthToken(data.bearer))
 
         // redirect user to home page
-        let { protocol, host } = document.location
-        document.location.assign(`${protocol}//${host}/app`)
-
-
+        redirect('/app')
     } else {
         console.warn("Sign in failed")
     }
 }
 
-function* signupUser(action) {
-    const anonymousClient = createHTTPClient(null)
+export function* signupUser(action) {
+    yield call(api.init)
     const { data } = yield call(
-        anonymousClient.post,
-        "/signup",
+        api.signupUser,
         action.payload
     )
     if(data.bearer) {
         yield put(setAuthToken(data.bearer))
 
         // redirect user to home page
-        let { protocol, host } = document.location
-        document.location.assign(`${protocol}//${host}/app`)
+        redirect('/app')
     } else {
         console.warn("Sign up failed")
     }
 }
 
-export default function* root() {
-    yield takeLatest("SET_AUTH_TOKEN", saveAuthToken)
-    yield takeLatest("SIGNIN_USER", signinUser)
-    yield takeLatest("SIGNUP_USER", signupUser)
-    yield takeLatest("ASSIGN_USER", getAuthToken)
-    
-    yield takeEvery("UTTER_MESSAGE", sendMessage)
-    yield takeEvery("LOAD_MESSAGES", loadMessages)
-}
+export function* signoutUser(action) {
+    if(typeof window !== 'undefined') {
+        yield apply(localStorage, localStorage.removeItem, ["auth_token"])
 
+        // redirect user to sign in page
+        redirect('/signin')
+    }
+}

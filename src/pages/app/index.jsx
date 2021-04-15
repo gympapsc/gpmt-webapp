@@ -3,7 +3,8 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import {
     utterMessage,
-    loadMessages
+    getMessages,
+    signoutUser
 } from '../../actions'
 
 import Secure from '../../components/secure'
@@ -20,20 +21,25 @@ const App = () => {
         dispatch(utterMessage(message))
     }
     
+    const signOut = () => {
+        dispatch(signoutUser())
+    }
+
     if(messages.length === 0) {
-        dispatch(loadMessages(new Date("2020-10-01")))
+        dispatch(getMessages(new Date("2020-10-01")))
     }
 
     return (
         <Secure>
             <h1>Hello {user?.firstname}</h1>
+            <button onClick={signOut}>Sign out</button>
             <ul>
                 {messages.map((message, i) => 
                     <li key={i}>{message.sender}: {message.text}</li>
                 )}
             </ul>
             <input 
-                type="text" 
+                type="text"
                 value={message}
                 onChange={e => setMessage(e.target.value)} />
             <button onClick={utter}>
