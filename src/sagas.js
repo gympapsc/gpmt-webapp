@@ -1,19 +1,19 @@
-import { call, apply, fork, put, take, } from 'redux-saga/effects'
-import { eventChannel, END } from 'redux-saga'
+import { call, apply, fork, put, take, } from "redux-saga/effects"
+import { eventChannel, END } from "redux-saga"
 
 import {
     setAuthToken,
     addMessage,
     setMessages,
     setUser
-} from './actions'
+} from "./actions"
 
 import {
     redirect
-} from './utils'
+} from "./utils"
 
-import io from './api/io'
-import api from './api/http'
+import io from "./api/io"
+import api from "./api/http"
 
 export function receiver() {
     return eventChannel(emitter => {
@@ -75,20 +75,20 @@ export function* getMessages(action) {
 }
 
 export function* getAuthToken() {
-    if(typeof window !== 'undefined') {
-        const token = yield apply(localStorage, localStorage.getItem, ['auth_token'])
+    if(typeof window !== "undefined") {
+        const token = yield apply(localStorage, localStorage.getItem, ["auth_token"])
         if(token) {
             yield put(setAuthToken(token))
         } else {
             // redirect user to sign in page
-            redirect('/signin')
+            redirect("/signin")
         }
     }
 }
 
 export function* saveAuthToken(action) {
-    if(typeof window !== 'undefined') {
-        yield apply(localStorage, localStorage.setItem, ['auth_token', action.payload.bearer])
+    if(typeof window !== "undefined") {
+        yield apply(localStorage, localStorage.setItem, ["auth_token", action.payload.bearer])
         // create authorized client
         yield call(io.init, action.payload.bearer)
 
@@ -110,7 +110,7 @@ export function* signinUser(action) {
         yield put(setAuthToken(data.bearer))
 
         // redirect user to home page
-        redirect('/app')
+        redirect("/app")
     } else {
         console.warn("Sign in failed")
     }
@@ -126,17 +126,17 @@ export function* signupUser(action) {
         yield put(setAuthToken(data.bearer))
 
         // redirect user to home page
-        redirect('/app')
+        redirect("/app")
     } else {
         console.warn("Sign up failed")
     }
 }
 
 export function* signoutUser(action) {
-    if(typeof window !== 'undefined') {
+    if(typeof window !== "undefined") {
         yield apply(localStorage, localStorage.removeItem, ["auth_token"])
 
         // redirect user to sign in page
-        redirect('/signin')
+        redirect("/signin")
     }
 }

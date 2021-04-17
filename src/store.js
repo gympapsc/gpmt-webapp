@@ -1,7 +1,7 @@
-import { createStore, applyMiddleware } from 'redux'
-import createSagaMiddleware from 'redux-saga'
-import { takeEvery, takeLatest } from 'redux-saga/effects'
-import reducer from './reducers'
+import { createStore, applyMiddleware } from "redux"
+import createSagaMiddleware from "redux-saga"
+import { takeEvery, takeLatest } from "redux-saga/effects"
+import reducer from "./reducers"
 import {
     getMessages,
     sendMessage,
@@ -10,7 +10,7 @@ import {
     signinUser,
     saveAuthToken,
     signoutUser
-} from './sagas'
+} from "./sagas"
 
 const sagaMiddleware = createSagaMiddleware()
 
