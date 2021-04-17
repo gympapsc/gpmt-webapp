@@ -9,7 +9,6 @@ const { getByText, getByPlaceholderText } = queries
 const delay = (fn, ms) => new Promise((res, rej) => setTimeout(async () => res(await fn()), ms))
 
 describe('authentication', () => {
-
     it('should sign in and redirect to app', async () => {
         await page.goto("http://localhost:5000/signin")
         let document = await getDocument(page)
@@ -26,11 +25,6 @@ describe('authentication', () => {
 
         await button.click()
 
-        // await waitFor(async () => {
-        //     let document = await getDocument(page)
-        //     getByText(document, "Hello")
-        // })
-
         await delay(async () => {
             await page.screenshot({path: path.resolve(__dirname, '../screenshots/signin.app.png')})
         }, 1200)
@@ -39,11 +33,6 @@ describe('authentication', () => {
 
     it('should sign up and redirect to app', async () => {
         await page.goto("http://localhost:5000/signup")
-
-        page.on("error", function(err) {  
-            theTempValue = err.toString();
-            throw new Error("Page error: " + theTempValue); 
-        })
 
         let document = await getDocument(page)
         
@@ -73,11 +62,8 @@ describe('authentication', () => {
         }, 1000)
 
     })
-})
 
-describe("messaging", () => {
-
-    beforeAll(async () => {
+    it("should signout", async () => {
         await page.goto("http://localhost:5000/signin")
         let document = await getDocument(page)
         
@@ -87,17 +73,70 @@ describe("messaging", () => {
         await emailField.type("t@t.com")
         await passwordField.type("password")
 
-        await page.screenshot({path: path.resolve(__dirname, '../screenshots/signin.signin.png')})
+        let signinButton = await getByText(document, /Sign in/i)
+        await signinButton.click()
+
+        await page.waitFor(1000)
+
+        let localStorageData = await page.evaluate(() => {
+            let json = {};
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                json[key] = localStorage.getItem(key);
+            }
+            return json;
+        });
+        expect(localStorageData["auth_token"]).toBeDefined()
+
+        document = await getDocument(page)
+        let signoutButton = await getByText(document, /Sign out/i)
+        await signoutButton.click()
+
+        await page.waitFor(1000)
+
+        localStorageData = await page.evaluate(() => {
+            let json = {};
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                json[key] = localStorage.getItem(key);
+            }
+            return json;
+        });
+        expect(localStorageData["auth_token"]).toBeUndefined()
         
-        let button = await getByText(document, /Sign in/i)
-
-        await button.click()
     })
+})
 
+describe("messaging", () => {
     it("should send message and echo back", async () => {
-        await page.goto("http://localhost:5000/app")
+        await page.goto("http://localhost:5000/signup")
+
         let document = await getDocument(page)
         
+        let firstnameField = await getByPlaceholderText(document, /firstname/)
+        let surnameField = await getByPlaceholderText(document, /surname/)
+        let emailField = await getByPlaceholderText(document, /email/)
+        let passwordField = await getByPlaceholderText(document, /password/)
+        let weightField = await getByPlaceholderText(document, /weight/)
+        let heightField = await getByPlaceholderText(document, /height/)
+        let birthDateField = await getByPlaceholderText(document, /birth date/)
+        
+        await firstnameField.type('hakim')
+        await surnameField.type('rachidi')
+        await emailField.type('test@test.com')
+        await passwordField.type('password')
+        await weightField.type("2")
+        await heightField.type("8")
+        await birthDateField.type("09/12/2002")
+
+        await page.screenshot({path: path.resolve(__dirname, '../screenshots/messaging.signup.png')})
+        let button = await getByText(document, /Sign up/i)
+
+        await button.click()
+
+        await page.waitFor(1000)
+
+        document = await getDocument(page)
         let sendButton = await getByText(document, /Send/i)
         expect(sendButton).toBeDefined()
         let messageField = await getByPlaceholderText(document, /Message/i)
@@ -110,11 +149,10 @@ describe("messaging", () => {
         await sendButton.click()
 
         await waitFor(() => getByText(document, "user: Hello"))
-        // await waitFor(() => getByText(document, "bot: Hello"))
+        await waitFor(() => getByText(document, "bot: Hello"))
 
         await delay(async () => {
             await page.screenshot({path: path.resolve(__dirname, '../screenshots/messaging.send.png')})
         }, 1000)
     })
-
 })

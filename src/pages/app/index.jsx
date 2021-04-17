@@ -26,6 +26,7 @@ const App = () => {
     }
 
     if(messages.length === 0) {
+        console.log("getMessages")
         dispatch(getMessages(new Date("2020-10-01")))
     }
 

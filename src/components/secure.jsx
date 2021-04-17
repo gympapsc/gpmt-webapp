@@ -8,7 +8,7 @@ const Secure = ({role="client", children}) => {
     let dispatch = useDispatch()
     let user = useSelector(state => state.user) 
     
-    if(typeof window !== 'undefined') {  
+    if(typeof window !== 'undefined' && !user.firstname) {  
         dispatch(assignUser())
     }
     
