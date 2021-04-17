@@ -149,7 +149,7 @@ describe("messaging", () => {
         await sendButton.click()
 
         await waitFor(() => getByText(document, "user: Hello"))
-        await waitFor(() => getByText(document, "bot: Hello"))
+        await waitFor(() => getByText(document, /bot: (.*)+/))
 
         await delay(async () => {
             await page.screenshot({path: path.resolve(__dirname, '../screenshots/messaging.send.png')})
