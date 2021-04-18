@@ -9,7 +9,4 @@ parserOptions:
     sourceType: module
 plugins:
     - react
-rules:
-    quotes:
-        - error
-        - double
+rules: {}

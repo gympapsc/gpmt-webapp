@@ -140,3 +140,17 @@ export function* signoutUser(action) {
         redirect("/signin")
     }
 }
+
+export function* updateUser(action) {
+    let user = yield call(
+        io.updateUser,
+        action.payload
+    )
+}
+
+export function* updatePassword(action) {
+    let user = yield call(
+        io.updatePassword,
+        action.payload
+    )
+}

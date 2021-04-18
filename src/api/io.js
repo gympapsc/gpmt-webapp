@@ -65,6 +65,12 @@ const api = {
     getUserInfo: () => {
         if (socket) return socket.emitAsync("GET_USER_INFO")
     },
+    updateUser: (user) => {
+        if(socket) return socket.emitAsync("UPDATE_USER", user)
+    },
+    updatePassword: password => {
+        if(socket) return socket.emitAsync("UPDATE_PASSWORD", password)
+    },
     sendAsync: (event, ...args) => {
         if (socket) return socket.emitAsync(event, ...args)
     }

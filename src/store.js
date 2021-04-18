@@ -9,19 +9,21 @@ import {
     signupUser,
     signinUser,
     saveAuthToken,
-    signoutUser
+    signoutUser,
+    updateUser,
+    updatePassword
 } from "./sagas"
 
 const sagaMiddleware = createSagaMiddleware()
 
-// const logger = store => next => action => {
-//     console.log(action.type)
-//     next(action)
-// }
+const logger = store => next => action => {
+    console.log(action.type)
+    next(action)
+}
 
 const store = createStore(
     reducer, 
-    applyMiddleware(sagaMiddleware)
+    applyMiddleware(sagaMiddleware, logger)
 )
 
 function* saga() {
@@ -33,6 +35,10 @@ function* saga() {
     
     yield takeEvery("UTTER_MESSAGE", sendMessage)
     yield takeEvery("GET_MESSAGES", getMessages)
+
+    yield takeEvery("UPDATE_USER", updateUser)
+    // TODO debounce sending
+    yield takeEvery("UPDATE_PASSWORD", updatePassword)
 }
 
 

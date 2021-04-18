@@ -33,6 +33,14 @@ const reducer = (state=initialState, action) => {
                 ...state,
                 user: action.payload.user
             }
+        case "UPDATE_USER":
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    ...action.payload
+                }
+            }
         default:
             return state
     }

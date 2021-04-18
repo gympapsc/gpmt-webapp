@@ -8,6 +8,8 @@ import {
 } from '../../actions'
 
 import Secure from '../../components/secure'
+import ChatShell from '../../components/chat/shell'
+import Sidebar from '../../components/sidebar/sidebar'
 
 
 const App = () => {
@@ -32,21 +34,9 @@ const App = () => {
 
     return (
         <Secure>
-            <h1>Hello {user?.firstname}</h1>
-            <button onClick={signOut}>Sign out</button>
-            <ul>
-                {messages.map((message, i) => 
-                    <li key={i}>{message.sender}: {message.text}</li>
-                )}
-            </ul>
-            <input 
-                type="text"
-                value={message}
-                placeholder="Message"
-                onChange={e => setMessage(e.target.value)} />
-            <button onClick={utter}>
-                Send
-            </button>
+            <Sidebar />
+            <ChatShell messages={messages} />
+
         </Secure>
     )
 }

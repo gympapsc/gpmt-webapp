@@ -4,12 +4,11 @@ import "../polyfills"
 
 import store from '../store'
 
-// import '../styles/bootstrap.scss'
-import '../styles/global.scss'
+import '../styles/global.css'
 
 
-
-function Root({Component, pageProps }) {    
+// eslint-disable-next-line react/prop-types
+function Root({ Component, pageProps }) {    
 
     return (
         <Provider store={store}>

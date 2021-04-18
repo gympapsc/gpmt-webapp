@@ -80,3 +80,35 @@ export const setUser = (user) => ({
     }
 })
 
+export const updateEmail = (email) => ({
+    type: "UPDATE_USER",
+    payload: {
+        email
+    }
+})
+
+export const updateWeight = (weight) => ({
+    type: "UPDATE_USER",
+    payload: {
+        weight
+    }
+})
+
+export const updateHeight = (height) => ({
+    type: "UPDATE_USER",
+    payload: {
+        height
+    }
+})
+
+export const updatePassword = (password) => ({
+    type: "UPDATE_PASSWORD",
+    payload: password
+})
+
+export const updateBirthDate = (birthDate) => ({
+    type: "UPDATE_USER",
+    payload: {
+        birthDate
+    }
+})
