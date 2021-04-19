@@ -8,8 +8,8 @@ import {
 } from '../../actions'
 
 import Secure from '../../components/secure'
-import ChatShell from '../../components/chat/shell'
-import Sidebar from '../../components/sidebar/sidebar'
+import ChatShell from '../../components/shell'
+import Sidebar from '../../components/sidebar'
 
 
 const App = () => {
@@ -36,7 +36,6 @@ const App = () => {
         <Secure>
             <Sidebar />
             <ChatShell messages={messages} />
-
         </Secure>
     )
 }
