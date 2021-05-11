@@ -9,7 +9,6 @@ import '../styles/global.css'
 
 // eslint-disable-next-line react/prop-types
 function Root({ Component, pageProps }) {    
-
     return (
         <Provider store={store}>
             <Component {...pageProps} />

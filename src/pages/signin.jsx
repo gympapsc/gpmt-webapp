@@ -1,5 +1,7 @@
 import React, {useState} from "react"
+import Link from "next/link"
 import { useDispatch } from "react-redux"
+import {useForm} from "react-hook-form"
 
 import {
     signinUser
@@ -7,70 +9,48 @@ import {
 
 
 const Signin = () => {
-    
+    const { register, handleSubmit, watch, formState: { errors, isValid, isDirty}} = useForm()
     let dispatch = useDispatch()
-    let [email, setEmail] = useState("")
-    let [password, setPassword] = useState("")
 
-    const submit = e => {
-        e.preventDefault()
-        dispatch(signinUser(email, password))
+    const submit = data => {
+        dispatch(signinUser(data.email, data.password))
     }
 
+    console.log(errors)
+
     return (
-        <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full space-y-8">
-                
-                <div>
-                    <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                        Gymnasium Papenburg<br/>Miktionstagebuch
-                    </h2>
-                </div>
-
-                <form onSubmit={submit} className="mt-8 space-y-6">
-                    <input type="hidden" name="remember" value="true" />
-                    <div className="rounded-md shadow-sm -space-y-px">
-                        <div>
-                            <label htmlFor="email-address" className="sr-only">Email address</label>
-                            <input 
-                                id="email-address" 
-                                name="email" 
-                                type="email"  
-                                required
-                                onChange={e => setEmail(e.target.value)}
-                                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Email address" />
-                        </div>
-                        <div>
-                            <label htmlFor="password" className="sr-only">Password</label>
-                            <input 
-                                id="password" 
-                                name="password" 
-                                type="password" 
-                                required 
-                                onChange={e => setPassword(e.target.value)}
-                                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Password" />
-                        </div>
+        <div className="absolute top-0 bottom-0 w-full bg-gray-100 flex flex-row">
+            <div className="px-3 self-center w-full md:w-5/6 lg:w-3/4 xl:w-2/3 mx-auto bg-gray-100">
+                <h1 className="text-2xl md:text-3xl font-bold text-center mx-auto mb-10">Gymnasium Papenburg<br/> Miktionstagebuch</h1>
+                <form className="mt-3 space-y-7 max-w-md w-full mx-auto" onSubmit={handleSubmit(submit)}>
+                    <div className="w-full space-y-1">
+                        <span className="text-sm text-red-700">{errors.email?.type}</span>
+                        <input
+                            className="w-full block bg-white text-black rounded-t-lg p-2 focus:ring-offset-gray-100 focus:ring-2 focus:ring-offset-1 focus:ring-blue-600 focus:outline-none"
+                            type="email"
+                            placeholder="Email"
+                            { ...register("email", { required: true, maxLength: 10 })}
+                            />
+                        <input
+                            className="w-full block bg-white text-black rounded-b-lg p-2 focus:ring-offset-gray-100 focus:ring-2 focus:ring-offset-1 focus:ring-blue-600 focus:outline-none"
+                            type="password"
+                            placeholder="Passwort"
+                            {...register("password", { required: true, minLength: 12})}
+                            />
                     </div>
-
-                    <div className="flex items-center justify-between font-medium">
-                        <div className="text-sm">
-                            <a href="/signup" className="text-indigo-600 hover:text-indigo-500">Sign up</a>
-                        </div>
-
-                        <div className="text-sm">
-                            <a href="#" className="text-indigo-600 hover:text-indigo-500">
-                                Forgot your password?
+                    <div className="flex flex-row justify-between">
+                        <Link href="/signup">
+                            <a className="text-sm lg:text-lg text-blue-600">
+                                Registrieren
                             </a>
-                        </div>
+                        </Link>
+                        <a className="text-sm lg:text-lg text-blue-600">
+                            Passwort vergessen
+                        </a>
                     </div>
-
-                    <div>
-                        <button 
-                            type="submit" 
-                            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            Sign in
-                        </button>
-                    </div>
+                    <button className="bg-blue-600 disabled:bg-blue-300 hover:bg-blue-500 text-white p-2 rounded-lg w-full focus:ring-2 focus:ring-offset-gray-100 focus:ring-offset-1 focus:ring-blue-600 focus:outline-none">
+                        Anmelden
+                    </button> 
                 </form>
             </div>
         </div>

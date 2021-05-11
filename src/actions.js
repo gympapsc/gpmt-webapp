@@ -15,6 +15,24 @@ export const addMessage = (text, sender, timestamp) => ({
     }
 })
 
+export const addMicturition = (date, timestamp) => ({
+    type: "ADD_MICTURITION",
+    payload: {
+        date,
+        timestamp
+    }
+})
+
+
+export const addDrinking = (date, timestamp, amount) => ({
+    type: "ADD_DRINKING",
+    payload: {
+        date,
+        timestamp,
+        amount
+    }
+})
+
 export const setMessages = messages => ({
     type: "SET_MESSAGES",
     payload: {
@@ -22,8 +40,37 @@ export const setMessages = messages => ({
     }
 })
 
+export const setMicturition = entries => ({
+    type: "SET_MICTURITION",
+    payload: {
+        entries
+    }
+})
+
+export const setDrinking = entries => ({
+    type: "SET_DRINKING",
+    payload: {
+        entries
+    }
+})
+
+
 export const getMessages = (startDate) => ({
     type: "GET_MESSAGES",
+    payload: {
+        startDate
+    }
+})
+
+export const getMicturition = startDate => ({
+    type: "GET_MICTURITION",
+    payload: {
+        startDate
+    }
+})
+
+export const getDrinking = startDate => ({
+    type: "GET_DRINKING",
     payload: {
         startDate
     }

@@ -4,25 +4,28 @@ let socket
 
 const api = {
     init: (authToken, options={}) => {
-        let s;
-        if (authToken) {
-            s = io(process.env.NEXT_PUBLIC_API_URL, {
-                auth: {
-                    bearer: authToken
-                },
-                reconnectionDelayMax: 10000,
-                ...options
-            })
-        } else {
-            s = io(process.env.NEXT_PUBLIC_API_URL, {
-                reconnectionDelayMax: 10000,
-                ...options
-            })
-        }
-        
-
         return new Promise((res, rej) => {
+            let s;
+            if (authToken) {
+                s = io(process.env.NEXT_PUBLIC_API_URL, {
+                    auth: {
+                        bearer: authToken
+                    },
+                    reconnectionDelayMax: 10000,
+                    ...options
+                })
+                s.on("test", () => {
+                    console.log("test ", s.connected)
+                })
+            } else {
+                s = io(process.env.NEXT_PUBLIC_API_URL, {
+                    reconnectionDelayMax: 10000,
+                    ...options
+                })
+            }
+
             s.on("connect", () => {
+                console.log("connected!!!")
                 s.emitAsync = (...args) => new Promise((res, rej) => {
                     s.emit(...args, response => res(response))
                 })
@@ -46,22 +49,21 @@ const api = {
         }
     },
     getMessages: startDate => {
-        if(socket) {
-            return socket.emitAsync("GET_MESSAGES", {
-                startDate
-            })
-        } else {
-            console.warn("getMessages was called, but socket is uninitialized")
-        }
-        
+        if(socket) return socket.emitAsync("GET_MESSAGES", { startDate })
+    },
+    getMicturition: startDate => {
+        if(socket) return socket.emitAsync("GET_MICTURITION", {startDate})
+    },
+    getDrinking: startDate => {
+        if(socket) return socket.emitAsync("GET_DRINKING", { startDate })
     },
     onMessage: cb => {
         if(socket) {
             socket.on("ADD_MESSAGE", cb)
-        } else {
-            console.warn("onMessage was called, but socket is uninitialized")
         }
     },
+    onMicturition: cb => socket.on("ADD_MICTURITION", cb),
+    onDrinking: cb => socket.on("ADD_DRINKING", cb),
     getUserInfo: () => {
         if (socket) return socket.emitAsync("GET_USER_INFO")
     },

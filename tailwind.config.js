@@ -5,6 +5,9 @@ module.exports = {
   ],
   darkMode: false, // or 'media' or 'class'
   theme: {
+    fontFamily: {
+      'sans': ['-apple-system', 'Inter', 'sans-serif']
+    },
     extend: {},
   },
   variants: {

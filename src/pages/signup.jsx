@@ -1,200 +1,217 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState } from "react"
+import Link from "next/link"
+import { useDispatch } from "react-redux"
+import {useForm} from "react-hook-form"
 
-import { signupUser } from "../actions";
+
+import { signupUser } from "../actions"
 
 const Signup = () => {
-  let dispatch = useDispatch();
-  let [firstname, setFirstname] = useState("");
-  let [surname, setSurname] = useState("");
-  let [email, setEmail] = useState("");
-  let [weight, setWeight] = useState(20);
-  let [height, setHeight] = useState(100);
-  let [birthDate, setBirthDate] = useState("");
-  let [password, setPassword] = useState("");
+    let dispatch = useDispatch()
+    let {
+        register, 
+        formState: { 
+            errors, 
+            isValid, 
+            isDirty
+        },
+        getValues,
+        handleSubmit
+    } = useForm()
 
-  const submit = (e) => {
-    e.preventDefault();
-    dispatch(
-      signupUser({
-        firstname,
-        surname,
-        email,
-        password,
-        weight,
-        height,
-        birthDate: new Date(birthDate),
-        password,
-      })
-    );
-  };
 
-  return (
-    <div className="mt-10 sm:m-3">
-      <div className="md:grid md:grid-cols-3 md:gap-6">
-        <div className="md:col-span-1">
-          <div className="px-4 sm:px-0">
-            <h1 className="text-3xl font-medium leading-6 text-gray-900">
-              Registrierung
-            </h1>
-            <p className="mt-1 text-sm text-gray-600">
-              <a href="/signin" className="text-indigo-600 font-medium">Bereits angemeldet?</a>
-            </p>
-          </div>
-        </div>
-        <div className="mt-5 md:mt-0 md:col-span-2">
-          <form onSubmit={submit}>
-            <div className="shadow overflow-hidden sm:rounded-md">
-              <div className="px-4 py-5 bg-white sm:p-6">
-                <div className="grid grid-cols-6 gap-6">
-                  <div className="col-span-6 sm:col-span-3">
-                    <label
-                      htmlFor="firstname"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Vorname
-                    </label>
-                    <input
-                      type="text"
-                      name="firstname"
-                      id="firstname"
-                      required
-                      value={firstname}
-                      onChange={e => setFirstname(e.target.value)}
-                      className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                    />
-                  </div>
+    const submit = () => {
+        let {
+            firstname,
+            surname,
+            email,
+            password,
+            weight,
+            height,
+            birthDate
+        } = getValues()
 
-                  <div className="col-span-6 sm:col-span-3">
-                    <label
-                      htmlFor="surname"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Nachname
-                    </label>
-                    <input
-                      type="text"
-                      name="surname"
-                      id="surname"
-                      required
-                      value={surname}
-                      onChange={e => setSurname(e.target.value)}
-                      className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                    />
-                  </div>
+        dispatch(
+            signupUser({
+                firstname,
+                surname,
+                email,
+                password,
+                weight,
+                height,
+                birthDate,
+                password
+            })
+        )
+    }
 
-                  <div className="col-span-6">
-                    <label
-                      htmlFor="email_address"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Email address
-                    </label>
-                    <input
-                      type="text"
-                      name="email_address"
-                      id="email_address"
-                      required
-                      value={email}
-                      onChange={e => setEmail(e.target.value)}
-                      className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                    />
-                  </div>
-
-                  <div className="col-span-6 sm:col-span-3">
-                    <label
-                      htmlFor="birthDate"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Geburtsdatum
-                    </label>
-                    <input
-                        type="date"
-                        className="mt-1 focus:ring-indigo-500 focus:border-indigo-5000 block w-full border-gray-300 rounded-md"
-                        onChange={e => setBirthDate(e.target.value)}
-                        required
-                        value={birthDate}
-                        id="birthDate" />
-                  </div>
-
-                  <div className="col-span-6 sm:col-span-3">
-                    <label
-                      htmlFor="weight"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Gewicht
-                    </label>
-                    <input
-                        type="number"
-                        className="mt-1 focus:ring-indigo-500 focus:border-indigo-5000 block w-full border-gray-300 rounded-md"
-                        required
-                        value={weight}
-                        onChange={e => setWeight(e.target.value)}
-                        id="weight" />
-                  </div>
-
-                  <div className="col-span-6 sm:col-span-3">
-                    <label
-                      htmlFor="height"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Köpergröße
-                    </label>
-                    <input
-                        type="number"
-                        value={height}
-                        required
-                        onChange={e => setHeight(e.target.value)}
-                        className="mt-1 focus:ring-indigo-500 focus:border-indigo-5000 block w-full border-gray-300 rounded-md"
-                        id="height" />
-                  </div>
-
-                  <div className="col-span-6">
-                    <label
-                      htmlFor="password"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Passwort
-                    </label>
-                    <input
-                        type="password"
-                        required
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                        className="mt-1 focus:ring-indigo-500 focus:border-indigo-5000 block w-full border-gray-300 rounded-md"
-                        id="password" />
-                  </div>
-
-                  <div className="col-span-6">
-                    <label
-                      htmlFor="password"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Wiederholtes Passwort
-                    </label>
-                    <input
-                        type="password"
-                          required
-                        className="mt-1 focus:ring-indigo-500 focus:border-indigo-5000 block w-full border-gray-300 rounded-md"
-                        id="password" />
-                  </div>
-
-                </div>
-              </div>
-              <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                <button
-                  type="submit"
-                  className="inline-flex w-full sm:w-auto justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                  Registrieren
-                </button>
-              </div>
+    return (
+        <div className="absolute top-0 bottom-0 w-full bg-gray-100">
+            <div className="px-3 w-full md:w-5/6 lg:w-3/4 xl:w-2/3 mx-auto">
+                <h1 className="text-2xl md:text-3xl font-bold mx-auto mt-10">Gymnasium Papenburg<br/> Miktionstagebuch</h1>
+                <Link href="/signin">
+                    <a className="text-sm md:text-lg text-blue-600">
+                        Anmelden
+                    </a>
+                </Link>
+                <form className="w-full mt-5 clear-right" onSubmit={handleSubmit(submit)}>
+                    <div className="grid grid-cols-6 gap-4">
+                        <div className="col-span-full md:col-span-3">
+                            <label
+                                className="text-gray-600 text-sm md:text-md" 
+                                htmlFor="vorname">
+                                Vorname
+                            </label>
+                            <input
+                                id="vorname"
+                                type="text"
+                                className="w-full bg-white p-3 rounded-lg focus:ring-offset-gray-100 focus:ring-2 focus:ring-offset-1 focus:ring-blue-600 focus:outline-none"
+                                {...register("firstname", 
+                                    { 
+                                        required: true 
+                                    }
+                                )}/>
+                        </div>
+                        <div className="col-span-full md:col-span-3">
+                            <label
+                                className="text-gray-600 text-sm md:text-md" 
+                                htmlFor="nachname">
+                                Nachname
+                            </label>
+                            <input
+                                id="nachname"
+                                type="text"
+                                className="w-full bg-white p-3 rounded-lg focus:ring-offset-gray-100 focus:ring-2 focus:ring-offset-1 focus:ring-blue-600 focus:outline-none"
+                                {...register("surname", 
+                                    { 
+                                        required: true 
+                                    }
+                                )}/>
+                        </div>
+                        <div className="col-span-full">
+                            <label
+                                className="text-gray-600 text-sm md:text-md"  
+                                htmlFor="email">
+                                Email
+                            </label>
+                            <input
+                                id="email"
+                                type="text"
+                                className="w-full bg-white p-3 rounded-lg focus:ring-offset-gray-100 focus:ring-2 focus:ring-offset-1 focus:ring-blue-600 focus:outline-none"
+                                {...register("email", 
+                                    { 
+                                        required: true 
+                                    }
+                                )}/>
+                        </div>
+                        <div className="col-span-full md:col-span-2">
+                            <label
+                                className="text-gray-600 text-sm md:text-md"  
+                                htmlFor="geschlecht">
+                                Geschlecht
+                            </label>
+                            <input
+                                id="geschlecht"
+                                type="text"
+                                className="w-full bg-white p-3 rounded-lg focus:ring-offset-gray-100 focus:ring-2 focus:ring-offset-1 focus:ring-blue-600 focus:outline-none"
+                                />
+                        </div>
+                        <div className="col-span-full md:col-span-2">
+                            <label
+                                className="text-gray-600 text-sm md:text-md"  
+                                htmlFor="geburtstag">
+                                Geburtstag
+                            </label>
+                            <input
+                                id="geburtstag"
+                                type="date"
+                                className="w-full bg-white p-3 rounded-lg focus:ring-offset-gray-100 focus:ring-2 focus:ring-offset-1 focus:ring-blue-600 focus:outline-none"
+                                {...register("birthDate", 
+                                    { 
+                                        required: true
+                                    }
+                                )}/>
+                        </div>
+                        <div className="col-span-full md:col-span-2">
+                            <label
+                                className="text-gray-600 text-sm md:text-md"  
+                                htmlFor="größe">
+                                Größe
+                            </label>
+                            <input
+                                id="größe"
+                                type="number"
+                                className="w-full bg-white p-3 rounded-lg focus:ring-offset-gray-100 focus:ring-2 focus:ring-offset-1 focus:ring-blue-600 focus:outline-none"
+                                {...register("height", 
+                                    { 
+                                        required: true 
+                                    }
+                                )}/>
+                        </div>
+                        <div className="col-span-full">
+                            <label
+                                className="text-gray-600 text-sm md:text-md"  
+                                htmlFor="weight">
+                                Gewicht in Kg
+                            </label>
+                            <input
+                                id="weight"
+                                type="number"
+                                className="w-full bg-white p-3 rounded-lg focus:ring-offset-gray-100 focus:ring-2 focus:ring-offset-1 focus:ring-blue-600 focus:outline-none"
+                                {...register("weight", 
+                                    { 
+                                        required: true 
+                                    }
+                                )}/>
+                        </div>
+                        <div className="col-span-full md:col-span-3">
+                            <label
+                                className="text-gray-600 text-sm md:text-md"  
+                                htmlFor="passwort">
+                                Passwort
+                            </label>
+                            <input
+                                id="passwort"
+                                type="password"
+                                className="w-full bg-white p-3 rounded-lg focus:ring-offset-gray-100 focus:ring-2 focus:ring-offset-1 focus:ring-blue-600 focus:outline-none"
+                                {...register("password", 
+                                    { 
+                                        required: "Password ist erfoderlich"
+                                    }
+                                )}/>
+                        </div>
+                        <div className="col-span-full md:col-span-3">
+                            <label
+                                className="text-gray-600 text-sm md:text-md"  
+                                htmlFor="passwort-wiederholen">
+                                Passwort wiederholen
+                            </label>
+                            <input
+                                id="passwort-wiederholen"
+                                type="password"
+                                className="w-full bg-white p-3 rounded-lg focus:ring-offset-gray-100 focus:ring-2 focus:ring-offset-1 focus:ring-blue-600 focus:outline-none"
+                                {...register("password_repeat", 
+                                    { 
+                                        required: "Password ist erfoderlich",
+                                        validate: {
+                                            matchesPassword: value => {
+                                                const { password } = getValues()
+                                                return password == value || "Passwörter müssen gleich sein"
+                                            }
+                                        } 
+                                    }
+                                )}/>
+                        </div>
+                    </div>
+                    <div className="w-full flex flex-col">
+                        <button className="w-full self-end md:w-64 mt-12 p-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg">
+                            Registrieren
+                        </button>
+                    </div>
+                </form>
             </div>
-          </form>
         </div>
-      </div>
-    </div>
-  );
+    )
 };
 
-export default Signup;
+export default Signup

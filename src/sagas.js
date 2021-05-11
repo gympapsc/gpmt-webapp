@@ -5,7 +5,11 @@ import {
     setAuthToken,
     addMessage,
     setMessages,
-    setUser
+    setUser,
+    setMicturition,
+    setDrinking,
+    addMicturition,
+    addDrinking
 } from "./actions"
 
 import {
@@ -18,18 +22,20 @@ import api from "./api/http"
 export function receiver() {
     return eventChannel(emitter => {
         if (!io.active()) {
-            // throw error
             emitter(END)
-            return () => {}
         }
 
-        
         io.onMessage(message => {
-            emitter(addMessage(message.text, message.sender, message.timestamp))
+            emitter(addMessage(message.text, message.sender, new Date(message.timestamp).valueOf()))
+        })
+
+        io.onMicturition(entry => {
+            emitter(addMicturition(new Date(entry.date), new Date(entry.timestamp).valueOf()))
         })
     
-        // TODO add more socket listeners
-        // stream events to redux store
+        io.onDrinking(entry => {
+            emitter(addDrinking(new Date(entry.date), new Date(entry.timestamp).valueOf(), entry.amount))
+        })
 
         return () => {
             io.close()
@@ -51,15 +57,13 @@ export function* receive() {
 
 export function* sendMessage(action) {
     if(!io.active()) {
-        // throw error
         return
     }
-       
     const message = yield call(
         io.addMessage,
         action.payload.text
     )
-    yield put(addMessage(message.text, "user", message.timestamp))    
+    yield put(addMessage(message.text, "user", new Date(message.timestamp).valueOf()))    
 }
 
 export function* getMessages(action) {
@@ -67,11 +71,46 @@ export function* getMessages(action) {
         return
     }
 
-    const messages = yield call(
+    let messages = yield call(
         io.getMessages,
         action.payload.startDate
-    )
+    ).map(e => ({
+        ...e,
+        timestamp: new Date(e.timestamp).valueOf()
+    }))
     yield put(setMessages(messages))
+}
+
+export function* getDrinking(action) {
+    if(!io.active()) {
+        return
+    }
+
+    let entries = yield call(
+        io.getDrinking,
+        action.payload.startDate
+    ).map(e => ({
+        ...e,
+        timestamp: new Date(e.timestamp).valueOf(),
+        date: new Date(e.date)
+    }))
+    yield put(setDrinking(entries))
+}
+
+export function* getMicturition(action) {
+    if(!io.active()) {
+        return
+    }
+
+    let entries = yield call(
+        io.getMicturition,
+        action.payload.startDate
+    ).map(e => ({
+        ...e,
+        timestamp: new Date(e.timestamp).valueOf(),
+        date: new Date(e.date)
+    }))
+    yield put(setMicturition(entries))
 }
 
 export function* getAuthToken() {
