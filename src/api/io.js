@@ -63,6 +63,7 @@ const api = {
         }
     },
     onMicturition: cb => socket.on("ADD_MICTURITION", cb),
+    onUpdateUser: cb => socket.on("UPDATE_USER", cb),
     onDrinking: cb => socket.on("ADD_DRINKING", cb),
     getUserInfo: () => {
         if (socket) return socket.emitAsync("GET_USER_INFO")

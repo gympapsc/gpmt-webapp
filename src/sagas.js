@@ -37,6 +37,10 @@ export function receiver() {
             emitter(addDrinking(new Date(entry.date), new Date(entry.timestamp).valueOf(), entry.amount))
         })
 
+        io.onUpdateUser(entry => {
+            // update user
+        })
+
         return () => {
             io.close()
         }
@@ -59,11 +63,11 @@ export function* sendMessage(action) {
     if(!io.active()) {
         return
     }
-    const message = yield call(
+    const {ok} = yield call(
         io.addMessage,
         action.payload.text
     )
-    yield put(addMessage(message.text, "user", new Date(message.timestamp).valueOf()))    
+    // yield put(addMessage(message.text, "user", new Date(message.timestamp).valueOf()))    
 }
 
 export function* getMessages(action) {
@@ -74,7 +78,8 @@ export function* getMessages(action) {
     let messages = yield call(
         io.getMessages,
         action.payload.startDate
-    ).map(e => ({
+    )
+    messages = messages.map(e => ({
         ...e,
         timestamp: new Date(e.timestamp).valueOf()
     }))
@@ -89,7 +94,8 @@ export function* getDrinking(action) {
     let entries = yield call(
         io.getDrinking,
         action.payload.startDate
-    ).map(e => ({
+    )
+    entries = entries.map(e => ({
         ...e,
         timestamp: new Date(e.timestamp).valueOf(),
         date: new Date(e.date)
@@ -105,7 +111,9 @@ export function* getMicturition(action) {
     let entries = yield call(
         io.getMicturition,
         action.payload.startDate
-    ).map(e => ({
+    )
+    console.log(entries)
+    entries = entries.map(e => ({
         ...e,
         timestamp: new Date(e.timestamp).valueOf(),
         date: new Date(e.date)
@@ -181,7 +189,7 @@ export function* signoutUser(action) {
 }
 
 export function* updateUser(action) {
-    let user = yield call(
+    let { ok } = yield call(
         io.updateUser,
         action.payload
     )

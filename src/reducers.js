@@ -10,19 +10,19 @@ const initialState = {
     ],
     user: {},
     micturition: [
-        {
-            timestamp: new Date().valueOf(),
-            date: new Date(),
-            _id: "123sadfasdf"
-        }
+        // {
+        //     timestamp: new Date().valueOf(),
+        //     date: new Date(),
+        //     _id: "123sadfasdf"
+        // }
     ],
     drinking: [
-        {
-            timestamp: new Date().valueOf(),
-            date: new Date(),
-            amount: 500,
-            _id: "123123"
-        }
+        // {
+        //     timestamp: new Date().valueOf(),
+        //     date: new Date(),
+        //     amount: 500,
+        //     _id: "123123"
+        // }
     ]
 }
 
@@ -62,7 +62,7 @@ const reducer = (state=initialState, action) => {
                 }
             }
             return state
-        case "SET_MICTURTION":
+        case "SET_MICTURITION":
             if (action.payload.entries.length > 0) {
                 return {
                     ...state,

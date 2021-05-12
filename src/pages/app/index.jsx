@@ -33,6 +33,7 @@ const App = () => {
                 <Dialog startDate={startDate} changeTitle={setTitle}></Dialog>
                 <div className="sticky bottom-0 lg:w-2/3 flex flex-row mt-auto pt-3 w-full mx-auto">
                     <input
+                        onEnter
                         className="h-12 flex-grow px-3 md:px-4 bg-gray-300 border-0 focus:outline-none focus:ring-2 focus:ring-inset"
                         ref={messageRef}
                         type="text"
