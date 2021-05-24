@@ -1,11 +1,11 @@
 import React, {useRef, useEffect} from "react"
 import * as d3 from "d3"
 
-const BarChart = () => {
+const BarChart = ({data}) => {
     let element = useRef(null)
 
     useEffect(() => {
-        let data = [
+        data = data || [
             [new Date("2020-10-10T00:00:00"), 100],
             [new Date("2020-10-10T01:00:00"), 300],
             [new Date("2020-10-10T02:00:00"), 200],
@@ -46,7 +46,7 @@ const BarChart = () => {
                 "translate(" + margin.left + "," + margin.top + ")")
 
         let x = d3.scaleTime()
-            .domain([new Date("2020-10-10T00:00:00"), new Date("2020-10-10T23:00:00")])
+            .domain([d3.min(data.map(d => d[0])), d3.max(data.map(d => d[0]))])
             .range([ 0, width ])
         Svg.append("g")
             .attr("transform", "translate(0," + height + ")")
@@ -88,5 +88,6 @@ const BarChart = () => {
         <div className="w-full h-full" ref={element}></div>
     )
 }
+
 
 export default BarChart

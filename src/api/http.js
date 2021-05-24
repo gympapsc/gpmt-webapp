@@ -12,7 +12,14 @@ const api = {
         })
     },
     signinUser: (email, password) => client.post("/signin", { email, password }),
-    signupUser: (user) => client.post("/signup", { user })
+    signupUser: (user) => client.post("/signup", { user }),
+    uploadPhoto: formData => client.post("/photo", formData, {
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }
+    }),
+    getPhotos: startDate => client.get("/photo"),
+    isEmailUnique: email => client.get(`/email/checkUnique/${btoa(email)}`)
 }
 
 export default api

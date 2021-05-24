@@ -1,8 +1,10 @@
 import React, {useRef, useEffect} from 'react'
+import { useSelector } from "react-redux"
 import * as d3 from 'd3'
 
 const Clock = () => {
     const element = useRef(null)
+    const predictions = useSelector(state => state.micturitionPredictions)
 
     useEffect(() => {
         // set the dimensions and margins of the graph
@@ -32,15 +34,15 @@ const Clock = () => {
                 .attr("stdDeviation", "20")
 
         // Create dummy data
-        let data = {a: 9, b: 20, c:20, d:8, e:12}
+        let data = predictions
 
-        let color = d3.scaleOrdinal()
-            .domain(['a', 'b', 'c', 'd', 'e'])
-            .range(["#00ff00", "#00ff00", "#99ff99", "#ff0000", "#ff0000"])
+        let color = d3.scaleLinear()
+            .domain([0, 50, 100])
+            .range(["#00ff00", "#eee", "#ff0000"])
 
         let pie = d3.pie()
-            .value(d => d[1])
-        let data_ready = pie(Object.entries(data))
+            .value(d => d.prediction)
+        let data_ready = pie(data)
 
         svg
             .selectAll('whatever')
@@ -50,12 +52,17 @@ const Clock = () => {
             .attr('d', d3.arc()
                 .innerRadius(80)
                 .outerRadius(radius)
+                .startAngle((d) =>  d.data.date.getHours() * Math.PI * 2 / 12)
+                .endAngle((d) => (d.data.date.getHours() + 1) * Math.PI * 2 / 12 )
             )
             .attr('fill', function(d){ 
-                return(color(d.data[0])) 
+                console.log(color(d.data.prediction))
+                return(color(d.data.prediction)) 
             })
             .style("stroke-width", "2px")
             .style("opacity", 0.7)
+            .transition()
+            .duration(100)
 
 
         svg
@@ -66,7 +73,7 @@ const Clock = () => {
             .attr("r", "115")
             .attr("cx", width / 2)
             .attr("cy", height / 2)
-            .attr("fill", "#fff")
+            .attr("fill", "#e5e7eb")
         
         let clock = root.append("g")
 
@@ -80,7 +87,7 @@ const Clock = () => {
                 .attr("transform", `rotate(${360*(i/12)}, ${width/2}, ${height/2})`)
                 .attr("stroke-linecap", "round")
                 .style("stroke-width", "4px")
-                .style("stroke", "#aaa")
+                .style("stroke", "#999")
         }
 
         let hourhand = clock
@@ -91,7 +98,7 @@ const Clock = () => {
                 .attr("y2", height/2 - 50)
                 .attr("stroke-linecap", "round")
                 .style("stroke-width", "10px")
-                .style("stroke", "#555")
+                .style("stroke", "#444")
 
         let minutehand = clock
             .append("line")
@@ -101,7 +108,7 @@ const Clock = () => {
                 .attr("y2", height/2 - 70)
                 .attr("stroke-linecap", "round")
                 .style("stroke-width", "10px")
-                .style("stroke", "#555")
+                .style("stroke", "#444")
         
             let date = new Date()
             minutehand
@@ -128,7 +135,14 @@ const Clock = () => {
     })
 
     return (
-        <div className="w-full" ref={element}></div>
+        <div className="w-full space-y-4 mb-4">
+            <div className="w-full" ref={element}></div>
+            <div className="w-full space-y-2">
+                <div className="w-full h-2 rounded-full bg-gradient-to-r from-green-500 to-red-500"></div>
+                <div className="float-left text-xs">0%</div>
+                <div className="float-right text-xs">100%</div>
+            </div>
+        </div>
     )
 }
 

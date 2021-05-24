@@ -23,7 +23,6 @@ export const addMicturition = (date, timestamp) => ({
     }
 })
 
-
 export const addDrinking = (date, timestamp, amount) => ({
     type: "ADD_DRINKING",
     payload: {
@@ -54,6 +53,12 @@ export const setDrinking = entries => ({
     }
 })
 
+export const setMicturitionPrediction = (predictions) => ({
+    type: "SET_MICTURITION_PREDICTION",
+    payload: {
+        predictions
+    }
+})
 
 export const getMessages = (startDate) => ({
     type: "GET_MESSAGES",
@@ -157,5 +162,35 @@ export const updateBirthDate = (birthDate) => ({
     type: "UPDATE_USER",
     payload: {
         birthDate
+    }
+})
+
+export const uploadPhoto = formData => ({
+    type: "UPLOAD_FORM_DATA",
+    payload: {
+        formData
+    }
+})
+
+export const addPhoto = (timestamp, url, name) => ({
+    type: "ADD_PHOTO",
+    payload: {
+        timestamp,
+        url,
+        name
+    }
+})
+
+export const getPhotos = (startDate) => ({
+    type: "GET_PHOTOS",
+    payload: {
+        startDate
+    }
+})
+
+export const setPhotos = (photos) => ({
+    type: "SET_PHOTOS",
+    payload: {
+        photos
     }
 })

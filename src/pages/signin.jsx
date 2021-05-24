@@ -1,6 +1,6 @@
 import React, {useState} from "react"
 import Link from "next/link"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import {useForm} from "react-hook-form"
 
 import {
@@ -11,6 +11,7 @@ import {
 const Signin = () => {
     const { register, handleSubmit, watch, formState: { errors, isValid, isDirty}} = useForm()
     let dispatch = useDispatch()
+    let signinError = useSelector(state => state.errors.signin) ? "Anmeldedaten sind falsch." : false
 
     const submit = data => {
         dispatch(signinUser(data.email, data.password))
@@ -21,34 +22,40 @@ const Signin = () => {
     return (
         <div className="absolute top-0 bottom-0 w-full bg-gray-100 flex flex-row">
             <div className="px-3 self-center w-full md:w-5/6 lg:w-3/4 xl:w-2/3 mx-auto bg-gray-100">
-                <h1 className="text-2xl md:text-3xl font-bold text-center mx-auto mb-10">Gymnasium Papenburg<br/> Miktionstagebuch</h1>
-                <form className="mt-3 space-y-7 max-w-md w-full mx-auto" onSubmit={handleSubmit(submit)}>
+                <h1 className="text-2xl md:text-3xl font-bold text-center mx-auto mb-6">Gymnasium Papenburg<br/> Miktionstagebuch</h1>
+                <form className="space-y-5 max-w-md w-full mx-auto" onSubmit={handleSubmit(submit)}>
                     <div className="w-full space-y-1">
-                        <span className="text-sm text-red-700">{errors.email?.type}</span>
+                        <span className="text-sm text-red-600">{errors.email?.message || signinError}&nbsp;</span>
                         <input
-                            className="w-full block bg-white text-black rounded-t-lg p-2 focus:ring-offset-gray-100 focus:ring-2 focus:ring-offset-1 focus:ring-blue-600 focus:outline-none"
+                            className="color transition ease-in-out duration-200 border-gray-300 w-full block tracking-wide bg-white text-black rounded-t-lg p-2 focus:border-transparent focus:ring-2 focus:ring-offset-1 focus:ring-blue-600 focus:outline-none"
                             type="email"
                             placeholder="Email"
-                            { ...register("email", { required: true, maxLength: 10 })}
+                            { ...register("email", { 
+                                    required: "Email ist erforderlich" 
+                                }
+                            )}
                             />
                         <input
-                            className="w-full block bg-white text-black rounded-b-lg p-2 focus:ring-offset-gray-100 focus:ring-2 focus:ring-offset-1 focus:ring-blue-600 focus:outline-none"
+                            className="color transition ease-in-out duration-200 border-gray-300 w-full block tracking-wide bg-white text-black rounded-b-lg p-2 focus:border-transparent focus:ring-2 focus:ring-offset-1 focus:ring-blue-600 focus:outline-none"
                             type="password"
                             placeholder="Passwort"
-                            {...register("password", { required: true, minLength: 12})}
+                            {...register("password", { 
+                                required: "Passwort is erforderlich"
+                            })}
                             />
+                        <span className="text-sm text-red-600">{errors.password?.message}&nbsp;</span>
                     </div>
                     <div className="flex flex-row justify-between">
                         <Link href="/signup">
-                            <a className="text-sm lg:text-lg text-blue-600">
+                            <a className="text-sm lg:text-base text-blue-600">
                                 Registrieren
                             </a>
                         </Link>
-                        <a className="text-sm lg:text-lg text-blue-600">
+                        <a className="text-sm lg:text-base text-blue-600">
                             Passwort vergessen
                         </a>
                     </div>
-                    <button className="bg-blue-600 disabled:bg-blue-300 hover:bg-blue-500 text-white p-2 rounded-lg w-full focus:ring-2 focus:ring-offset-gray-100 focus:ring-offset-1 focus:ring-blue-600 focus:outline-none">
+                    <button className="color transition ease-in-out duration-200 bg-blue-600  hover:bg-blue-500 text-white p-2 rounded-lg w-full focus:ring-2 focus:ring-offset-1 focus:ring-blue-600 focus:outline-none">
                         Anmelden
                     </button> 
                 </form>

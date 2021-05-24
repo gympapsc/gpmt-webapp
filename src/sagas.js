@@ -9,7 +9,9 @@ import {
     setMicturition,
     setDrinking,
     addMicturition,
-    addDrinking
+    addDrinking,
+    setMicturitionPrediction,
+    addPhoto
 } from "./actions"
 
 import {
@@ -18,6 +20,7 @@ import {
 
 import io from "./api/io"
 import api from "./api/http"
+import { Router } from "next/router" 
 
 export function receiver() {
     return eventChannel(emitter => {
@@ -121,6 +124,46 @@ export function* getMicturition(action) {
     yield put(setMicturition(entries))
 }
 
+export function* getMicturitionPrediction(action) {
+    if(!io.active()) {
+        return
+    }
+
+    let predictions = yield call(
+        io.getMicturitionPrediction,
+        action.payload.startDate
+    )
+    predicitions = predictions.map(p => ({
+        ...p,
+        timestamp: new Date(p.timestamp).valueOf(),
+        date: new Date(p.date),
+        prediction: parseFloat(p.prediction)
+    }))
+    yield put(setMicturitionPrediction(predictions))
+}
+
+export function* getPhotos(action) {
+    const { photos } = yield call(
+        api.getPhotos,
+        action.startDate
+    )
+
+    if(photos) {
+        yield put(setPhotos(photos))
+    }
+}
+
+export function* uploadPhoto(action) {
+    const { data } = yield call(
+        api.uploadPhoto,
+        action.formData
+    )
+
+    if(data.photo) {
+        yield put(addPhoto(data.photo.timestamp, data.photo.url, data.photo.classification))
+    }
+}
+
 export function* getAuthToken() {
     if(typeof window !== "undefined") {
         const token = yield apply(localStorage, localStorage.getItem, ["auth_token"])
@@ -140,6 +183,12 @@ export function* saveAuthToken(action) {
         yield call(io.init, action.payload.bearer)
 
         let user = yield call(io.getUserInfo)
+
+        user = {
+            ...user,
+            brithDate: new Date(user.birthDate)
+        }
+        
         yield put(setUser(user))
         yield fork(receive)
     }
@@ -148,12 +197,14 @@ export function* saveAuthToken(action) {
 export function* signinUser(action) {
     // use anonymous client for sign in
     yield call(api.init) 
-    const { data } = yield call(
+    const { data, err } = yield call(
         api.signinUser,
         action.payload.email,
         action.payload.password
     )
-    if(data.bearer) {
+    if(err) {
+        yield put({type: "SIGNIN_FAILED"})
+    } else if(data.bearer) {
         yield put(setAuthToken(data.bearer))
 
         // redirect user to home page
@@ -172,8 +223,8 @@ export function* signupUser(action) {
     if(data.bearer) {
         yield put(setAuthToken(data.bearer))
 
-        // redirect user to home page
-        redirect("/app")
+        // redirect user to about
+        redirect("/setup/about")
     } else {
         console.warn("Sign up failed")
     }

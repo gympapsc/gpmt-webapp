@@ -14,9 +14,6 @@ const api = {
                     reconnectionDelayMax: 10000,
                     ...options
                 })
-                s.on("test", () => {
-                    console.log("test ", s.connected)
-                })
             } else {
                 s = io(process.env.NEXT_PUBLIC_API_URL, {
                     reconnectionDelayMax: 10000,
@@ -52,17 +49,17 @@ const api = {
         if(socket) return socket.emitAsync("GET_MESSAGES", { startDate })
     },
     getMicturition: startDate => {
-        if(socket) return socket.emitAsync("GET_MICTURITION", {startDate})
+        if(socket) return socket.emitAsync("GET_MICTURITION", { startDate })
+    },
+    getMicturitionPrediction: startDate => {
+        if(socket) return socket.emitAsync("GET_MICTURITION_PREDICTION", { startDate })
     },
     getDrinking: startDate => {
         if(socket) return socket.emitAsync("GET_DRINKING", { startDate })
     },
-    onMessage: cb => {
-        if(socket) {
-            socket.on("ADD_MESSAGE", cb)
-        }
-    },
+    onMessage: cb => socket.on("ADD_MESSAGE", cb),
     onMicturition: cb => socket.on("ADD_MICTURITION", cb),
+    onMicturitionPrediction: cb => socket.on("SET_MICTURITION_PREDICTION", cb),
     onUpdateUser: cb => socket.on("UPDATE_USER", cb),
     onDrinking: cb => socket.on("ADD_DRINKING", cb),
     getUserInfo: () => {

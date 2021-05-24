@@ -23,6 +23,7 @@
   "homepage": "https://github.com/gympapsc/gpmt-webapp#readme",
   "dependencies": {
     "@babel/runtime-corejs3": "^7.13.10",
+    "@headlessui/react": "^1.2.0",
     "@heroicons/react": "^1.0.1",
     "@tailwindcss/forms": "^0.3.2",
     "axios": "^0.21.1",
