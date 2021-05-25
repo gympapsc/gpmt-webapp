@@ -73,7 +73,7 @@ const BarChart = ({data}) => {
                 .attr("y", d => y(d[1] / 1000))
                 .attr("height", d => height - y(d[1] / 1000))
                 .attr("width", d => 10)
-                .style("fill", "blue")
+                .style("fill", "rgb(79, 70, 229)")
         
         return () => {
             if(element.current) {

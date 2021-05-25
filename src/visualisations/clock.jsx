@@ -31,14 +31,14 @@ const Clock = () => {
                 .attr("id", "blur")
             .append("feGaussianBlur")
                 .attr("edgeMode", "wrap")
-                .attr("stdDeviation", "20")
+                .attr("stdDeviation", "15")
 
         // Create dummy data
         let data = predictions
 
         let color = d3.scaleLinear()
             .domain([0, 50, 100])
-            .range(["#00ff00", "#eee", "#ff0000"])
+            .range(["rgb(5, 150, 105)", "#eee", "rgb(220, 38, 38)"])
 
         let pie = d3.pie()
             .value(d => d.prediction)
@@ -55,10 +55,7 @@ const Clock = () => {
                 .startAngle((d) =>  d.data.date.getHours() * Math.PI * 2 / 12)
                 .endAngle((d) => (d.data.date.getHours() + 1) * Math.PI * 2 / 12 )
             )
-            .attr('fill', function(d){ 
-                console.log(color(d.data.prediction))
-                return(color(d.data.prediction)) 
-            })
+            .attr('fill', d => color(d.data.prediction))
             .style("stroke-width", "2px")
             .style("opacity", 0.7)
             .transition()
@@ -138,7 +135,7 @@ const Clock = () => {
         <div className="w-full space-y-4 mb-4">
             <div className="w-full" ref={element}></div>
             <div className="w-full space-y-2">
-                <div className="w-full h-2 rounded-full bg-gradient-to-r from-green-500 to-red-500"></div>
+                <div className="w-full h-2 rounded-full bg-gradient-to-r from-green-300 to-red-300"></div>
                 <div className="float-left text-xs">0%</div>
                 <div className="float-right text-xs">100%</div>
             </div>

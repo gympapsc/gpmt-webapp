@@ -35,18 +35,20 @@ const PhotoEntry = ({name, url}) => (
 
 const MicturitionEntry = ({date, id}) => (
     <Link href={`/app/micturition/${id}`}>
-        <a href="#" className="text-md text-white bg-indigo-700 w-48 md:52 rounded-xl py-2 px-3 self-center">
+        <a href="#" className="text-md text-white bg-indigo-600 w-48 md:52 rounded-xl py-2 px-3 self-center">
             <h6 className="text-xs font-semibold text-white text-opacity-80 tracking-wider uppercase">Miktion</h6>
             <h5 className="text-xl md:text-2xl font-semibold">{date.getHours() < 10 ? '0' + date.getHours(): date.getHours()}:{date.getMinutes() < 10 ? '0' + date.getMinutes(): date.getMinutes()}</h5>
         </a>
     </Link>
 )
 
-const DrinkingEntry = ({amount}) => (
-    <a href="#" className="text-md text-white bg-pink-500 w-48 md:52 rounded-xl py-2 px-3 self-center">
-        <h6 className="text-xs font-semibold text-white text-opacity-80 tracking-wider uppercase">Trinken</h6>
-        <h5 className="text-xl md:text-2xl font-semibold">{amount}<span className="text-base md:text-lg">ml</span></h5>
-    </a>
+const DrinkingEntry = ({amount, id}) => (
+    <Link href={`/app/drinking/${id}`}>
+        <a href="#" className="text-md text-white bg-pink-500 w-48 md:52 rounded-xl py-2 px-3 self-center">
+            <h6 className="text-xs font-semibold text-white text-opacity-80 tracking-wider uppercase">Trinken</h6>
+            <h5 className="text-xl md:text-2xl font-semibold">{amount}<span className="text-base md:text-lg">ml</span></h5>
+        </a>
+    </Link>
 )
         
 const BotMessage = ({text}) => (
@@ -71,9 +73,9 @@ const DialogEntry = ({entry}) => {
     switch(entry.type) {
         case "MICTURITION":
             console.log(entry)
-            return <MicturitionEntry date={entry.date} id={entry.id} />
+            return <MicturitionEntry date={entry.date} id={entry._id} />
         case "DRINKING":
-            return <DrinkingEntry amount={entry.amount} />
+            return <DrinkingEntry amount={entry.amount} id={entry._id}/>
         case "BOT_MESSAGE":
             return <BotMessage text={entry.text} />
         case "USER_MESSAGE":
