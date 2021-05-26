@@ -16,10 +16,10 @@ const WEEKDAY = [
 const PhotoEntry = ({name, url}) => (
     <div className="block self-end">
         <img  className="rounded-t-xl w-64 lg:w-72 xl:w-80" src={url} />
-        <div className="bg-white p-3 rounded-b-xl flex flex-row justify-between">
+        <div className="bg-gray-100 p-3 rounded-b-xl flex flex-row justify-between">
             <div>
-                {name}
-                <span className="block text-gray-400 text-sm">
+                <h4 className="text-lg font-semibold">{name}</h4>
+                <span className="block text-gray-600 text-sm">
                     Automatische Bilderkennung
                 </span>
             </div>
@@ -35,7 +35,7 @@ const PhotoEntry = ({name, url}) => (
 
 const MicturitionEntry = ({date, id}) => (
     <Link href={`/app/micturition/${id}`}>
-        <a href="#" className="text-md text-white bg-indigo-600 w-48 md:52 rounded-xl py-2 px-3 self-center">
+        <a href="#" className="text-md text-white bg-indigo-600 w-48 md:52 rounded-xl py-2 px-3 self-center focus:ring-2 focus:outline-none focus:ring-blue-500 focus:ring-offset-1">
             <h6 className="text-xs font-semibold text-white text-opacity-80 tracking-wider uppercase">Miktion</h6>
             <h5 className="text-xl md:text-2xl font-semibold">{date.getHours() < 10 ? '0' + date.getHours(): date.getHours()}:{date.getMinutes() < 10 ? '0' + date.getMinutes(): date.getMinutes()}</h5>
         </a>
@@ -44,7 +44,7 @@ const MicturitionEntry = ({date, id}) => (
 
 const DrinkingEntry = ({amount, id}) => (
     <Link href={`/app/drinking/${id}`}>
-        <a href="#" className="text-md text-white bg-pink-500 w-48 md:52 rounded-xl py-2 px-3 self-center">
+        <a href="#" className="text-md text-white bg-pink-500 w-48 md:52 rounded-xl py-2 px-3 self-center focus:ring-2 focus:outline-none focus:ring-blue-500 focus:ring-offset-1">
             <h6 className="text-xs font-semibold text-white text-opacity-80 tracking-wider uppercase">Trinken</h6>
             <h5 className="text-xl md:text-2xl font-semibold">{amount}<span className="text-base md:text-lg">ml</span></h5>
         </a>
@@ -52,13 +52,13 @@ const DrinkingEntry = ({amount, id}) => (
 )
         
 const BotMessage = ({text}) => (
-    <div className="text-sm md:text-base text-gray-900 bg-gray-100 rounded-xl py-1 px-2 md:px-3 text-left self-start">
+    <div className="text-lg lg:text-xl font-semibold text-blue-900 text-opacity-80 max-w-xs md:max-w-md rounded-xl py-1 px-2 md:px-3 text-left self-start">
         {text}
     </div>
 )
 
 const UserMessage = ({text}) => (
-    <div className="text-sm md:text-base text-gray-100 bg-gray-900 rounded-xl py-1 px-2 md:px-3 text-right self-end">
+    <div className="text-lg lg:text-xl font-semibold text-gray-800 max-w-xs md:max-w-md rounded-xl py-1 px-2 md:px-3 text-right self-end">
         {text}
     </div>
 )
@@ -137,11 +137,10 @@ const Dialog = ({startDate}) => {
         ]
         dialog = addDateLabels(dialog)
             .sort((a, b) => a.timestamp - b.timestamp)
-        console.log("dialog", dialog)
     }
 
     return (
-        <div className="flex flex-col px-3 w-full lg:w-3/4 xl:w-2/3 mx-auto space-y-2 pt-8">
+        <div className="flex flex-col px-3 w-full lg:w-3/4 xl:w-2/3 mx-auto space-y-3 pt-8">
             {dialog.map((e, i) => 
                 <DialogEntry entry={e} key={i} /> 
             )}

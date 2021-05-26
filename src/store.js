@@ -14,7 +14,8 @@ import {
     updatePassword,
     getMicturition,
     getDrinking,
-    uploadPhoto
+    uploadPhoto,
+    getPhotos
 } from "./sagas"
 
 const sagaMiddleware = createSagaMiddleware()
@@ -40,11 +41,11 @@ function* saga() {
     yield takeEvery("GET_MESSAGES", getMessages)
     yield takeEvery("GET_MICTURITION", getMicturition)
     yield takeEvery("GET_DRINKING", getDrinking)
+    yield takeEvery("GET_PHOTOS", getPhotos)
 
     yield takeEvery("UPDATE_USER", updateUser)
     // TODO debounce sending
     yield takeEvery("UPDATE_PASSWORD", updatePassword)
-    yield takeEvery("UPLOAD_FORM_DATA", uploadPhoto)
 }
 
 

@@ -19,7 +19,14 @@ const api = {
         }
     }),
     getPhotos: startDate => client.get("/photo"),
-    isEmailUnique: email => client.get(`/email/checkUnique/${btoa(email)}`)
+    downloadPhoto: id => {
+        return client.get(`/photo/${id}`, {
+            responseType: "arraybuffer"
+        })
+            .then(response => Buffer.from(response.data, 'binary').toString('base64'))
+            .then(url => `data:image/jpeg;base64, ${url}`)
+    },
+    isEmailUnique: email => client.get(`/email/checkUnique/${btoa(email)}`),
 }
 
 export default api

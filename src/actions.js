@@ -172,12 +172,13 @@ export const uploadPhoto = formData => ({
     }
 })
 
-export const addPhoto = (timestamp, url, name) => ({
+export const addPhoto = (timestamp, id, name, url) => ({
     type: "ADD_PHOTO",
     payload: {
         timestamp,
-        url,
-        name
+        id,
+        name,
+        url
     }
 })
 

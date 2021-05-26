@@ -11,7 +11,8 @@ import {
     addMicturition,
     addDrinking,
     setMicturitionPrediction,
-    addPhoto
+    addPhoto,
+    setPhotos
 } from "./actions"
 
 import {
@@ -57,9 +58,7 @@ export function* receive() {
             let action = yield take(channel)
             yield put(action)
         }
-    } finally {
-        
-    }
+    } finally {}
 }
 
 export function* sendMessage(action) {
@@ -70,7 +69,7 @@ export function* sendMessage(action) {
         io.addMessage,
         action.payload.text
     )
-    // yield put(addMessage(message.text, "user", new Date(message.timestamp).valueOf()))    
+    // yield put(addMessage(message.text, "user", new Date(message.timestamp).valueOf()))   
 }
 
 export function* getMessages(action) {
@@ -143,24 +142,30 @@ export function* getMicturitionPrediction(action) {
 }
 
 export function* getPhotos(action) {
-    const { photos } = yield call(
-        api.getPhotos,
-        action.startDate
-    )
-
-    if(photos) {
-        yield put(setPhotos(photos))
+    if(typeof window !== 'undefined') {
+        const { data: { photos } } = yield call(
+            api.getPhotos,
+            action.startDate
+        )
+    
+        if(photos) {
+            for(let i = 0; i < photos.length; i++) {
+                photos[i].url = yield call(
+                    api.downloadPhoto,
+                    photos[i]._id
+                )
+            }
+            yield put(setPhotos(photos))
+        }
     }
 }
 
-export function* uploadPhoto(action) {
-    const { data } = yield call(
-        api.uploadPhoto,
-        action.formData
-    )
-
-    if(data.photo) {
-        yield put(addPhoto(data.photo.timestamp, data.photo.url, data.photo.classification))
+export function* downloadPhoto(action) {
+    if(typeof window !== 'undefined') {
+        photos[i].url = yield call(
+            api.downloadPhoto,
+            photos[i]._id
+        )
     }
 }
 
@@ -180,6 +185,7 @@ export function* saveAuthToken(action) {
     if(typeof window !== "undefined") {
         yield apply(localStorage, localStorage.setItem, ["auth_token", action.payload.bearer])
         // create authorized client
+        yield call(api.init, action.payload.bearer)
         yield call(io.init, action.payload.bearer)
 
         let user = yield call(io.getUserInfo)

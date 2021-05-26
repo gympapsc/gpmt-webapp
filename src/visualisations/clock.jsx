@@ -136,8 +136,8 @@ const Clock = () => {
             <div className="w-full" ref={element}></div>
             <div className="w-full space-y-2">
                 <div className="w-full h-2 rounded-full bg-gradient-to-r from-green-300 to-red-300"></div>
-                <div className="float-left text-xs">0%</div>
-                <div className="float-right text-xs">100%</div>
+                <div className="float-left text-xs text-gray-800">0%</div>
+                <div className="float-right text-xs text-gray-800">100%</div>
             </div>
         </div>
     )
