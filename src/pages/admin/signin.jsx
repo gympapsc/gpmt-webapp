@@ -8,7 +8,7 @@ const AdminSignin = () => {
                 <form className="mt-3 space-y-7 max-w-md w-full mx-auto" action="#" method="GET">
                     <div className="w-full space-y-1">
                         <input
-                            className="w-full block bg-white text-black rounded-lg p-2 focus:ring-2 focus:ring-offset-1 focus:ring-blue-600 focus:outline-none"
+                            className="border border-gray-300 w-full block bg-white text-black rounded-lg p-2 focus:ring-2 focus:border-transparent focus:ring-offset-1 focus:ring-blue-600 focus:outline-none"
                             type="password"
                             placeholder="Password"
                             />

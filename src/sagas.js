@@ -135,7 +135,6 @@ export function* getMicturition(action) {
     yield put(setMicturition(entries))
 }
 
-
 export function* updateMicturition(action) {
     if(!io.active()) {
         return
@@ -194,7 +193,6 @@ export function* downloadPhoto(action) {
     }
 }
 
-
 export function* getAuthToken() {
     if(typeof window !== "undefined") {
         const token = yield apply(localStorage, localStorage.getItem, ["auth_token"])
@@ -218,7 +216,9 @@ export function* saveAuthToken(action) {
 
         user = {
             ...user,
-            brithDate: new Date(user.birthDate)
+            birthDate: new Date(user.birthDate),
+            // birthDate: new Date(user.timestamp),
+            timestamp: new Date(user.timestamp)
         }
         
         yield put(setUser(user))

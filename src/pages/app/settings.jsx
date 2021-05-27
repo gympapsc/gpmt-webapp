@@ -4,11 +4,6 @@ import { Listbox, Switch, Transition } from "@headlessui/react"
 import { SelectorIcon, CheckIcon } from "@heroicons/react/solid"
 
 import {
-    updateEmail,
-    updateWeight,
-    updateHeight,
-    updateBirthDate,
-    updatePassword, 
     updateUser
 } from "../../actions"
 
@@ -16,6 +11,9 @@ import Secure from "../../components/secure"
 import Shell from "../../components/shell"
 import Aside from "../../components/aside"
 import DateInput from "../../components/dateInput"
+import TextInput from "../../components/textInput"
+import NumberInput from "../../components/numberInput"
+
 
 const gender = {
     w: { id: 1, name: "weiblich"},
@@ -97,13 +95,52 @@ const Settings = () => {
     let birthDate = new Date(useSelector(state => state.user.birthDate)) 
     let height = useSelector(state => state.user.height)
     let surname = useSelector(state => state.user.surname)
-    let firstname = useSelector(state => state.user.firstname) 
+    let firstname = useSelector(state => state.user.firstname)
+    let user = useSelector(state => state.user)
 
     let changeBirthDate = date => {
         dispatch(updateUser({
             birthDate: date
         }))
     }
+
+    let changeFirstname = name => {
+        dispatch(updateUser({
+            firstname: name
+        }))
+    }
+
+    let changeSurname = name => {
+        dispatch(updateUser({
+            surname: name
+        }))
+    }
+
+    let changeWeight = weight => {
+        dispatch(updateUser({
+            weight
+        }))
+    }
+
+    let changeHeight = height => {
+        dispatch(updateUser({
+            height
+        }))
+    }
+
+    let changeSex = sex => {
+        dispatch(updateUser({
+            sex
+        }))
+    }
+
+    let changeEmail = email => {
+        dispatch(updateUser({
+            email
+        }))
+    }
+
+    console.log("USER", user)
 
     return (
         <Secure>
@@ -113,56 +150,26 @@ const Settings = () => {
                     <form className="mt-3" action="#" method="GET">
                         <div className="grid grid-cols-6 gap-4">
                             <div className="col-span-6 md:col-span-3">
-                                <label className="text-sm text-gray-800" htmlFor="vorname">Vorname</label>
-                                <input
-                                    className="color transition ease-in-out duration-200 w-full border border-gray-300 bg-white rounded-lg px-3 py-2 md:py-3 block mt-1 focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 focus:border-transparent focus:outline-none"
-                                    type="text"
-                                    id="vorname"
-                                    value={firstname}
-                                    />
+                                <TextInput label="Vorname" value={user.firstname} onChange={changeFirstname} />
                             </div>
                             <div className="col-span-6 md:col-span-3">
-                                <label className="text-sm text-gray-600" htmlFor="nachname">Nachname</label>
-                                <input
-                                    className="color transition ease-in-out duration-200 w-full border border-gray-300 bg-white rounded-lg px-3 py-2 md:py-3 block mt-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:ring-offset-1 focus:outline-none"
-                                    type="text"
-                                    id="nachname"
-                                    value={surname}
-                                    />
+                                <TextInput label="Nachname" value={user.surname} onChange={changeSurname} />
                             </div>
                             <div className="col-span-full">
-                                <label className="text-sm text-gray-600" htmlFor="email">Email</label>
-                                <input
-                                    className="color transition ease-in-out duration-200 w-full border border-gray-300 bg-white rounded-lg px-3 py-2 md:py-3 block mt-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:ring-offset-1 focus:outline-none"
-                                    type="text"
-                                    id="email"
-                                    value={email}
-                                    />
+                                <TextInput label="Email" value={user.email} onChange={changeEmail} />
                             </div>
                             <div className="col-span-full">
                                 <label className="text-sm text-gray-600" htmlFor="gewicht">Geschlecht</label>
                                 <SexSelect sex={"m"}/>
                             </div>
                             <div className="col-span-full md:col-span-3">
-                                <label className="text-sm text-gray-600" htmlFor="gewicht">Gewicht in Kg</label>
-                                <input
-                                    className="color transition ease-in-out duration-200  w-full border border-gray-300 bg-white rounded-lg px-3 py-2 md:py-3 block mt-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:ring-offset-1 focus:outline-none"
-                                    type="number"
-                                    id="gewicht"
-                                    value={weight}
-                                    />
+                                <NumberInput label="Gewicht in Kg" value={user.weight} onChange={changeWeight} />
                             </div>
                             <div className="col-span-full md:col-span-3">
-                                <label className="text-sm text-gray-600" htmlFor="größe">Größe in cm</label>
-                                <input
-                                    className="color transition ease-in-out duration-200 w-full border border-gray-300 bg-white rounded-lg px-3 py-2 md:py-3 block mt-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:ring-offset-1 focus:outline-none"
-                                    type="number"
-                                    id="größe"
-                                    value={height}
-                                    />
+                                <NumberInput label="Größe in cm" value={user.height} onChange={changeHeight} />
                             </div>
                             <div className="col-span-full">
-                                <DateInput label="Geburtstag" value={birthDate || new Date()} onChange={changeBirthDate} />
+                                <DateInput label="Geburtstag" value={user.birthDate} onChange={changeBirthDate} />
                             </div>
                         </div>
 

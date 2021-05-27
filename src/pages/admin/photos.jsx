@@ -36,24 +36,28 @@ const AdminPhotoDashboard = () => {
                     </aside>
                     <div className="p-4 w-full space-y-4">
                         <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-3">
-                            <div className="col-span-1 h-24 text-black rounded-xl bg-white flex flex-col p-3">
-                                <h3 className="text-md font-medium">Hochgeladene Bilder</h3>
-                                <div className="mt-auto">
-                                    <span className="text-2xl md:text-3xl font-bold">650</span>
+                            <div className="col-span-1 h-24 text-black rounded-lg bg-white flex flex-col">
+                                <div className="w-full bg-gray-100 px-3 py-3  rounded-t-lg">
+                                    <h3 className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hochgeladene Bilder</h3>
+                                </div>
+                                <div className="mt-auto p-3">
+                                    <span className="text-2xl md:text-3xl font-bold">650 <span className="text-base font-medium"> Bilder</span></span>
                                 </div>
                             </div>
-                            <div className="col-span-1 h-24 text-black rounded-xl bg-white flex flex-col p-3">
-                                <h3 className="text-md font-medium">Klassifizierungs Genauigkeit</h3>
-                                <div className="mt-auto">
-                                    <span className="text-2xl md:text-3xl font-bold">62</span><span className="text-md">%</span>
+                            <div className="col-span-1 h-24 text-black rounded-lg bg-white flex flex-col">
+                                <div className="w-full bg-gray-100 px-3 py-3  rounded-t-lg">
+                                    <h3 className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hochgeladene Bilder</h3>
+                                </div>
+                                <div className="mt-auto p-3">
+                                    <span className="text-2xl md:text-3xl font-bold">62</span><span className="text-base">%</span>
                                 </div>
                             </div>
                         </div>
                         <div>
                             <input
                                 type="text"
-                                className="h-12 w-full py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" 
-                                placeholder="Fotolabel" />
+                                className="border border-gray-300 h-12 w-full py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:border-transparent focus:ring-indigo-500" 
+                                placeholder="Bildgruppe" />
                         </div>
                         <div className="flex flex-col">
                             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
