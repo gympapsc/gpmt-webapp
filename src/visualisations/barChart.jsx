@@ -38,12 +38,12 @@ const BarChart = ({data}) => {
             height = element.current.clientHeight - margin.top - margin.bottom;
 
         let Svg = d3.select(element.current)
-        .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-            .attr("transform",
-                "translate(" + margin.left + "," + margin.top + ")")
+            .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+                .attr("transform",
+                    "translate(" + margin.left + "," + margin.top + ")")
 
         let x = d3.scaleTime()
             .domain([d3.min(data.map(d => d[0])), d3.max(data.map(d => d[0]))])

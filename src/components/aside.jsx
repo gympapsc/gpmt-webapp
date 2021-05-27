@@ -4,6 +4,7 @@ import Link from "next/link"
 
 import Clock from "../visualisations/clock"
 import BarChart from "../visualisations/barChart"
+import LineChart from "../visualisations/lineChart"
 
 import {
     getMessages
@@ -68,7 +69,7 @@ const Aside = () => {
                     <a className="col-span-2 h-64 rounded-xl bg-white p-3 flex flex-col">
                         <h3 className="text-md font-semibold flex-grow-0">Miktion</h3>
                         <div className="w-full h-full mt-3 flex-grow">
-                            <BarChart></BarChart>
+                            <LineChart />
                         </div>
                     </a>
                 </Link>

@@ -14,6 +14,8 @@ import Secure from '../../../components/secure'
 import Shell from '../../../components/shell'
 import Aside from '../../../components/aside'
 import BarChart from '../../../visualisations/barChart'
+import LineChart from '../../../visualisations/lineChart'
+
 
 const WEEKDAY = [
     "Sonntag",
@@ -76,13 +78,67 @@ const Micturition = () => {
                                     </div>
                                     <div
                                         className="w-full h-36 lg:h-96 mt-auto" >
-                                            <BarChart data={predictions}></BarChart>
+                                            <LineChart data={predictions}></LineChart>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div className="flex flex-col px-3 md:px-5 xl:px-5 xl:w-3/4 mx-auto">
                             <h3 className="mb-2 font-semibold text-lg md:text-xl">Einträge</h3>
+                            <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                                <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                                    <div className="border overflow-hidden border-gray-200 sm:rounded-lg">
+                                        <table className="min-w-full divide-y divide-gray-200">
+                                            <thead className="bg-gray-50">
+                                                <tr>
+                                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        Datum
+                                                    </th>
+                                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        Uhrzeit
+                                                    </th>
+                                                    <th scope="col" className="relative px-6 py-3">
+                                                        <span className="sr-only">Bearbeiten</span>
+                                                    </th>
+                                                    <th scope="col" className="relative px-6 py-3">
+                                                        <span className="sr-only">Löschen</span>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="bg-white divide-y divide-gray-200">
+
+                                                {entries.map((e, i) => (
+                                                    <tr key={i}>
+                                                        <td className="px-6 py-4 whitespace-nowrap">
+                                                            {WEEKDAY[e?.date.getDay()]}
+                                                        </td>
+                                                        <td className="px-6 py-4 whitespace-nowrap">
+                                                            {e?.date.getHours()}:{e?.date.getMinutes()}
+                                                        </td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                            <Link href={`/app/${e.type}/${e._id}`}>
+                                                                <a className="text-indigo-600 p-2 hover:bg-indigo-100 rounded-lg transition-colors ease-in-out duration-100">
+                                                                    Bearbeiten
+                                                                </a>
+                                                            </Link>
+                                                        </td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                            <Link href={`/app/${e.type}/${e._id}`}>
+                                                                <a className="text-indigo-600 p-2 hover:bg-indigo-100 rounded-lg transition-colors ease-in-out duration-100">
+                                                                    Löschen
+                                                                </a>
+                                                            </Link>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="flex flex-col px-3 md:px-5 xl:px-5 xl:w-3/4 mx-auto">
+                            <h3 className="mb-2 font-semibold text-lg md:text-xl">Fotos</h3>
                             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                                 <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                                     <div className="border overflow-hidden border-gray-200 sm:rounded-lg">
