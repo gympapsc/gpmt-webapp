@@ -60,7 +60,6 @@ const App = () => {
                         </svg>
                     </button>
                     <input
-                        onEnter
                         className="h-12 flex-grow px-3 md:px-4 bg-gray-300 border-0 focus:outline-none focus:ring-2 focus:ring-inset"
                         ref={messageRef}
                         type="text"

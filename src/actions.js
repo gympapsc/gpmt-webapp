@@ -132,38 +132,36 @@ export const setUser = (user) => ({
     }
 })
 
-export const updateEmail = (email) => ({
+export const updateUser = ({ firstname, surname, email, birthDate, weight, height}) => ({
     type: "UPDATE_USER",
     payload: {
-        email
-    }
-})
-
-export const updateWeight = (weight) => ({
-    type: "UPDATE_USER",
-    payload: {
-        weight
-    }
-})
-
-export const updateHeight = (height) => ({
-    type: "UPDATE_USER",
-    payload: {
+        firstname,
+        surname,
+        birthDate,
+        email,
+        weight,
         height
     }
 })
 
-export const updatePassword = (password) => ({
-    type: "UPDATE_PASSWORD",
-    payload: password
-})
-
-export const updateBirthDate = (birthDate) => ({
-    type: "UPDATE_USER",
+export const updateDrinking = ({_id, amount, date}) => ({
+    type: "UPDATE_DRINKING",
     payload: {
-        birthDate
+        _id,
+        amount,
+        date
     }
 })
+
+export const updateMicturition = ({_id, date}) => ({
+    type: "UPDATE_MICTURITION",
+    payload: {
+        _id,
+        date
+    }
+})
+
+
 
 export const uploadPhoto = formData => ({
     type: "UPLOAD_FORM_DATA",

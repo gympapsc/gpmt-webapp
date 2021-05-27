@@ -8,12 +8,14 @@ import {
     updateWeight,
     updateHeight,
     updateBirthDate,
-    updatePassword
+    updatePassword, 
+    updateUser
 } from "../../actions"
 
 import Secure from "../../components/secure"
 import Shell from "../../components/shell"
 import Aside from "../../components/aside"
+import DateInput from "../../components/dateInput"
 
 const gender = {
     w: { id: 1, name: "weiblich"},
@@ -92,10 +94,16 @@ const Settings = () => {
 
     let email = useSelector(state => state.user.email)
     let weight = useSelector(state => state.user.weight)
-    let birthDate = useSelector(state => state.user.birthDate) 
+    let birthDate = new Date(useSelector(state => state.user.birthDate)) 
     let height = useSelector(state => state.user.height)
     let surname = useSelector(state => state.user.surname)
     let firstname = useSelector(state => state.user.firstname) 
+
+    let changeBirthDate = date => {
+        dispatch(updateUser({
+            birthDate: date
+        }))
+    }
 
     return (
         <Secure>
@@ -154,37 +162,7 @@ const Settings = () => {
                                     />
                             </div>
                             <div className="col-span-full">
-                                <label className="text-sm text-gray-600" htmlFor="day">Geburtstag</label>
-                                <div className="grid grid-cols-3 gap-2">
-                                    <div>
-                                        <input
-                                            className="color transition ease-in-out duration-200 w-full border border-gray-300 bg-white rounded-lg px-3 py-2 md:py-3 block mt-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:ring-offset-1 focus:outline-none"
-                                            type="number"
-                                            id="day"
-                                            value={birthDate}
-                                            placeholder="TT"
-                                            />
-                                    </div>
-                                    <div>
-                                        <input
-                                            className="color transition ease-in-out duration-200 w-full border border-gray-300 bg-white rounded-lg px-3 py-2 md:py-3 block mt-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:ring-offset-1 focus:outline-none"
-                                            type="number"
-                                            id="month"
-                                            value=""
-                                            placeholder="MM"
-                                            />
-                                    </div>
-                                    <div>
-                                        <input
-                                            className="color transition ease-in-out duration-200 w-full border border-gray-300 bg-white rounded-lg px-3 py-2 md:py-3 block mt-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:ring-offset-1 focus:outline-none"
-                                            type="number"
-                                            id="year"
-                                            value=""
-                                            placeholder="JJJJ"
-                                            />
-                                    </div>
-                                </div>
-                                
+                                <DateInput label="Geburtstag" value={birthDate || new Date()} onChange={changeBirthDate} />
                             </div>
                         </div>
 

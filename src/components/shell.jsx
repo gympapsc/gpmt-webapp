@@ -13,7 +13,7 @@ const Shell = ({children, title, className, onScroll}) => {
     useEffect(() => {
         if(container.current)
             container.current.scrollTop = container.current.scrollHeight - container.current.clientHeight
-    }, container)
+    }, [container])
     console.log("scrollTop", container.current?.scrollTop)
 
     return (
@@ -41,7 +41,7 @@ const Shell = ({children, title, className, onScroll}) => {
 }
 
 Shell.propTypes = {
-    children: PropTypes.array,
+    children: PropTypes.any,
     title: PropTypes.string,
     className: PropTypes.string,
     onScroll: PropTypes.func

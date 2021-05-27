@@ -130,6 +130,28 @@ const reducer = (state=initialState, action) => {
                     signin: action.payload?.reason || true
                 }
             }
+        case "UPDATE_DRINKING":
+            return {
+                ...state,
+                drinking: [
+                    ...state.drinking.filter(d => d._id !== action.payload._id),
+                    {
+                        ...state.drinking.find(d => d._id === action.payload._id),
+                        ...action.payload
+                    }
+                ]
+            }
+        case "UPDATE_MICTURITION":
+            return {
+                ...state,
+                micturition: [
+                    ...state.micturition.filter(m => m._id !== action.payload._id),
+                    {
+                        ...state.micturition.find(m => m._id === action.payload._id),
+                        ...action.payload
+                    }
+                ]
+            }
         default:
             return state
     }

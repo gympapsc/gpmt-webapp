@@ -105,6 +105,18 @@ export function* getDrinking(action) {
     yield put(setDrinking(entries))
 }
 
+export function* updateDrinking(action) {
+    if(!io.active()) {
+        return
+    }
+
+    // TODO check status
+    yield call(
+        io.updateDrinking,
+        action.payload
+    )
+}
+
 export function* getMicturition(action) {
     if(!io.active()) {
         return
@@ -121,6 +133,19 @@ export function* getMicturition(action) {
         date: new Date(e.date)
     }))
     yield put(setMicturition(entries))
+}
+
+
+export function* updateMicturition(action) {
+    if(!io.active()) {
+        return
+    }
+
+    // TODO check status
+    yield call(
+        io.updateMicturition,
+        action.payload
+    )
 }
 
 export function* getMicturitionPrediction(action) {
@@ -168,6 +193,7 @@ export function* downloadPhoto(action) {
         )
     }
 }
+
 
 export function* getAuthToken() {
     if(typeof window !== "undefined") {

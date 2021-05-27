@@ -57,6 +57,12 @@ const api = {
     getDrinking: startDate => {
         if(socket) return socket.emitAsync("GET_DRINKING", { startDate })
     },
+    updateDrinking: drinkingUpdate => {
+        if(socket) return socket.emitAsync("UPDATE_DRINKING", drinkingUpdate)
+    },
+    updateMicturition: micturitionUpdate => {
+        if(socket) return socket.emitAsync("UPDATE_MICTURITION", micturitionUpdate)
+    },
     onMessage: cb => socket.on("ADD_MESSAGE", cb),
     onMicturition: cb => socket.on("ADD_MICTURITION", cb),
     onMicturitionPrediction: cb => socket.on("SET_MICTURITION_PREDICTION", cb),
