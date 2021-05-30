@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react'
-import axios from "axios"
 import { useSelector, useDispatch } from 'react-redux'
 
 import {
@@ -16,8 +15,17 @@ import Shell from '../../components/shell'
 import Dialog from '../../components/dialog'
 import Banner from '../../components/banner'
 import api from '../../api/http'
+import { useDrinking, useMessages, useMicturition, useStress } from '../../hooks'
 
 const App = () => {
+    let startDate = new Date()
+    let drinking = useDrinking(startDate)
+    let stress = useStress(startDate)
+    let micturition = useMicturition(startDate)
+    let messages = useMessages(startDate)
+    
+    
+
     let messageRef = useRef(null)
     let fileInputRef = useRef(null)
     let dispatch = useDispatch()
@@ -43,7 +51,6 @@ const App = () => {
 
     let [title, setTitle] = useState('Heute')
 
-    let startDate = new Date()
 
     let startDictation = () => {}
 

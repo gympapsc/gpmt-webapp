@@ -8,8 +8,8 @@ import Shell from '../../../components/shell'
 import DateTimeInput from "../../../components/datetimeInput"
 
 import {
-    deleteMicturition,
-    updateMicturition
+    deleteStress,
+    updateStress
 } from "../../../actions"
 
 const Edit = () => {
@@ -17,28 +17,49 @@ const Edit = () => {
     let {id} = router.query
     let dispatch = useDispatch()
 
-    let entry = useSelector(state => state.micturition.find(m => m._id === id))
+    let entry = useSelector(state => state.stress.find(s => s._id === id))
 
-    let changeMicturition = date => {
-        dispatch(updateMicturition({
+    let changeLevel = level => {
+        dispatch(updateStress({
+            ...entry,
+            level
+        }))
+    }
+
+    let changeDate = date => {
+        dispatch(updateStress({
             ...entry,
             date
         }))
     }
 
     let deleteEntry = () => {
-        dispatch(deleteMicturition(id))
+        dispatch(deleteStress(id))
         router.push("/app")
     }
 
     return (
         <Secure>
             <Aside />
-            <Shell title={"Miktionseintrag"} className="bg-gray-100">
+            <Shell title={"Stresseintrag"} className="bg-gray-100">
                 <div className="flex flex-col px-3 w-full lg:w-3/4 xl:w-2/3 mx-auto space-y-4 my-5">
                     <form className="mt-3 space-y-4">
                         <div className="col-span-full">
-                            <DateTimeInput value={entry?.date} onChange={changeMicturition} label="Datum" />       
+                            <label className="text-sm text-gray-600" htmlFor="amount">Stresslevel</label>
+                            <h4 className="text-2xl font-semibold">{level}<span className="text-sm">. level</span></h4>
+                            <input
+                                type="range"
+                                className="block w-full"
+                                id="amount"
+                                min="1"
+                                max="5"
+                                value={level}
+                                onChange={e => setLevel(e.target.value)}
+                                onBlur={e => changeLevel(e.target.value)}
+                                />
+                            </div>
+                        <div className="col-span-full">
+                            <DateTimeInput value={entry?.date} onChange={changeDate} label="Datum" />       
                         </div>
 
                         <div className="flex flex-row w-full">

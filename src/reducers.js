@@ -1,11 +1,12 @@
 const initialState = {
     loadedDate: new Date(0),
     errors: {},
-    messages: [],
-    user: {},
-    micturition: [],
-    drinking: [],
-    photos: [],
+    user: null,
+    messages: null,
+    micturition: null,
+    stress: null,
+    drinking: null,
+    photos: null,
     micturitionPredictions: [
         {date: new Date(2021, 4, 24, 0), prediction: 90},
         {date: new Date(2021, 4, 24, 1), prediction: 60},
@@ -62,6 +63,14 @@ const reducer = (state=initialState, action) => {
                         action.payload
                     ]
                 }
+        case "ADD_STRESS":
+            return {
+                ...state,
+                stress: [
+                    ...state.stress,
+                    action.payload
+                ]
+            }
         case "SET_MESSAGES":
             if (action.payload.messages.length > 0) {
                 return {
@@ -122,6 +131,11 @@ const reducer = (state=initialState, action) => {
                 ...state,
                 photos: action.payload.photos
             }
+        case "SET_STRESS":
+            return {
+                ...state,
+                stress: action.payload.entries
+            }
         case "SIGNIN_FAILED":
             return {
                 ...state,
@@ -151,6 +165,32 @@ const reducer = (state=initialState, action) => {
                         ...action.payload
                     }
                 ]
+            }
+        case "DELETE_DRINKING":
+            return {
+                ...state,
+                drinking: [
+                    ...state.drinking.filter(d => d._id !== action.payload._id)
+                ]
+            }
+        case "DELETE_MICTURITION":
+            return {
+                ...state,
+                micturition: [
+                    ...state.micturition.filter(m => m._id !== action.payload._id)
+                ]
+            }
+        case "DELETE_STRESS":
+            return {
+                ...state,
+                stress: [
+                    ...state.stress.filter(s => s._id !== action.payload._id)
+                ]
+            }
+        case "USER_CONNECTION":
+            return {
+                ...state,
+                connected: action.payload.status
             }
         default:
             return state

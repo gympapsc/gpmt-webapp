@@ -1,20 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { assignUser } from '../actions'
+import { useUser } from '../hooks'
 
 
-const Secure = ({role="client", children}) => {    
-    let dispatch = useDispatch()
-    let user = useSelector(state => state.user) 
-    
-    if(typeof window !== 'undefined' && !user.firstname) {  
-        dispatch(assignUser())
-    }
-    
+const Secure = ({children}) => {    
+    let user = useUser()
+        
     return (
         <>
-            {user ? children: ''}
+            {user ? children: 'Loading ...'}
         </>
     )
 }

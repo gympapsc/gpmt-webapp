@@ -57,16 +57,26 @@ const api = {
     getDrinking: startDate => {
         if(socket) return socket.emitAsync("GET_DRINKING", { startDate })
     },
+    getStress: startDate => {
+        if(socket) return socket.emitAsync("GET_STRESS", { startDate })
+    },
     updateDrinking: drinkingUpdate => {
         if(socket) return socket.emitAsync("UPDATE_DRINKING", drinkingUpdate)
     },
     updateMicturition: micturitionUpdate => {
         if(socket) return socket.emitAsync("UPDATE_MICTURITION", micturitionUpdate)
     },
+    updateStress: stressUpdate => {
+        if(socket) return socket.emitAsync("UPDATE_STRESS", stressUpdate)
+    },
+    deleteDrinking: _id => socket.emitAsync("DELETE_DRINKING", { _id }),
+    deleteMicturition: _id => socket.emitAsync("DELETE_MICTURITION", { _id }),
+    deleteStress: _id => socket.emitAsync("DELETE_STRESS", { _id }),
     onMessage: cb => socket.on("ADD_MESSAGE", cb),
     onMicturition: cb => socket.on("ADD_MICTURITION", cb),
     onMicturitionPrediction: cb => socket.on("SET_MICTURITION_PREDICTION", cb),
     onUpdateUser: cb => socket.on("UPDATE_USER", cb),
+    onStress: cb => socket.on("ADD_STRESS", cb),
     onDrinking: cb => socket.on("ADD_DRINKING", cb),
     getUserInfo: () => {
         if (socket) return socket.emitAsync("GET_USER_INFO")

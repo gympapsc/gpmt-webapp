@@ -3,7 +3,7 @@ import createSagaMiddleware from "redux-saga"
 import { takeEvery, takeLatest } from "redux-saga/effects"
 import reducer from "./reducers"
 import {
-    getMessages,
+    loadMessages,
     sendMessage,
     getAuthToken,
     signupUser,
@@ -12,11 +12,16 @@ import {
     signoutUser,
     updateUser,
     updatePassword,
-    getMicturition,
-    getDrinking,
-    getPhotos,
+    loadMicturition,
+    loadDrinking,
+    loadPhotos,
     updateDrinking,
-    updateMicturition
+    updateMicturition,
+    loadStress,
+    updateStress,
+    deleteMicturition,
+    deleteDrinking,
+    deleteStress
 } from "./sagas"
 
 const sagaMiddleware = createSagaMiddleware()
@@ -40,15 +45,20 @@ function* saga() {
     
     yield takeEvery("UTTER_MESSAGE", sendMessage)
 
-    yield takeEvery("GET_MESSAGES", getMessages)
-    yield takeEvery("GET_MICTURITION", getMicturition)
-    yield takeEvery("GET_DRINKING", getDrinking)
-    yield takeEvery("GET_PHOTOS", getPhotos)
+    yield takeEvery("GET_MESSAGES", loadMessages)
+    yield takeEvery("GET_MICTURITION", loadMicturition)
+    yield takeEvery("GET_DRINKING", loadDrinking)
+    yield takeEvery("GET_PHOTOS", loadPhotos)
+    yield takeEvery("GET_STRESS", loadStress)
 
+    yield takeEvery("UPDATE_STRESS", updateStress)
     yield takeEvery("UPDATE_USER", updateUser)
     yield takeEvery("UPDATE_DRINKING", updateDrinking)
     yield takeEvery("UPDATE_MICTURITION", updateMicturition)
 
+    yield takeEvery("DELETE_MICTURITION", deleteMicturition)
+    yield takeEvery("DELETE_DRINKING", deleteDrinking)
+    yield takeEvery("DELETE_STRESS", deleteStress)
 }
 
 

@@ -17,8 +17,6 @@ const Signin = () => {
         dispatch(signinUser(data.email, data.password))
     }
 
-    console.log(errors)
-
     return (
         <div className="absolute top-0 bottom-0 w-full bg-gray-100 flex flex-row">
             <div className="px-3 self-center w-full md:w-5/6 lg:w-3/4 xl:w-2/3 mx-auto bg-gray-100">

@@ -23,6 +23,15 @@ export const addMicturition = (date, timestamp) => ({
     }
 })
 
+export const addStress = (date, timestamp, level) => ({
+    type: "ADD_STRESS",
+    payload: {
+        date,
+        timestamp,
+        level
+    }
+})
+
 export const addDrinking = (date, timestamp, amount) => ({
     type: "ADD_DRINKING",
     payload: {
@@ -81,6 +90,13 @@ export const getDrinking = startDate => ({
     }
 })
 
+export const getStress = startDate => ({
+    type: "GET_STRESS",
+    payload: {
+        startDate
+    }
+})
+
 export const assignUser = () => ({
     type: "ASSIGN_USER"
 })
@@ -132,6 +148,13 @@ export const setUser = (user) => ({
     }
 })
 
+export const setStress = (entries) => ({
+    type: "SET_STRESS",
+    payload: {
+        entries
+    }
+})
+
 export const updateUser = ({ firstname, surname, email, birthDate, weight, height}) => ({
     type: "UPDATE_USER",
     payload: {
@@ -141,6 +164,27 @@ export const updateUser = ({ firstname, surname, email, birthDate, weight, heigh
         email,
         weight,
         height
+    }
+})
+
+export const deleteDrinking = (_id) => ({
+    type: "DELETE_DRINKING",
+    payload: {
+        _id
+    }
+})
+
+export const deleteMicturition = (_id) => ({
+    type: "DELETE_MICTURITION",
+    payload: {
+        _id
+    }
+})
+
+export const deleteStress = (_id) => ({
+    type: "DELETE_STRESS",
+    payload: {
+        _id
     }
 })
 
@@ -161,7 +205,14 @@ export const updateMicturition = ({_id, date}) => ({
     }
 })
 
-
+export const updateStress = ({ _id, date, level }) => ({
+    type: "UPDATE_STRESS",
+    payload: {
+        _id,
+        date,
+        level
+    }
+})
 
 export const uploadPhoto = formData => ({
     type: "UPLOAD_FORM_DATA",
@@ -192,4 +243,9 @@ export const setPhotos = (photos) => ({
     payload: {
         photos
     }
+})
+
+export const userConnected = status => ({
+    type: "USER_CONNECTION",
+    payload: status
 })

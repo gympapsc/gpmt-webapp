@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux"
 import Aside from '../../../components/aside'
 import Secure from '../../../components/secure'
 import Shell from '../../../components/shell'
-import { getDrinking, updateDrinking } from "../../../actions"
+import { deleteDrinking, getDrinking, updateDrinking } from "../../../actions"
 import DateTimeInput from "../../../components/datetimeInput"
 
 
@@ -35,6 +35,11 @@ const DrinkingEdit = () => {
         }))
     }
 
+    let deleteEntry = () => {
+        dispatch(deleteDrinking(id))
+        router.push("/app")
+    }
+
     return (
         <Secure>
             <Aside />
@@ -62,7 +67,11 @@ const DrinkingEdit = () => {
                         </div>
 
                         <div className="flex flex-row w-full">
-                            <button className="py-2 w-full text-center text-white bg-red-600 rounded-lg">Löschen</button>
+                            <button
+                                onClick={deleteEntry}
+                                className="py-2 w-full text-center text-white bg-red-600 rounded-lg">
+                                Löschen
+                            </button>
                         </div>
                     </form>
                 </div>

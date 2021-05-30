@@ -38,13 +38,6 @@ const Micturition = () => {
         .map(m => ({type: "micturition", ...m}))
     let entries = [...micturition, ...drinking].sort((a, b) => b.timestamp - a.timestamp)
     
-    console.log(entries)
-    if(entries.length == 0) {
-        dispatch(getMicturition(new Date()))
-        dispatch(getDrinking(new Date()))
-    }
-
-
     let [title, setTitle] = useState('Übersicht')
 
     return (

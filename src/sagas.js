@@ -12,7 +12,15 @@ import {
     addDrinking,
     setMicturitionPrediction,
     addPhoto,
-    setPhotos
+    setPhotos,
+    addStress,
+    setStress,
+    userConnected,
+    getMicturition,
+    getPhotos,
+    getMessages,
+    getStress,
+    getDrinking
 } from "./actions"
 
 import {
@@ -21,7 +29,6 @@ import {
 
 import io from "./api/io"
 import api from "./api/http"
-import { Router } from "next/router" 
 
 export function receiver() {
     return eventChannel(emitter => {
@@ -39,6 +46,10 @@ export function receiver() {
     
         io.onDrinking(entry => {
             emitter(addDrinking(new Date(entry.date), new Date(entry.timestamp).valueOf(), entry.amount))
+        })
+
+        io.onStress(entry => {
+            emitter(addStress(new Date(entry.date), new Date(entry.timestamp).valueOf(), entry.level))
         })
 
         io.onUpdateUser(entry => {
@@ -72,7 +83,7 @@ export function* sendMessage(action) {
     // yield put(addMessage(message.text, "user", new Date(message.timestamp).valueOf()))   
 }
 
-export function* getMessages(action) {
+export function* loadMessages(action) {
     if(!io.active()) {
         return
     }
@@ -88,7 +99,7 @@ export function* getMessages(action) {
     yield put(setMessages(messages))
 }
 
-export function* getDrinking(action) {
+export function* loadDrinking(action) {
     if(!io.active()) {
         return
     }
@@ -117,7 +128,7 @@ export function* updateDrinking(action) {
     )
 }
 
-export function* getMicturition(action) {
+export function* loadMicturition(action) {
     if(!io.active()) {
         return
     }
@@ -147,7 +158,7 @@ export function* updateMicturition(action) {
     )
 }
 
-export function* getMicturitionPrediction(action) {
+export function* loadMicturitionPrediction(action) {
     if(!io.active()) {
         return
     }
@@ -165,7 +176,71 @@ export function* getMicturitionPrediction(action) {
     yield put(setMicturitionPrediction(predictions))
 }
 
-export function* getPhotos(action) {
+export function* loadStress(action) {
+    if(!io.active()) {
+        return
+    }
+
+    let entries = yield call(
+        io.getStress,
+        action.payload.startDate
+    )
+    console.log("STRESS", entries)
+    entries = entries.map(e => ({
+        ...e,
+        timestamp: new Date(e.timestamp).valueOf(),
+        date: new Date(e.date)
+    }))
+    yield put(setStress(entries))
+
+}
+
+export function* updateStress(action) {
+    if(!io.active()) {
+        return
+    }
+
+    // TODO check status
+    yield call(
+        io.updateStress,
+        action.payload
+    )
+}
+
+export function* deleteStress(action) {
+    if(!io.active()) {
+        return
+    }
+
+    yield call(
+        io.deleteStress,
+        action.payload._id
+    )
+}
+
+export function* deleteMicturition(action) {
+    if(!io.active()) {
+        return
+    }
+
+    yield call(
+        io.deleteMicturition,
+        action.payload._id
+    )
+}
+
+export function* deleteDrinking(action) {
+    if(!io.active()) {
+        return
+    }
+
+    yield call(
+        io.deleteDrinking,
+        action.payload._id
+    )
+}
+
+export function* loadPhotos(action) {
     if(typeof window !== 'undefined') {
         const { data: { photos } } = yield call(
             api.getPhotos,
@@ -211,13 +286,12 @@ export function* saveAuthToken(action) {
         // create authorized client
         yield call(api.init, action.payload.bearer)
         yield call(io.init, action.payload.bearer)
-
+    
         let user = yield call(io.getUserInfo)
 
         user = {
             ...user,
             birthDate: new Date(user.birthDate),
-            // birthDate: new Date(user.timestamp),
             timestamp: new Date(user.timestamp)
         }
         

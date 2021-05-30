@@ -1,7 +1,6 @@
 import React from "react"
 import Link from "next/link"
-import { useSelector, useDispatch } from "react-redux"
-import { getMessages, getMicturition, getDrinking, getPhotos } from "../actions"
+import { useDrinking, useMessages, useMicturition, usePhotos, useStress } from "../hooks"
 
 const WEEKDAY = [
     "Sonntag",
@@ -31,6 +30,15 @@ const PhotoEntry = ({name, url}) => (
             </button>
         </div>
     </div>
+)
+
+const StressEntry = ({ id, level }) => (
+    <Link href={`/app/micturition/${id}`}>
+        <a href="#" className="text-md text-white bg-green-600 w-48 md:52 rounded-xl py-2 px-3 self-center focus:ring-2 focus:outline-none focus:ring-blue-500 focus:ring-offset-1">
+            <h6 className="text-xs font-semibold text-white text-opacity-80 tracking-wider uppercase">Stress</h6>
+            <h5 className="text-xl md:text-2xl font-semibold">{2}<span className="text-base md:text-lg">. level</span></h5>
+        </a>
+    </Link>
 )
 
 const MicturitionEntry = ({date, id}) => (
@@ -72,7 +80,6 @@ const DateTitle  = ({text}) => (
 const DialogEntry = ({entry}) => {
     switch(entry.type) {
         case "MICTURITION":
-            console.log(entry)
             return <MicturitionEntry date={entry.date} id={entry._id} />
         case "DRINKING":
             return <DrinkingEntry amount={entry.amount} id={entry._id}/>
@@ -84,6 +91,8 @@ const DialogEntry = ({entry}) => {
             return <DateTitle text={entry.text} />
         case "PHOTO":
             return <PhotoEntry name={entry.name} url={entry.url} />
+        case "STRESS":
+            return <StressEntry level={entry.level} id={entry._id} />
         default:
             return <span>{entry}</span>
     }
@@ -103,41 +112,27 @@ const addDateLabels = entries => {
 }
 
 const Dialog = ({startDate}) => {
-    let dispatch = useDispatch()
-    let oldest = useSelector(state => state.loadedDate)
-    let micturitionEntries = useSelector(state => state.micturition)
+    let micturitionEntries = useMicturition(startDate)
         .map(e => ({ ...e, type: "MICTURITION"}))
-    let drinkingEntries = useSelector(state => state.drinking)
+    let drinkingEntries = useDrinking(startDate)
         .map(e => ({ ...e, type: "DRINKING"}))
-    let photos = useSelector(state => state.photos)
+    let photos = usePhotos(startDate)
         .map(p => ({ ...p, type: "PHOTO" }))
-    let messages = useSelector(state => state.messages)
+    let stressEntries = useStress(startDate)
+        .map(s => ({ ...s, type: "STRESS"}))
+    let messages = useMessages(startDate)
         .map(e => ({ ...e, type: e.sender === 'user' ? "USER_MESSAGE" : "BOT_MESSAGE"}))
 
     let dialog = [
         ...micturitionEntries,
         ...drinkingEntries,
-        ...messages
+        ...stressEntries,
+        ...messages,
+        ...photos
     ]
+
     dialog = addDateLabels(dialog)
         .sort((a, b) => a.timestamp - b.timestamp)
-
-
-    if(messages.length == 0) {
-        dispatch(getMessages(startDate))
-        dispatch(getMicturition(startDate))
-        dispatch(getDrinking(startDate))
-        dispatch(getPhotos(startDate))
-    } else {
-        dialog = [
-            ...micturitionEntries,
-            ...drinkingEntries,
-            ...messages,
-            ...photos
-        ]
-        dialog = addDateLabels(dialog)
-            .sort((a, b) => a.timestamp - b.timestamp)
-    }
 
     return (
         <div className="flex flex-col px-3 w-full lg:w-3/4 xl:w-2/3 mx-auto space-y-3 pt-8">

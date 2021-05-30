@@ -6,18 +6,12 @@ import Clock from "../visualisations/clock"
 import BarChart from "../visualisations/barChart"
 import LineChart from "../visualisations/lineChart"
 
-import {
-    getMessages
-} from "../actions"
+import { useMessages } from "../hooks"
 
 const Aside = () => {
-    let dispatch = useDispatch()
-    let r_messages = useSelector(state => state.messages).sort((a, b) => b.timestamp - a.timestamp)
-    if(!r_messages.length) {
-        let startDate = new Date()
-        dispatch(getMessages(startDate))
-    }
-
+    let startDate = new Date()
+    let messages = useMessages(startDate).sort((a, b) => b.timestamp - a.timestamp)
+    
     let currDate = new Date()
 
     return (
@@ -39,7 +33,7 @@ const Aside = () => {
                 <Link href="/app">
                     <a className="col-span-2 p-3 bg-white rounded-xl">
                         <h3 className="text-md font-semibold">Chat</h3>
-                        <p className="text-gray-400">{r_messages[0]?.text || "..."}</p>
+                        <p className="text-gray-400">{messages[0]?.text || "..."}</p>
                     </a>
                 </Link>
                 <Link href="/app/micturition" id="micturition_widget">

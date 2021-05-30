@@ -159,7 +159,7 @@ const Settings = () => {
                                 <TextInput label="Email" value={user.email} onChange={changeEmail} />
                             </div>
                             <div className="col-span-full">
-                                <label className="text-sm text-gray-600" htmlFor="gewicht">Geschlecht</label>
+                                <label className="text-sm text-gray-600" htmlFor="sex">Geschlecht</label>
                                 <SexSelect sex={"m"}/>
                             </div>
                             <div className="col-span-full md:col-span-3">
