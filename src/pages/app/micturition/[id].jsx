@@ -11,13 +11,15 @@ import {
     deleteMicturition,
     updateMicturition
 } from "../../../actions"
+import { useMicturition } from "../../../hooks"
 
 const Edit = () => {
     let router = useRouter()
     let {id} = router.query
     let dispatch = useDispatch()
 
-    let entry = useSelector(state => state.micturition.find(m => m._id === id))
+    let entry = useMicturition(new Date())
+        .find(m => m._id === id)
 
     let changeMicturition = date => {
         dispatch(updateMicturition({
@@ -26,15 +28,16 @@ const Edit = () => {
         }))
     }
 
-    let deleteEntry = () => {
+    let deleteEntry = e => {
+        e.preventDefault()
         dispatch(deleteMicturition(id))
         router.push("/app")
     }
 
     return (
-        <Secure>
+        <>
             <Aside />
-            <Shell title={"Miktionseintrag"} className="bg-gray-100">
+            <Shell title="Miktionseintrag" className="bg-gray-100">
                 <div className="flex flex-col px-3 w-full lg:w-3/4 xl:w-2/3 mx-auto space-y-4 my-5">
                     <form className="mt-3 space-y-4">
                         <div className="col-span-full">
@@ -51,8 +54,12 @@ const Edit = () => {
                     </form>
                 </div>
             </Shell>
-        </Secure>
+        </>
     )
 }
 
-export default Edit
+export default () => (
+    <Secure>
+        <Edit />
+    </Secure>
+)

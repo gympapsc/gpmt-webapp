@@ -15,29 +15,32 @@ export const addMessage = (text, sender, timestamp) => ({
     }
 })
 
-export const addMicturition = (date, timestamp) => ({
+export const addMicturition = (date, timestamp, _id) => ({
     type: "ADD_MICTURITION",
     payload: {
         date,
-        timestamp
+        timestamp,
+        _id
     }
 })
 
-export const addStress = (date, timestamp, level) => ({
+export const addStress = (date, timestamp, level, _id) => ({
     type: "ADD_STRESS",
     payload: {
         date,
         timestamp,
-        level
+        level,
+        _id
     }
 })
 
-export const addDrinking = (date, timestamp, amount) => ({
+export const addDrinking = (date, timestamp, amount, _id) => ({
     type: "ADD_DRINKING",
     payload: {
         date,
         timestamp,
-        amount
+        amount,
+        _id
     }
 })
 
@@ -155,7 +158,7 @@ export const setStress = (entries) => ({
     }
 })
 
-export const updateUser = ({ firstname, surname, email, birthDate, weight, height}) => ({
+export const updateUser = ({ firstname, surname, email, birthDate, weight, height, sex}) => ({
     type: "UPDATE_USER",
     payload: {
         firstname,
@@ -163,7 +166,8 @@ export const updateUser = ({ firstname, surname, email, birthDate, weight, heigh
         birthDate,
         email,
         weight,
-        height
+        height,
+        sex
     }
 })
 

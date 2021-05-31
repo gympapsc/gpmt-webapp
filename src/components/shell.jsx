@@ -10,11 +10,11 @@ import {
 const Shell = ({children, title, className, onScroll}) => {
     let container = useRef(null)
 
-    useEffect(() => {
-        if(container.current)
-            container.current.scrollTop = container.current.scrollHeight - container.current.clientHeight
-    }, [container])
-    console.log("scrollTop", container.current?.scrollTop)
+    // useEffect(() => {
+    //     if(container.current)
+    //         container.current.scrollTop = container.current.scrollHeight - container.current.clientHeight
+    // }, [container])
+    // console.log("scrollTop", container.current?.scrollTop)
 
     return (
         <main ref={container} className={`absolute top-0 left-0 md:left-96 right-0 bottom-0 flex flex-col overflow-y-scroll ${className}`}>

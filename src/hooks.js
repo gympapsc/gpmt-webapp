@@ -94,7 +94,6 @@ export function useUser() {
     let user = useSelector(s => s.user)
     let [requestIsRunning, runningRequest] = useState(false)
 
-
     if(typeof window !== 'undefined') {
         if(user === null && !requestIsRunning) {
             dispatch(assignUser())
@@ -106,4 +105,3 @@ export function useUser() {
 
     return user
 }
-

@@ -11,13 +11,16 @@ import {
     deleteStress,
     updateStress
 } from "../../../actions"
+import { useStress } from "../../../hooks"
 
 const Edit = () => {
     let router = useRouter()
     let {id} = router.query
     let dispatch = useDispatch()
 
-    let entry = useSelector(state => state.stress.find(s => s._id === id))
+    let entry = useStress(new Date()).find(s => s._id === id)
+
+    console.log(entry)
 
     let changeLevel = level => {
         dispatch(updateStress({
@@ -33,7 +36,8 @@ const Edit = () => {
         }))
     }
 
-    let deleteEntry = () => {
+    let deleteEntry = e => {
+        e.preventDefault()
         dispatch(deleteStress(id))
         router.push("/app")
     }
@@ -46,14 +50,14 @@ const Edit = () => {
                     <form className="mt-3 space-y-4">
                         <div className="col-span-full">
                             <label className="text-sm text-gray-600" htmlFor="amount">Stresslevel</label>
-                            <h4 className="text-2xl font-semibold">{level}<span className="text-sm">. level</span></h4>
+                            <h4 className="text-2xl font-semibold">{entry?.level}<span className="text-sm">. level</span></h4>
                             <input
                                 type="range"
                                 className="block w-full"
                                 id="amount"
                                 min="1"
                                 max="5"
-                                value={level}
+                                value={entry?.level}
                                 onChange={e => setLevel(e.target.value)}
                                 onBlur={e => changeLevel(e.target.value)}
                                 />

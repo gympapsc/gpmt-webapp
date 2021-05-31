@@ -13,6 +13,7 @@ import Aside from "../../components/aside"
 import DateInput from "../../components/dateInput"
 import TextInput from "../../components/textInput"
 import NumberInput from "../../components/numberInput"
+import { useUser } from "../../hooks"
 
 
 const gender = {
@@ -21,13 +22,18 @@ const gender = {
     d: { id: 3, name: "divers"}
 }
 
-const SexSelect = ({sex}) => {
+const SexSelect = ({sex, onChange}) => {
     console.log(sex)
     const [selected, setSelected] = useState(gender[sex])
 
+    const changeSex = s => {
+        setSelected(s)
+        onChange(s.name[0])
+    }
+
   return (
     <div>
-      <Listbox value={selected} onChange={setSelected}>
+      <Listbox value={selected} onChange={changeSex}>
         <div className="w-full relative">
           <Listbox.Button className="relative color transition ease-in-out duration-200 border border-gray-300  w-full py-2 md:py-3 pl-3 pr-10 text-left bg-white rounded-lg  cursor-default focus:outline-none focus:ring-2 focus:ring-blue-500 focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500 text-sm md:text-base">
             <span className="block truncate">{selected.name}</span>
@@ -90,90 +96,90 @@ const Settings = () => {
     let dispatch = useDispatch()
     let [enabled, setEnabled] = useState(false)
 
-    let email = useSelector(state => state.user.email)
-    let weight = useSelector(state => state.user.weight)
-    let birthDate = new Date(useSelector(state => state.user.birthDate)) 
-    let height = useSelector(state => state.user.height)
-    let surname = useSelector(state => state.user.surname)
-    let firstname = useSelector(state => state.user.firstname)
-    let user = useSelector(state => state.user)
+    let user = useUser()
 
     let changeBirthDate = date => {
         dispatch(updateUser({
+            ...user,
             birthDate: date
         }))
     }
 
     let changeFirstname = name => {
         dispatch(updateUser({
+            ...user,
             firstname: name
         }))
     }
 
     let changeSurname = name => {
         dispatch(updateUser({
+            ...user,
             surname: name
         }))
     }
 
     let changeWeight = weight => {
         dispatch(updateUser({
+            ...user,
             weight
         }))
     }
 
     let changeHeight = height => {
         dispatch(updateUser({
+            ...user,
             height
         }))
     }
 
     let changeSex = sex => {
         dispatch(updateUser({
+            ...user,
             sex
         }))
     }
 
     let changeEmail = email => {
         dispatch(updateUser({
+            ...user,
             email
         }))
     }
-
-    console.log("USER", user)
 
     return (
         <Secure>
             <Aside></Aside>
             <Shell title="Einstellungen" className="bg-gray-100">
-                <div className="px-3 w-full lg:w-5/6 xl:w-2/3 mx-auto my-5">
-                    <form className="mt-3" action="#" method="GET">
-                        <div className="grid grid-cols-6 gap-4">
+                <div className="px-3 w-full lg:w-5/6 xl:w-2/3 mx-auto my-5 divide-y divide-gray-500">
+                    <form className="divide-y divide-gray-300" action="#" method="GET">
+                        <div className="grid grid-cols-6 gap-4 py-5">
                             <div className="col-span-6 md:col-span-3">
-                                <TextInput label="Vorname" value={user.firstname} onChange={changeFirstname} />
+                                <TextInput label="Vorname" value={user?.firstname} onChange={changeFirstname} />
                             </div>
                             <div className="col-span-6 md:col-span-3">
-                                <TextInput label="Nachname" value={user.surname} onChange={changeSurname} />
+                                <TextInput label="Nachname" value={user?.surname} onChange={changeSurname} />
                             </div>
                             <div className="col-span-full">
-                                <TextInput label="Email" value={user.email} onChange={changeEmail} />
+                                <TextInput label="Email" value={user?.email} onChange={changeEmail} />
                             </div>
                             <div className="col-span-full">
                                 <label className="text-sm text-gray-600" htmlFor="sex">Geschlecht</label>
-                                <SexSelect sex={"m"}/>
+                                <SexSelect sex={user?.sex} onChange={changeSex}/>
                             </div>
                             <div className="col-span-full md:col-span-3">
-                                <NumberInput label="Gewicht in Kg" value={user.weight} onChange={changeWeight} />
+                                <NumberInput label="Gewicht in Kg" value={user?.weight} onChange={changeWeight} />
                             </div>
                             <div className="col-span-full md:col-span-3">
-                                <NumberInput label="Größe in cm" value={user.height} onChange={changeHeight} />
+                                <NumberInput label="Größe in cm" value={user?.height} onChange={changeHeight} />
                             </div>
                             <div className="col-span-full">
-                                <DateInput label="Geburtstag" value={user.birthDate} onChange={changeBirthDate} />
+                                <DateInput label="Geburtstag" value={user?.birthDate} onChange={changeBirthDate} />
                             </div>
                         </div>
 
-                        <div className="my-6 space-y-4">
+
+                        <div className="space-y-4 py-5">
                             <Switch.Group>
                                 <div className="flex flex-row justify-between">
                                     <div>

@@ -41,7 +41,7 @@ const reducer = (state=initialState, action) => {
             return {
                 ...state,
                 messages: [
-                    ...state.messages,
+                    ...(state.messages || []),
                     {
                         ...action.payload
                     }    
@@ -51,7 +51,7 @@ const reducer = (state=initialState, action) => {
             return {
                 ...state,
                 micturition: [
-                    ...state.micturition,
+                    ...(state.micturition || []),
                     action.payload
                 ]
             }
@@ -59,7 +59,7 @@ const reducer = (state=initialState, action) => {
                 return {
                     ...state,
                     drinking: [
-                        ...state.drinking,
+                        ...(state.drinking || []),
                         action.payload
                     ]
                 }
@@ -67,7 +67,7 @@ const reducer = (state=initialState, action) => {
             return {
                 ...state,
                 stress: [
-                    ...state.stress,
+                    ...(state.stress || []),
                     action.payload
                 ]
             }

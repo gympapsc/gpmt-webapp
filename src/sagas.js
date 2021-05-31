@@ -41,15 +41,15 @@ export function receiver() {
         })
 
         io.onMicturition(entry => {
-            emitter(addMicturition(new Date(entry.date), new Date(entry.timestamp).valueOf()))
+            emitter(addMicturition(new Date(entry.date), new Date(entry.timestamp).valueOf(), entry._id))
         })
     
         io.onDrinking(entry => {
-            emitter(addDrinking(new Date(entry.date), new Date(entry.timestamp).valueOf(), entry.amount))
+            emitter(addDrinking(new Date(entry.date), new Date(entry.timestamp).valueOf(), entry.amount, entry._id))
         })
 
         io.onStress(entry => {
-            emitter(addStress(new Date(entry.date), new Date(entry.timestamp).valueOf(), entry.level))
+            emitter(addStress(new Date(entry.date), new Date(entry.timestamp).valueOf(), entry.level, entry._id))
         })
 
         io.onUpdateUser(entry => {

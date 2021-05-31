@@ -33,7 +33,7 @@ const PhotoEntry = ({name, url}) => (
 )
 
 const StressEntry = ({ id, level }) => (
-    <Link href={`/app/micturition/${id}`}>
+    <Link href={`/app/stress/${id}`}>
         <a href="#" className="text-md text-white bg-green-600 w-48 md:52 rounded-xl py-2 px-3 self-center focus:ring-2 focus:outline-none focus:ring-blue-500 focus:ring-offset-1">
             <h6 className="text-xs font-semibold text-white text-opacity-80 tracking-wider uppercase">Stress</h6>
             <h5 className="text-xl md:text-2xl font-semibold">{2}<span className="text-base md:text-lg">. level</span></h5>

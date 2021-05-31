@@ -7,6 +7,7 @@ import Secure from '../../../components/secure'
 import Shell from '../../../components/shell'
 import { deleteDrinking, getDrinking, updateDrinking } from "../../../actions"
 import DateTimeInput from "../../../components/datetimeInput"
+import { useDrinking } from "../../../hooks"
 
 
 const DrinkingEdit = () => {
@@ -14,11 +15,8 @@ const DrinkingEdit = () => {
     let {id} = router.query
 
     let dispatch = useDispatch()
-    let entry = useSelector(state => state.drinking.find(d => d._id === id))
-    if(!entry) {
-        dispatch(getDrinking(new Date()))
-    }
-    let [amount, setAmount] = useState(entry?.amount || 200)
+    let entry = useDrinking(new Date()).find(d => d._id === id)
+    let [amount, setAmount] = useState(entry?.amount || 0)
     
 
     const changeAmount = amount => {
@@ -35,7 +33,8 @@ const DrinkingEdit = () => {
         }))
     }
 
-    let deleteEntry = () => {
+    let deleteEntry = e => {
+        e.preventDefault()
         dispatch(deleteDrinking(id))
         router.push("/app")
     }

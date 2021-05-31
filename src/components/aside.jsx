@@ -15,7 +15,7 @@ const Aside = () => {
     let currDate = new Date()
 
     return (
-        <aside className="absolute top-0 left-0 bottom-0 md:w-96 bg-gray-200 overflow-y-scroll border-r border-gray-300">
+        <aside className="absolute top-0 left-0 bottom-0 md:w-96 bg-gray-200 overflow-y-scroll border-r border-gray-300 divide-y divide-gray-300 md:divide-y-0">
             <header className="px-4 md:h-14 w-full flex flex-row justify-between bg-gray-200 mt-4">
                 <h1 className="text-2xl md:text-3xl font-bold self-center">
                     Übersicht
@@ -36,7 +36,7 @@ const Aside = () => {
                         <p className="text-gray-400">{messages[0]?.text || "..."}</p>
                     </a>
                 </Link>
-                <Link href="/app/micturition" id="micturition_widget">
+                <Link href="/app/overview" id="micturition_widget">
                     <a className="col-span-1 h-32 text-white rounded-xl bg-green-500 flex flex-col p-3">
                         <h3 className="text-md font-semibold">Miktion</h3>
                         <div className="mt-auto">
@@ -45,7 +45,7 @@ const Aside = () => {
                         </div>
                     </a>
                 </Link>
-                <Link href="/app/micturition">
+                <Link href="/app/overview">
                     <a className="col-span-1 h-32 rounded-xl bg-white flex flex-col p-3">
                         <h3 className="text-md font-semibold">Nächste Miktion</h3>
                         <div className="mt-auto">
@@ -59,7 +59,7 @@ const Aside = () => {
                         <Clock></Clock>
                     </div>
                 </div>
-                <Link href="/app/micturition">
+                <Link href="/app/overview">
                     <a className="col-span-2 h-64 rounded-xl bg-white p-3 flex flex-col">
                         <h3 className="text-md font-semibold flex-grow-0">Miktion</h3>
                         <div className="w-full h-full mt-3 flex-grow">
@@ -70,6 +70,14 @@ const Aside = () => {
                 <Link href="#">
                     <a className="col-span-2 h-64 rounded-xl bg-white p-3 flex flex-col">
                         <h3 className="text-md font-semibold">Trinken</h3>
+                        <div className="w-full h-full mt-3 flex-grow">
+                            <BarChart></BarChart>
+                        </div>
+                    </a>
+                </Link>
+                <Link href="#">
+                    <a className="col-span-2 h-64 rounded-xl bg-white p-3 flex flex-col">
+                        <h3 className="text-md font-semibold">Stress</h3>
                         <div className="w-full h-full mt-3 flex-grow">
                             <BarChart></BarChart>
                         </div>
