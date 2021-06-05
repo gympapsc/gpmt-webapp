@@ -84,7 +84,7 @@ const Clock = () => {
                 .attr("transform", `rotate(${360*(i/12)}, ${width/2}, ${height/2})`)
                 .attr("stroke-linecap", "round")
                 .style("stroke-width", "4px")
-                .style("stroke", "#999")
+                .style("stroke", i % 3 == 0 ? "#888" : "#999")
         }
 
         let hourhand = clock
