@@ -7,7 +7,8 @@ export const signupUser = ({
     password,
     weight,
     height,
-    birthDate
+    birthDate,
+    sex
 }) => async (dispatch, getState, { api, io }) => {
     await api.init()
     let {data: {bearer}} = await api.signupUser({
@@ -17,7 +18,8 @@ export const signupUser = ({
         password,
         weight,
         height,
-        birthDate
+        birthDate,
+        sex
     })
     
     console.log(bearer)
@@ -81,8 +83,10 @@ export const openEventStream = () => (dispatch, getState, { api, io }) => {
             io.onMessage(m => dispatch(addMessage(m.text, m.sender, new Date(m.timestamp).valueOf())))
             io.onMicturition(m => dispatch(addMicturition(new Date(m.date), new Date(m.timestamp).valueOf(), m._id)))
             io.onDrinking(d => dispatch(addDrinking(new Date(d.date), new Date(d.timestamp).valueOf(), d.amount, d._id)))
-            io.onStress(s => dispatch(addStress(new Date(s.date), new Date(s.timestamp).valueOf(), entry.level, entry._id)))
+            io.onStress(s => dispatch(addStress(new Date(s.date), new Date(s.date).valueOf(), s.level, s._id)))
             io.onUpdateUser(u => dispatch(updateUser(u)))
+
+            io.onMicturitionPredictions(p => dispatch(setMicturitionPrediction(p)))
         }
     }
 }
@@ -172,8 +176,8 @@ export const setDrinking = entries => ({
     }
 })
 
-export const setMicturitionPrediction = (predictions) => ({
-    type: "SET_MICTURITION_PREDICTION",
+export const setMicturitionPredictions = (predictions) => ({
+    type: "SET_MICTURITION_PREDICTIONS",
     payload: {
         predictions
     }
@@ -228,6 +232,19 @@ export const loadMicturition = startDate => async (dispatch, getState, { api, io
     }
 }
 
+export const loadMicturitionPredictions = startDate => async (dispatch, getState, { api, io }) => {
+    if(io.connected()) {
+        let m = await io.getMicturitionPrediction(startDate)
+        m = m.map(e => ({
+            ...e,
+            date: new Date(e.date),
+            timestamp: new Date(e.timestamp).valueOf()
+        }))
+        dispatch(setMicturitionPredictions(m))
+    }
+}
+
+
 export const loadDrinking = startDate => async (dispatch, getState, { api, io }) => {
     if(io.connected()) {
         let m = await io.getDrinking(startDate)
@@ -246,7 +263,8 @@ export const loadStress = startDate => async (dispatch, getState, { api, io }) =
         s = s.map(e => ({
             ...e,
             date: new Date(e.date),
-            timestamp: new Date(e.timestamp).valueOf()
+            // TODO Fix missing timestamp
+            timestamp: new Date(e.date).valueOf()
         }))
         dispatch(setStress(s))
     }
@@ -273,18 +291,38 @@ export const loadPhotos = (startDate) => async (dispatch, getState, { api, io })
 
 export const updateDrinking = d => async (dispatch, getState, { api, io }) => {
     let { ok } = await io.updateDrinking(d)
+
+    dispatch({
+        type: "UPDATE_DRINKING",
+        payload: d
+    })
 }
 
 export const updateMicturition = m => async (dispatch, getState, { api, io }) => {
     let { ok } = await io.updateMicturition(m)
+
+    dispatch({
+        type: "UPDATE_MICTURITION",
+        payload: m
+    })
 }
 
 export const updateStress = s => async (dispatch, getState, { api, io }) => {
     let { ok } = await io.updateStress(s)
+
+    dispatch({
+        type: "UPDATE_STRESS",
+        payload: s
+    })
 }
 
 export const updateUser = u => async (dispatch, getState, {api, io}) => {
     let { ok } = await io.updateUser(u)
+
+    dispatch({
+        type: "UPDATE_USER",
+        payload: u
+    })
 }
 
 /*

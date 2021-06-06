@@ -95,7 +95,7 @@ const reducer = (state=initialState, action) => {
                 }
             }
             return state
-        case "SET_MICTURITION_PREDICTION":
+        case "SET_MICTURITION_PREDICTIONS":
             return {
                 ...state,
                 micturitionPrediction: action.payload.predictions

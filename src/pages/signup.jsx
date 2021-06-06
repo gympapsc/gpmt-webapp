@@ -9,75 +9,79 @@ import api from "../api/http"
 
 import { signupUser } from "../actions"
 
-const gender = [
-    { id: 1, name: "weiblich"},
-    { id: 2, name: "männlich"},
-    { id: 3, name: "divers"}
+const gender = {
+    w: { id: 1, name: "weiblich"},
+    m: { id: 2, name: "männlich"},
+    d: { id: 3, name: "divers"}
+}
 
-]
+const SexSelect = ({value, onChange, onBlur}) => {
+    const [selected, setSelected] = useState(gender[value])
 
-const SexSelect = () => {
-    const [selected, setSelected] = useState(gender[1])
+    const changeSex = sex => {
+        setSelected(sex)
+        onChange(sex.name[0])
+    }
 
-  return (
-    <div>
-      <Listbox value={selected} onChange={setSelected}>
-        <div className="w-full relative">
-          <Listbox.Button className="relative color transition ease-in-out duration-200 border border-gray-300 w-full py-2 md:py-3 pl-3 pr-10 text-left bg-white rounded-lg  cursor-default focus:outline-none focus:ring-2 focus:ring-blue-500 focus-visible:ring-offset-orange-300 focus:ring-offset-2 focus:border-transparent text-sm md:text-base">
-            <span className="block truncate">{selected.name}</span>
-            <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-              <SelectorIcon
-                className="w-5 h-5 text-gray-400"
-                aria-hidden="true"
-              />
-            </span>
-          </Listbox.Button>
-          <Transition
-            as={Fragment}
-            enter="transition ease-in duration-75"
-            leave="transition ease-in duration-150"
-            leaveFrom="opacity-150"
-            leaveTo="opacity-0"
-          >
-            <Listbox.Options className="absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-md max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-              {gender.map(s => (
-                <Listbox.Option
-                  key={s.id}
-                  className={({ active }) =>
-                    `${active ? 'text-blue-900 bg-blue-100' : 'text-gray-900'}
-                          cursor-default select-none relative py-2 pl-10 pr-4`
-                  }
-                  value={s}
+    return (
+        <div>
+        <Listbox value={selected} onChange={changeSex}>
+            <div className="w-full relative">
+                <Listbox.Button onBlur={onBlur} className="relative color transition ease-in-out duration-200 border border-gray-300 w-full py-2 md:py-3 pl-3 pr-10 text-left bg-white rounded-lg  cursor-default focus:outline-none focus:ring-2 focus:ring-blue-500 focus-visible:ring-offset-orange-300 focus:ring-offset-2 focus:border-transparent text-sm md:text-base">
+                    <span className="block truncate">{selected.name}</span>
+                    <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                    <SelectorIcon
+                        className="w-5 h-5 text-gray-400"
+                        aria-hidden="true"
+                    />
+                    </span>
+                </Listbox.Button>
+                <Transition
+                    as={Fragment}
+                    enter="transition ease-in duration-75"
+                    leave="transition ease-in duration-150"
+                    leaveFrom="opacity-150"
+                    leaveTo="opacity-0"
                 >
-                  {({ selected, active }) => (
-                    <>
-                      <span
-                        className={`${
-                          selected ? 'font-medium' : 'font-normal'
-                        } block truncate`}
-                      >
-                        {s.name}
-                      </span>
-                      {selected ? (
-                        <span
-                          className={`${
-                            active ? 'text-blue-600' : 'text-blue-600'
-                          }
-                                absolute inset-y-0 left-0 flex items-center pl-3`}
+                <Listbox.Options className="absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-md max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                    {Object.keys(gender).map(k => (
+                        <Listbox.Option
+                            key={gender[k].id}
+                            className={({ active }) =>
+                                `${active ? 'text-blue-900 bg-blue-100' : 'text-gray-900'}
+                                    cursor-default select-none relative py-2 pl-10 pr-4`
+                            }
+                            value={gender[k]}
                         >
-                            <CheckIcon className="w-5 h-5" aria-hidden="true" />
-                        </span>
-                      ) : null}
-                    </>
-                  )}
-                </Listbox.Option>
-              ))}
-            </Listbox.Options>
-          </Transition>
+                            {({ selected, active }) => (
+                                <>
+                                    <span
+                                        className={`${
+                                        selected ? 'font-medium' : 'font-normal'
+                                        } block truncate`}
+                                    >
+                                        {gender[k].name}
+                                    </span>
+                                    {selected ? (
+                                    <span
+                                        className={`${
+                                            active ? 'text-blue-600' : 'text-blue-600'
+                                        }
+                                            absolute inset-y-0 left-0 flex items-center pl-3`}
+                                    >
+                                        <CheckIcon className="w-5 h-5" aria-hidden="true" />
+                                    </span>
+                                ) : null}
+                                </>
+                            )}
+                        </Listbox.Option>
+                    ))}
+                </Listbox.Options>
+            </Transition>
+            </div>
+        </Listbox>
         </div>
-      </Listbox>
-    </div>
-  )
+    )
 }
 
 var daysInMonth = function (m, y) {
@@ -116,9 +120,11 @@ const Signup = () => {
             birthMonth,
             birthYear,
             height,
-            weight
+            weight,
+            sex
         } = data
         
+        console.log(sex)
         let birthDate = new Date(parseInt(birthYear), parseInt(birthMonth) - 1, parseInt(birthDay))
 
         dispatch(
@@ -130,7 +136,8 @@ const Signup = () => {
                 weight,
                 height,
                 birthDate,
-                password
+                password,
+                sex
             })
         )
     }
@@ -226,18 +233,14 @@ const Signup = () => {
                                         required: "Du musst dein Geschlecht angeben" 
                                     }
                                 )}/> */}
-                            <SexSelect />
-                            {/* <Controller
+                            <Controller
                                 name="sex"
                                 control={control}
                                 defaultValue={"w"}
-                                rules={{
-                                    required: true
-                                }}
                                 render={
                                     ({ field }) => <SexSelect {...field} />
                                 }
-                                /> */}
+                                />
                             <span className="text-xs text-red-500">{errors.sex?.message}&nbsp;</span>
                         </div>
                         <div className="col-span-full md:col-span-2">

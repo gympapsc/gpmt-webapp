@@ -36,7 +36,7 @@ const StressEntry = ({ id, level }) => (
     <Link href={`/app/stress/${id}`}>
         <a href="#" className="text-md text-white bg-green-600 w-48 md:52 rounded-xl py-2 px-3 self-center focus:ring-2 focus:outline-none focus:ring-blue-500 focus:ring-offset-1">
             <h6 className="text-xs font-semibold text-white text-opacity-80 tracking-wider uppercase">Stress</h6>
-            <h5 className="text-xl md:text-2xl font-semibold">{2}<span className="text-base md:text-lg">. level</span></h5>
+            <h5 className="text-xl md:text-2xl font-semibold">{level}<span className="text-base md:text-lg">. level</span></h5>
         </a>
     </Link>
 )
@@ -133,6 +133,8 @@ const Dialog = ({startDate}) => {
 
     dialog = addDateLabels(dialog)
         .sort((a, b) => a.timestamp - b.timestamp)
+
+    console.log(dialog)
 
     return (
         <div className="flex flex-col px-3 w-full lg:w-3/4 xl:w-2/3 mx-auto space-y-3 pt-8">

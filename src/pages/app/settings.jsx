@@ -22,9 +22,8 @@ const gender = {
     d: { id: 3, name: "divers"}
 }
 
-const SexSelect = ({sex, onChange}) => {
-    console.log(sex)
-    const [selected, setSelected] = useState(gender[sex])
+const SexSelect = ({value, onChange}) => {
+    const [selected, setSelected] = useState(gender[value])
 
     const changeSex = s => {
         setSelected(s)
@@ -165,7 +164,7 @@ const Settings = () => {
                             </div>
                             <div className="col-span-full">
                                 <label className="text-sm text-gray-600" htmlFor="sex">Geschlecht</label>
-                                <SexSelect sex={user?.sex} onChange={changeSex}/>
+                                <SexSelect value={user?.sex} onChange={changeSex}/>
                             </div>
                             <div className="col-span-full md:col-span-3">
                                 <NumberInput label="Gewicht in Kg" value={user?.weight} onChange={changeWeight} />

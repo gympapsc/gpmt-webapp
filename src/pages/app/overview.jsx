@@ -17,7 +17,7 @@ import Shell from '../../components/shell'
 import Aside from '../../components/aside'
 import BarChart from '../../visualisations/barChart'
 import LineChart from '../../visualisations/lineChart'
-import { useDrinking, useMicturition, useUser} from '../../hooks'
+import { useDrinking, useMicturition, useUser, useMicturitionPredictions} from '../../hooks'
 
 
 const WEEKDAY = [
@@ -32,7 +32,7 @@ const WEEKDAY = [
 
 const Micturition = () => {
     let dispatch = useDispatch()
-    let predictions = useSelector(state => state.micturitionPredictions)
+    let predictions = useMicturitionPredictions()
         .map(p => [p.date, p.prediction])
     
     let micturition = useMicturition(new Date())
@@ -61,23 +61,23 @@ const Micturition = () => {
                                 <div className="grid grid-cols-2 gap-2 px-3 md:px-5 xl:gap-3 mx-auto">
                                     <div className="col-span-full xl:col-span-1 flex flex-col">
                                         <div>
-                                            <h2 className="text-lg md:text-xl font-semibold text-gray-800">Heute</h2>
+                                            <h2 className="text-lg md:text-xl font-semibold text-gray-800">Gestern</h2>
                                             <p className="text-gray-500 text-sm md:text-md">Alle Trink- und Miktionseinträge die du in den letzten 24 Stunden gemacht hast.</p>
                                         </div>
                                         <div className="grid grid-rows-2 mt-auto">
                                             <div
                                                 className="w-full h-36 lg:h-48 row-span-1">
-                                                <BarChart></BarChart>
+                                                <BarChart data={micturition}></BarChart>
                                             </div>
                                             <div
                                                 className="w-full h-36 lg:h-48 row-span-1">
-                                                <BarChart></BarChart>
+                                                <BarChart data={drinking}></BarChart>
                                             </div>
                                         </div>
                                     </div>
                                     <div className="col-span-full xl:col-span-1 flex flex-col">
                                         <div>
-                                            <h2 className="text-lg md:text-xl font-semibold text-gray-800">Vorhersage</h2>
+                                            <h2 className="text-lg md:text-xl font-semibold text-gray-800">Morgen</h2>
                                             <p className="text-gray-500 text-sm md:text-md">Basierend auf deiner getrunkenmenge Flüssigkeit und den letzten Miktionen, wird diese Miktionsvorhersage für dich errechnet.</p>
                                         </div>
                                         <div
@@ -87,7 +87,7 @@ const Micturition = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="flex flex-col px-3 md:px-5 xl:px-5 xl:w-3/4 mx-auto">
+                            <div className="flex flex-col px-3 md:px-4 mx-auto">
                                 <h3 className="mb-2 font-semibold text-lg md:text-xl">Einträge</h3>
                                 <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                                     <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -139,7 +139,7 @@ const Micturition = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="flex flex-col px-3 md:px-5 xl:px-5 xl:w-3/4 mx-auto">
+                            <div className="flex flex-col px-3 md:px-4 mx-auto">
                                 <h3 className="mb-2 font-semibold text-lg md:text-xl">Fotos</h3>
                                 <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                                     <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -195,7 +195,7 @@ const Micturition = () => {
                             </div>
                         </div> :
                         <div className="self-center mt-16 text-center">
-                            <h1 className="text-xl font-semibold text-gray-500">Du hast noch keine Einträge gemacht</h1>
+                            <h1 className="text-xl font-semibold text-gray-600">Du hast noch keine Einträge gemacht</h1>
                             <span className="text-base text-gray-500">Sage dem Chatbot wenn du etwas getrunken hast</span>
                         </div>
                     }

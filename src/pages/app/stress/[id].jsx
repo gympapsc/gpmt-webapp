@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState} from "react"
 import { useRouter } from "next/router"
 import { useDispatch, useSelector } from "react-redux"
 
@@ -17,10 +17,9 @@ const Edit = () => {
     let router = useRouter()
     let {id} = router.query
     let dispatch = useDispatch()
+    let [stress, setLevel] = useState(entry?.level)
 
     let entry = useStress(new Date()).find(s => s._id === id)
-
-    console.log(entry)
 
     let changeLevel = level => {
         dispatch(updateStress({
@@ -50,16 +49,16 @@ const Edit = () => {
                     <form className="mt-3 space-y-4">
                         <div className="col-span-full">
                             <label className="text-sm text-gray-600" htmlFor="amount">Stresslevel</label>
-                            <h4 className="text-2xl font-semibold">{entry?.level}<span className="text-sm">. level</span></h4>
+                            <h4 className="text-2xl font-semibold">{stress}<span className="text-sm">. level</span></h4>
                             <input
                                 type="range"
                                 className="block w-full"
                                 id="amount"
                                 min="1"
                                 max="5"
-                                value={entry?.level}
+                                value={stress}
                                 onChange={e => setLevel(e.target.value)}
-                                onBlur={e => changeLevel(e.target.value)}
+                                onBlur={e => changeLevel(stress)}
                                 />
                             </div>
                         <div className="col-span-full">

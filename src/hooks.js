@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { authenticateUser, loadDrinking, loadMessages, loadMicturition, loadPhotos, loadStress } from "./actions"
+import { authenticateUser, loadDrinking, loadMessages, loadMicturition, loadPhotos, loadStress, loadMicturitionPredictions} from "./actions"
 
 
 export function useDrinking(startDate) {
@@ -57,6 +57,26 @@ export function useMicturition(startDate) {
 
     return micturition || []
 }
+
+export function useMicturitionPredictions(startDate) {
+    let dispatch = useDispatch()
+    let predictions = useSelector(s => s.micturitionPredictions)
+    let [requestIsRunning, runningRequest] = useState(false)
+
+    useEffect(() => {
+        if(typeof window !== 'undefined') {
+            if(predictions === null && !requestIsRunning) {
+                dispatch(loadMicturitionPredictions(startDate))
+                runningRequest(true)
+            } else if(predictions !== null && requestIsRunning) {
+                runningRequest(false)
+            }
+        }
+    })
+
+    return predictions || []
+}
+
 
 export function useStress(startDate) {
     let dispatch = useDispatch()
