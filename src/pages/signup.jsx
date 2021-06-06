@@ -80,7 +80,6 @@ const SexSelect = () => {
   )
 }
 
-
 var daysInMonth = function (m, y) {
     switch (m) {
         case 1 :

@@ -21,6 +21,8 @@ const api = {
                 })
             }
 
+            console.log("in call io init ", authToken)
+
             s.on("connect", () => {
                 console.log("connected!!!")
                 s.emitAsync = (...args) => new Promise((res, rej) => {
@@ -36,7 +38,7 @@ const api = {
             })
         })
     },
-    active: () => typeof socket !== "undefined" && socket.connected,
+    connected: () => typeof socket !== "undefined" && socket.connected,
     close: () => socket.close(),
     addMessage: text => {
         if(socket) {
@@ -78,9 +80,7 @@ const api = {
     onUpdateUser: cb => socket.on("UPDATE_USER", cb),
     onStress: cb => socket.on("ADD_STRESS", cb),
     onDrinking: cb => socket.on("ADD_DRINKING", cb),
-    getUserInfo: () => {
-        if (socket) return socket.emitAsync("GET_USER_INFO")
-    },
+    getUserInfo: () => socket.emitAsync("GET_USER_INFO"),
     updateUser: (user) => {
         if(socket) return socket.emitAsync("UPDATE_USER", user)
     },

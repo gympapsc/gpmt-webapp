@@ -10,7 +10,8 @@ import { useMessages } from "../hooks"
 
 const Aside = () => {
     let startDate = new Date()
-    let messages = useMessages(startDate).sort((a, b) => b.timestamp - a.timestamp)
+    let messages = useMessages(startDate)
+        .sort((a, b) => b.timestamp - a.timestamp)
     
     let currDate = new Date()
 

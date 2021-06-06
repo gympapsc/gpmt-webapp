@@ -62,12 +62,20 @@ const reducer = (state=initialState, action) => {
                         ...(state.drinking || []),
                         action.payload
                     ]
-                }
+            }
         case "ADD_STRESS":
             return {
                 ...state,
                 stress: [
                     ...(state.stress || []),
+                    action.payload
+                ]
+            }
+        case "ADD_PHOTO":
+            return {
+                ...state,
+                photos: [
+                    ...state.photos,
                     action.payload
                 ]
             }
@@ -100,32 +108,11 @@ const reducer = (state=initialState, action) => {
                 }
             }
             return state
-        case "SET_AUTH_TOKEN":
-            return {
-                ...state,
-                bearer: action.payload.bearer
-            }
         case "SET_USER":
             return {
                 ...state,
                 user: action.payload.user
-            }
-        case "UPDATE_USER":
-            return {
-                ...state,
-                user: {
-                    ...state.user,
-                    ...action.payload
-                }
-            }
-        case "ADD_PHOTO":
-            return {
-                ...state,
-                photos: [
-                    ...state.photos,
-                    action.payload
-                ]
-            }
+            }    
         case "SET_PHOTOS":
             return {
                 ...state,
@@ -135,6 +122,14 @@ const reducer = (state=initialState, action) => {
             return {
                 ...state,
                 stress: action.payload.entries
+            }
+        case "UPDATE_USER":
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    ...action.payload
+                }
             }
         case "SIGNIN_FAILED":
             return {

@@ -6,7 +6,8 @@ import {
     getMessages,
     signoutUser,
     uploadPhoto,
-    addPhoto
+    addPhoto,
+    test
 } from '../../actions'
 
 import Secure from '../../components/secure'
@@ -19,17 +20,10 @@ import { useDrinking, useMessages, useMicturition, useStress } from '../../hooks
 
 const App = () => {
     let startDate = new Date()
-    let drinking = useDrinking(startDate)
-    let stress = useStress(startDate)
-    let micturition = useMicturition(startDate)
-    let messages = useMessages(startDate)
-    
-    
 
     let messageRef = useRef(null)
     let fileInputRef = useRef(null)
     let dispatch = useDispatch()
-    let user = useSelector(state => state.user)
     let authBearer = useSelector(state => state.bearer)
 
     const utter = () => {

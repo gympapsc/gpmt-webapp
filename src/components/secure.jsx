@@ -1,13 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import io from "../api/io"
 
-import { assignUser } from '../actions'
 import { useUser } from '../hooks'
 
 
 const Secure = ({children}) => {    
     let user = useUser()
-        
     return (
         <>
             {user ? children: 'Loading ...'}
