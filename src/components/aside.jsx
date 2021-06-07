@@ -58,12 +58,12 @@ const Aside = ({ showMenu }) => {
             <div className="p-2 md:p-4 grid grid-cols-2 gap-3">
                 <Link href="/app">
                     <a className="col-span-2 p-3 bg-white rounded-xl">
-                        <h3 className="text-md font-semibold">Chat</h3>
+                        <h3 className="text-md font-semibold">Chat &bull; <span className="text-gray-500">Gestern</span></h3>
                         <p className="text-gray-400">{messages[0]?.text || "..."}</p>
                     </a>
                 </Link>
                 <Link href="/app/overview" id="micturition_widget">
-                    <a className="col-span-1 h-32 text-white rounded-xl bg-green-500 flex flex-col p-3">
+                    <a className="col-span-1 h-32 text-white rounded-xl bg-gradient-to-l from-green-500 to-green-600 flex flex-col p-3">
                         <h3 className="text-md font-semibold">Miktion</h3>
                         <div className="mt-auto">
                             <h5 className="text-sm -mb-1 tracking-wide">{currDate.getHours()}:{currDate.getMinutes()}</h5>
