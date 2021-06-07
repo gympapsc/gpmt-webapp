@@ -52,7 +52,7 @@ export const signinUser = (
 
 export const signoutUser = () => (dispatch, getState, { api, io }) => {
     if(typeof window !== "undefined") {
-        loadStorage.removeItem("auth_token")
+        localStorage.removeItem("auth_token")
 
         redirect("/signin")
     }
@@ -243,7 +243,6 @@ export const loadMicturitionPredictions = startDate => async (dispatch, getState
         dispatch(setMicturitionPredictions(m))
     }
 }
-
 
 export const loadDrinking = startDate => async (dispatch, getState, { api, io }) => {
     if(io.connected()) {

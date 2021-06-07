@@ -148,7 +148,6 @@ const Settings = () => {
 
     return (
         <Secure>
-            <Aside></Aside>
             <Shell title="Einstellungen" className="bg-gray-100">
                 <div className="px-3 w-full lg:w-5/6 xl:w-2/3 mx-auto my-5 divide-y divide-gray-500">
                     <form className="divide-y divide-gray-300" action="#" method="GET">
