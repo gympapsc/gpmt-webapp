@@ -24,4 +24,16 @@ describe("http client", () => {
         expect(true).toBeTruthy()
     })
 
+    it("should post signup request", async () => {
+
+    })
+
+    it("should post utterance", async () => {
+
+    })
+
+    it("should retrieve messages", async () => {})
+
+    it("should retrieve messages", async () => {})
+    
 })

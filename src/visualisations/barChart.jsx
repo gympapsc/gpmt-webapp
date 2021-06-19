@@ -39,10 +39,10 @@ const BarChart = ({data}) => {
             [new Date("2020-10-10T23:00:00"), 100]
         ]
 
-        console.log(d3.bin()
-            .value(d => d.date)
-            .thresholds(thresholdTime())
-        (data))
+        // cd3.bin()
+        //     .value(d => d.date)
+        //     .thresholds(thresholdTime())
+        // (data)
 
         let margin = {top: 10, right: 20, bottom: 20, left: 20},
             width = element.current.clientWidth - margin.left - margin.right,

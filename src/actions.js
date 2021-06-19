@@ -9,9 +9,9 @@ export const signupUser = ({
     height,
     birthDate,
     sex
-}) => async (dispatch, getState, { api, io }) => {
+}) => async (dispatch, getState, { api }) => {
     await api.init()
-    let {data: {bearer}} = await api.signupUser({
+    let { data: {ok, err} } = await api.signupUser({
         firstname,
         surname,
         email,
@@ -21,80 +21,86 @@ export const signupUser = ({
         birthDate,
         sex
     })
-    
-    console.log(bearer)
 
-    if(bearer) {
-        localStorage.setItem("auth_token", bearer)
+    
+    if(ok) {
         redirect("/setup/about")
     } else {
-        console.warn("Sign up failed")
+        dispatch({ type: "SIGNUP_FAILED" })
     }
 }
 
 export const signinUser = (
     email,
     password
-) => async (dispatch, getState, { api, io }) => {
-    await api.init()
-    let { data: { bearer }, err } = await api.signinUser(
+) => async (dispatch, getState, { api }) => {
+    api.init()
+    let { data: { ok, err }} = await api.signinUser(
         email,
         password
     )
 
+    
     if(err) {
         dispatch({ type: "SIGNIN_FAILED"})
-    } else if(bearer) {
-        localStorage.setItem("auth_token", bearer)
+    } else if(ok) {
         redirect("/app")
     }
 }
 
-export const signoutUser = () => (dispatch, getState, { api, io }) => {
+export const signoutUser = () => (dispatch, getState, { api }) => {
     if(typeof window !== "undefined") {
-        localStorage.removeItem("auth_token")
-
         redirect("/signin")
     }
 }
 
-export const authenticateUser = () => async (dispatch, getState, { api, io }) => {
+export const authenticateUser = () => async (dispatch, getState, { api }) => {
     if(typeof window !== undefined) {
-        let bearer = localStorage.getItem("auth_token")
-        api.init(bearer)
-        await io.init(bearer)
+        api.init()
+        try {
+            let { data: {user, err} } = await api.getUserInfo()
 
-        let user = await io.getUserInfo()
+            if(!user) {
+                return redirect("/signin")
+            }
 
-        user = {
-            ...user,
-            birthDate: new Date(user.birthDate),
-            timestamp: new Date(user.timestamp).valueOf()
+            user = {
+                ...user,
+                birthDate: new Date(user.birthDate),
+                timestamp: new Date(user.timestamp).valueOf()
+            }
+
+            dispatch(setUser(user))
+        } catch {
+            return redirect("/signin")
         }
-
-        dispatch(setUser(user))
-        dispatch(openEventStream())
+        
     }
 }
 
-export const openEventStream = () => (dispatch, getState, { api, io }) => {
-    if(typeof window !== undefined) {
-        if(io.connected()) {
-            io.onMessage(m => dispatch(addMessage(m.text, m.sender, new Date(m.timestamp).valueOf())))
-            io.onMicturition(m => dispatch(addMicturition(new Date(m.date), new Date(m.timestamp).valueOf(), m._id)))
-            io.onDrinking(d => dispatch(addDrinking(new Date(d.date), new Date(d.timestamp).valueOf(), d.amount, d._id)))
-            io.onStress(s => dispatch(addStress(new Date(s.date), new Date(s.date).valueOf(), s.level, s._id)))
-            io.onUpdateUser(u => dispatch(updateUser(u)))
-
-            io.onMicturitionPredictions(p => dispatch(setMicturitionPrediction(p)))
-        }
-    }
+export const utterMessage = (text) =>  async (dispatch, getState, { api }) => {
+    let { data: { events, micturitionPrediction }} = await api.utterMessage(text)
+    processEvents(events, dispatch, getState)
+    dispatch(setMicturitionPredictions(micturitionPrediction))
 }
 
-export const utterMessage = (text) => {
-    return (dispatch, getState, { api, io }) => {
-        if(io.connected()) {
-            return io.addMessage(text)
+
+const processEvents = (events, dispatch, getState) => {
+    for(let event of events) {
+        if(event.text) {
+            dispatch(addMessage(event.text, event.sender, new Date(event.timestamp).valueOf()))
+        } else if(event.type) {
+            switch(event.type) {
+                case "ADD_MICTURITION":
+                    dispatch(addMicturition(new Date(event.date), new Date(event.timestamp).valueOf(), event._id))
+                    break
+                case "ADD_STRESS":
+                    dispatch(addStress(new Date(event.date), new Date(event.timestamp).valueOf(), event.level, event._id))
+                    break
+                case "ADD_DRINKING":
+                    dispatch(addDrinking(new Date(event.date), new Date(event.timestamp).valueOf(), event.amount, event._id))
+                    break
+            }
         }
     }
 }
@@ -209,76 +215,90 @@ export const setStress = (entries) => ({
     Load Data
 */
 
-export const loadMessages = (startDate) => async (dispatch, getState, { api, io }) => {
-    if(io.connected()) {
-        let m = await io.getMessages(startDate)
-        m = m.map(e => ({
+export const loadMessages = (startDate) => async (dispatch, getState, { api }) => {
+    if(!api._pending["messages"]) {
+        api._pending["messages"] = true
+        let { data: { messages }} = await api.getMessages(startDate)
+        messages = messages.map(e => ({
             ...e,
             timestamp: new Date(e.timestamp).valueOf()
         }))
-        dispatch(setMessages(m))
+        api._pending["messages"] = false
+        dispatch(setMessages(messages))
     }
 }
 
-export const loadMicturition = startDate => async (dispatch, getState, { api, io }) => {
-    if(io.connected()) {
-        let m = await io.getMicturition(startDate)
-        m = m.map(e => ({
-            ...e,
-            date: new Date(e.date),
-            timestamp: new Date(e.timestamp).valueOf()
-        }))
-        dispatch(setMicturition(m))
-    }
-}
-
-export const loadMicturitionPredictions = startDate => async (dispatch, getState, { api, io }) => {
-    if(io.connected()) {
-        let m = await io.getMicturitionPrediction(startDate)
-        m = m.map(e => ({
+export const loadMicturition = startDate => async (dispatch, getState, { api }) => {
+    if(!api._pending["micturition"]) {
+        api._pending["micturition"] = true
+        let { data: { entries }} = await api.getMicturition(startDate)
+        entries = entries.map(e => ({
             ...e,
             date: new Date(e.date),
             timestamp: new Date(e.timestamp).valueOf()
         }))
-        dispatch(setMicturitionPredictions(m))
+        api._pending["micturition"] = false
+        dispatch(setMicturition(entries))
     }
 }
 
-export const loadDrinking = startDate => async (dispatch, getState, { api, io }) => {
-    if(io.connected()) {
-        let m = await io.getDrinking(startDate)
-        m = m.map(e => ({
+export const loadMicturitionPredictions = startDate => async (dispatch, getState, { api }) => {
+    if(!api._pending["micturitionPrediction"]) {
+        api._pending["micturitionPrediction"] = true
+        let { data: { predictions }} = await api.getMicturitionPrediction(startDate)
+        predictions = predictions.map(e => ({
             ...e,
             date: new Date(e.date),
             timestamp: new Date(e.timestamp).valueOf()
         }))
-        dispatch(setDrinking(m))
+        api._pending["micturitionPrediction"] = false
+        dispatch(setMicturitionPredictions(predictions))
     }
 }
 
-export const loadStress = startDate => async (dispatch, getState, { api, io }) => {
-    if(io.connected()) {
-        let s = await io.getStress(startDate)
-        s = s.map(e => ({
+export const loadDrinking = startDate => async (dispatch, getState, { api }) => {
+    if(!api._pending["drinking"]) {
+        api._pending["drinking"] = true
+        let { data: { entries }} = await api.getDrinking(startDate)
+        entries = entries.map(e => ({
+            ...e,
+            date: new Date(e.date),
+            timestamp: new Date(e.timestamp).valueOf()
+        }))
+        api._pending["drinking"] = false
+        dispatch(setDrinking(entries))
+    }
+}
+
+export const loadStress = startDate => async (dispatch, getState, { api }) => {
+    if(!api._pending["stress"]) {
+        api._pending["stress"] = true
+        let { data: { entries }} = await api.getStress(startDate)
+        entries = entries.map(e => ({
             ...e,
             date: new Date(e.date),
             // TODO Fix missing timestamp
             timestamp: new Date(e.date).valueOf()
         }))
-        dispatch(setStress(s))
+        api._pending["stress"] = false
+        dispatch(setStress(entries))
     }
 }
 
-export const loadPhotos = (startDate) => async (dispatch, getState, { api, io }) => {
-    if(typeof window !== "undefined") {
+export const loadPhotos = (startDate) => async (dispatch, getState, { api }) => {
+    if(typeof window !== "undefined" && !api._pending["photos"]) {
+        api._pending["photos"] = true
         const { data: { photos } } = await api.getPhotos(startDate)
 
         if(photos) {
             for(let i = 0; i < photos.length; i++) {
-                photos[i].url = await api.downloadPhoto(photos[i]._id)
+                photos[i].url = `${process.env.NEXT_PUBLIC_API_URL}/photo/${photos[i]._id}`
+                photos[i].date = new Date(photos[i].date)
+                photos[i].timestamp = new Date(photos[i].timestamp)
             }
             dispatch(setPhotos(photos))
         }
+        api._pending["photos"] = false
     }
 }
 
@@ -287,9 +307,8 @@ export const loadPhotos = (startDate) => async (dispatch, getState, { api, io })
     Update Data
 */
 
-
-export const updateDrinking = d => async (dispatch, getState, { api, io }) => {
-    let { ok } = await io.updateDrinking(d)
+export const updateDrinking = d => async (dispatch, getState, { api }) => {
+    let {data: { ok }} = await api.updateDrinking(d)
 
     dispatch({
         type: "UPDATE_DRINKING",
@@ -297,8 +316,8 @@ export const updateDrinking = d => async (dispatch, getState, { api, io }) => {
     })
 }
 
-export const updateMicturition = m => async (dispatch, getState, { api, io }) => {
-    let { ok } = await io.updateMicturition(m)
+export const updateMicturition = m => async (dispatch, getState, { api }) => {
+    let {data: { ok }} = await api.updateMicturition(m)
 
     dispatch({
         type: "UPDATE_MICTURITION",
@@ -306,8 +325,8 @@ export const updateMicturition = m => async (dispatch, getState, { api, io }) =>
     })
 }
 
-export const updateStress = s => async (dispatch, getState, { api, io }) => {
-    let { ok } = await io.updateStress(s)
+export const updateStress = s => async (dispatch, getState, { api }) => {
+    let { data: { ok }} = await api.updateStress(s)
 
     dispatch({
         type: "UPDATE_STRESS",
@@ -315,8 +334,8 @@ export const updateStress = s => async (dispatch, getState, { api, io }) => {
     })
 }
 
-export const updateUser = u => async (dispatch, getState, {api, io}) => {
-    let { ok } = await io.updateUser(u)
+export const updateUser = u => async (dispatch, getState, { api }) => {
+    let { data: { ok } } = await api.updateUser(u)
 
     dispatch({
         type: "UPDATE_USER",
@@ -328,8 +347,8 @@ export const updateUser = u => async (dispatch, getState, {api, io}) => {
     Delete Data
 */
 
-export const deleteDrinking = (_id) => async (dispatch, getState, {api, io}) => {
-    await io.deleteDrinking(_id)
+export const deleteDrinking = (_id) => async (dispatch, getState, { api }) => {
+    await api.deleteDrinking(_id)
 
     dispatch({
         type: "DELETE_DRINKING",
@@ -339,8 +358,8 @@ export const deleteDrinking = (_id) => async (dispatch, getState, {api, io}) => 
     })
 }
 
-export const deleteMicturition = (_id) => async (dispatch, getState, { api, io }) => {
-    await io.deleteMicturition(_id)
+export const deleteMicturition = (_id) => async (dispatch, getState, { api }) => {
+    await api.deleteMicturition(_id)
 
     dispatch({
         type: "DELETE_MICTURITION",
@@ -350,8 +369,8 @@ export const deleteMicturition = (_id) => async (dispatch, getState, { api, io }
     })
 }
 
-export const deleteStress = (_id) =>  async (dispatch, getState, { api, io }) => {
-    await io.deleteStress(_id)
+export const deleteStress = (_id) =>  async (dispatch, getState, { api }) => {
+    await api.deleteStress(_id)
 
     dispatch({
         type: "DELETE_STRESS",

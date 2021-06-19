@@ -2,9 +2,8 @@ import React, {useRef, useEffect} from 'react'
 import { useSelector } from "react-redux"
 import * as d3 from 'd3'
 
-const Clock = () => {
+const Clock = ({ data }) => {
     const element = useRef(null)
-    const predictions = useSelector(state => state.micturitionPredictions)
 
     useEffect(() => {
         // set the dimensions and margins of the graph
@@ -33,8 +32,6 @@ const Clock = () => {
                 .attr("edgeMode", "wrap")
                 .attr("stdDeviation", "15")
 
-        // Create dummy data
-        let data = predictions
 
         let color = d3.scaleLinear()
             .domain([0, 50, 100])

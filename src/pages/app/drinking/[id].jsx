@@ -15,7 +15,8 @@ const DrinkingEdit = () => {
     let {id} = router.query
 
     let dispatch = useDispatch()
-    let entry = useDrinking(new Date()).find(d => d._id === id)
+    let entry = useDrinking(new Date())
+        .find(d => d._id === id)
     let [amount, setAmount] = useState(entry?.amount || 0)
     
 
@@ -40,7 +41,7 @@ const DrinkingEdit = () => {
     }
 
     return (
-        <Secure>
+        <>
             <Aside />
             <Shell title={"Trinkeintrag"} className="bg-gray-100">
                 <div className="flex flex-col px-3 w-full lg:w-3/4 xl:w-2/3 mx-auto my-5 space-y-4">
@@ -75,8 +76,14 @@ const DrinkingEdit = () => {
                     </form>
                 </div>
             </Shell>
-        </Secure>
+        </>
     )
 }
 
-export default DrinkingEdit
+const SecureDrinkingEdit = () => (
+    <Secure>
+        <DrinkingEdit></DrinkingEdit>
+    </Secure>
+)
+
+export default SecureDrinkingEdit

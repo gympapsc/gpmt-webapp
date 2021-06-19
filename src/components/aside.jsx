@@ -8,14 +8,22 @@ import Clock from "../visualisations/clock"
 import BarChart from "../visualisations/barChart"
 import LineChart from "../visualisations/lineChart"
 
-import { useMessages } from "../hooks"
+import { useDrinking, useMessages, useMicturition, useMicturitionPredictions, useStress } from "../hooks"
 import { signoutUser } from "../actions"
+import DrinkingChart from "../visualisations/drinkingChart"
+import MicturitionChart from "../visualisations/micturitionChart"
+import StressChart from "../visualisations/stressChart"
 
 const Aside = ({ showMenu }) => {
     let startDate = new Date()
     let dispatch = useDispatch()
     let messages = useMessages(startDate)
         .sort((a, b) => b.timestamp - a.timestamp)
+
+    let micturition = useMicturition(startDate)
+    let drinking = useDrinking(startDate)
+    let prediction = useMicturitionPredictions(startDate)
+    let stress = useStress(startDate)
 
     const isMobile = useMediaQuery({
         query: '(max-width: 640px)'
@@ -82,14 +90,14 @@ const Aside = ({ showMenu }) => {
                 <div className="col-span-2">
                     <div className="p-3 h-96">
                         <h3 className="text-md font-semibold">Heute</h3>
-                        <Clock></Clock>
+                        <Clock data={prediction}></Clock>
                     </div>
                 </div>
                 <Link href="/app/overview">
                     <a className="col-span-2 h-64 rounded-xl bg-white p-3 flex flex-col">
                         <h3 className="text-md font-semibold flex-grow-0">Miktion</h3>
                         <div className="w-full h-full mt-3 flex-grow">
-                            <LineChart />
+                            <MicturitionChart data={micturition || []} />
                         </div>
                     </a>
                 </Link>
@@ -97,7 +105,7 @@ const Aside = ({ showMenu }) => {
                     <a className="col-span-2 h-64 rounded-xl bg-white p-3 flex flex-col">
                         <h3 className="text-md font-semibold">Trinken</h3>
                         <div className="w-full h-full mt-3 flex-grow">
-                            <BarChart></BarChart>
+                            <DrinkingChart data={drinking || []} />
                         </div>
                     </a>
                 </Link>
@@ -105,7 +113,7 @@ const Aside = ({ showMenu }) => {
                     <a className="col-span-2 h-64 rounded-xl bg-white p-3 flex flex-col">
                         <h3 className="text-md font-semibold">Stress</h3>
                         <div className="w-full h-full mt-3 flex-grow">
-                            <BarChart></BarChart>
+                            <StressChart data={stress || []} />
                         </div>
                     </a>
                 </Link>

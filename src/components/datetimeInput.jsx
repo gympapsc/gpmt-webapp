@@ -8,7 +8,6 @@ const DateTimeInput = ({label, value, onChange}) => {
     let [month, setMonth] = useState(value?.getMonth() || 0)
     let [year, setYear] = useState(value?.getFullYear() || 0)
 
-
     let changeDate = e => {
         let newDate = new Date(year, month, day, hour, minute)
         onChange(newDate)

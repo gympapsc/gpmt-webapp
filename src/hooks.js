@@ -6,14 +6,10 @@ import { authenticateUser, loadDrinking, loadMessages, loadMicturition, loadPhot
 export function useDrinking(startDate) {
     let dispatch = useDispatch()
     let drinking = useSelector(s => s.drinking)
-    let [requestIsRunning, runningRequest] = useState(false)
 
     useEffect(() => {
-        if(typeof window !== 'undefined' && drinking === null && !requestIsRunning) {
+        if(typeof window !== 'undefined' && drinking === null) {
             dispatch(loadDrinking(startDate))
-            runningRequest(true)
-        } else if(drinking !== null && requestIsRunning) {
-            runningRequest(false)
         }
     })
 
@@ -23,16 +19,10 @@ export function useDrinking(startDate) {
 export function useMessages(startDate) {
     let dispatch = useDispatch()
     let messages = useSelector(s => s.messages)
-    let [requestIsRunning, runningRequest] = useState(false)
 
     useEffect(() => {
-        if(typeof window !== 'undefined') {
-            if(messages === null && !requestIsRunning) {
-                dispatch(loadMessages(startDate))
-                runningRequest(true)
-            } else if(messages !== null && requestIsRunning) {
-                runningRequest(false)
-            }
+        if(typeof window !== 'undefined' && messages === null) {
+            dispatch(loadMessages(startDate))
         }
     })
 
@@ -42,16 +32,12 @@ export function useMessages(startDate) {
 export function useMicturition(startDate) {
     let dispatch = useDispatch()
     let micturition = useSelector(s => s.micturition)
-    let [requestIsRunning, runningRequest] = useState(false)
 
     useEffect(() => {
-        if(typeof window !== 'undefined') {
-            if(micturition === null && !requestIsRunning) {
-                dispatch(loadMicturition(startDate))
-                runningRequest(true)
-            } else if(micturition !== null && requestIsRunning) {
-                runningRequest(false)
-            }
+        if(typeof window !== 'undefined' && micturition === null) {
+            console.log("LOADING MICTURITION")
+
+            dispatch(loadMicturition(startDate))
         }
     })
 
@@ -61,16 +47,10 @@ export function useMicturition(startDate) {
 export function useMicturitionPredictions(startDate) {
     let dispatch = useDispatch()
     let predictions = useSelector(s => s.micturitionPredictions)
-    let [requestIsRunning, runningRequest] = useState(false)
 
     useEffect(() => {
-        if(typeof window !== 'undefined') {
-            if(predictions === null && !requestIsRunning) {
-                dispatch(loadMicturitionPredictions(startDate))
-                runningRequest(true)
-            } else if(predictions !== null && requestIsRunning) {
-                runningRequest(false)
-            }
+        if(typeof window !== 'undefined' && predictions === null) {
+            dispatch(loadMicturitionPredictions(startDate))
         }
     })
 
@@ -81,16 +61,11 @@ export function useMicturitionPredictions(startDate) {
 export function useStress(startDate) {
     let dispatch = useDispatch()
     let stress = useSelector(s => s.stress)
-    let [requestIsRunning, runningRequest] = useState(false)
 
     useEffect(() => {
-        if(typeof window !== 'undefined') {
-            if(stress === null && !requestIsRunning) {
-                dispatch(loadStress(startDate))
-                runningRequest(true)
-            } else if(stress !== null && requestIsRunning) {
-                runningRequest(false)
-            }
+        if(typeof window !== 'undefined' && stress === null) {
+            console.log("LOADING STRESS")
+            dispatch(loadStress(startDate))
         }
     })
 
@@ -100,16 +75,10 @@ export function useStress(startDate) {
 export function usePhotos(startDate) {
     let dispatch = useDispatch()
     let photos = useSelector(s => s.photos)
-    let [requestIsRunning, runningRequest] = useState(false)
 
     useEffect(() => {
-        if(typeof window !== 'undefined') {
-            if(photos === null && !requestIsRunning) {
-                dispatch(loadPhotos(startDate))
-                runningRequest(true)
-            } else if(photos !== null && requestIsRunning) {
-                runningRequest(false)
-            }
+        if(typeof window !== 'undefined' && photos === null) {
+            dispatch(loadPhotos(startDate))
         }
     })
 
@@ -119,19 +88,47 @@ export function usePhotos(startDate) {
 export function useUser() {
     let dispatch = useDispatch()
     let user = useSelector(s => s.user)
-    let [requestIsRunning, runningRequest] = useState(false)
 
     useEffect(() => {
-        if(typeof window !== 'undefined') {
-            if(user === null && !requestIsRunning) {
-                dispatch(authenticateUser())
-                
-                runningRequest(true)
-            } else if(user !== null && requestIsRunning) {
-                runningRequest(false)
-            }
+        if(typeof window !== 'undefined' && user === null) {
+            dispatch(authenticateUser())             
         }
     })
 
     return user
+}
+
+
+export function useDictation(onresult) {
+    if(typeof window === "typeof") {
+        let SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition
+
+        if(!SpeechRecognition) {
+            return {
+                supported: false
+            }
+        }
+        
+
+        let recognition = new SpeechRecognition()
+        recognition.onresult = event => {
+            onresult(event.results[0][0].transcript)
+        }
+
+        recognition.onspeechend = function() {
+            recognition.stop();
+        }
+
+        return {
+            supported: true,
+            start: () => {
+                console.log(recognition)
+                recognition.start()
+            }
+        }
+    }
+
+    return {
+        supported: false
+    }
 }

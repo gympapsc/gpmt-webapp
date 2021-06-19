@@ -21,6 +21,7 @@ const Edit = () => {
     let entry = useMicturition(new Date())
         .find(m => m._id === id)
 
+
     let changeMicturition = date => {
         dispatch(updateMicturition({
             ...entry,
@@ -58,8 +59,10 @@ const Edit = () => {
     )
 }
 
-export default () => (
-    <Secure>
-        <Edit />
-    </Secure>
-)
+export default function SecureMicturitionEdit() {    
+    return (
+        <Secure>
+            <Edit />
+        </Secure>
+    )
+}

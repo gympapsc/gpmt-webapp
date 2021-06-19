@@ -18,6 +18,8 @@ import Aside from '../../components/aside'
 import BarChart from '../../visualisations/barChart'
 import LineChart from '../../visualisations/lineChart'
 import { useDrinking, useMicturition, useUser, useMicturitionPredictions} from '../../hooks'
+import MicturitionChart from '../../visualisations/micturitionChart'
+import DrinkingChart from '../../visualisations/drinkingChart'
 
 
 const WEEKDAY = [
@@ -33,7 +35,6 @@ const WEEKDAY = [
 const Micturition = () => {
     let dispatch = useDispatch()
     let predictions = useMicturitionPredictions()
-        .map(p => [p.date, p.prediction])
     
     let micturition = useMicturition(new Date())
         .map(m => ({type:"micturition", ...m}))
@@ -65,11 +66,11 @@ const Micturition = () => {
                                     <div className="grid grid-rows-2 mt-auto">
                                         <div
                                             className="w-full h-36 lg:h-48 row-span-1">
-                                            <BarChart data={micturition}></BarChart>
+                                            <MicturitionChart data={micturition} />
                                         </div>
                                         <div
                                             className="w-full h-36 lg:h-48 row-span-1">
-                                            <BarChart data={drinking}></BarChart>
+                                            <DrinkingChart data={drinking} />
                                         </div>
                                     </div>
                                 </div>
