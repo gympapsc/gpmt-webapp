@@ -10,7 +10,7 @@ const StressChart = ({data}) => {
     }
 
     useEffect(() => {
-        console.log("DRINKING data", data)
+        console.log("STRESS data", data)
         let margin = {top: 10, right: 20, bottom: 20, left: 20},
             width = element.current.clientWidth - margin.left - margin.right,
             height = element.current.clientHeight - margin.top - margin.bottom;

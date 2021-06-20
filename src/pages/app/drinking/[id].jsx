@@ -23,7 +23,7 @@ const DrinkingEdit = () => {
     const changeAmount = amount => {
         dispatch(updateDrinking({
             ...entry,
-            amount
+            amount: parseInt(amount)
         }))
     }
 

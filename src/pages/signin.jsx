@@ -6,6 +6,7 @@ import {useForm} from "react-hook-form"
 import {
     signinUser
 } from "../actions"
+import { ErrorBanner } from "../components/banner"
 
 
 const Signin = () => {
@@ -19,6 +20,10 @@ const Signin = () => {
 
     return (
         <div className="absolute top-0 bottom-0 w-full bg-gray-100 flex flex-row">
+            {
+                signinError &&
+                <ErrorBanner message="Deine Anmeldedaten sind ungültig" messageShort="Passwort ist falsch" dismisable={true} />
+            }
             <div className="px-3 self-center w-full md:w-5/6 lg:w-3/4 xl:w-2/3 mx-auto bg-gray-100">
                 <h1 className="text-2xl md:text-3xl font-bold text-center mx-auto mb-6">Gymnasium Papenburg<br/> Miktionstagebuch</h1>
                 <form className="space-y-5 max-w-md w-full mx-auto" onSubmit={handleSubmit(submit)}>

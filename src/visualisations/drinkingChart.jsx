@@ -2,12 +2,7 @@ import React, {useRef, useEffect} from "react"
 import * as d3 from "d3"
 
 const DrinkingChart = ({data}) => {
-
     let element = useRef(null)
-
-    const update = () => {
-
-    }
 
     useEffect(() => {
         console.log("DRINKING data", data)
@@ -47,8 +42,6 @@ const DrinkingChart = ({data}) => {
             )
             .select(".domain").remove()
         
-        console.log(d3.timeHour.ceil(new Date()))
-
         const chart = d3.bin()
             .value(d => d.date)
             .thresholds(() => x.ticks(d3.timeHour.every(1)))
@@ -67,9 +60,10 @@ const DrinkingChart = ({data}) => {
         svg.selectAll(".tick line")
             .attr("stroke", "#EBEBEB")
 
+
         svg.append('g')
             .selectAll("rect")
-            .data(chart)
+            .data(chart, d => d)
             .enter()
                 .append("rect")
                 .attr("x", d => x(d3.timeHour.floor(d.x0)))
@@ -91,7 +85,5 @@ const DrinkingChart = ({data}) => {
         <div className="w-full h-full" ref={element}></div>
     )
 }
-
-
 
 export default DrinkingChart

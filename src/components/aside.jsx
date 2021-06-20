@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useState} from "react"
 import { useDispatch, useSelector } from "react-redux"
 import Link from "next/link"
 import { useSpring, animated } from "react-spring"
@@ -33,16 +33,20 @@ const Aside = ({ showMenu }) => {
         dispatch(signoutUser())
     }
 
-    let currDate = new Date()
+    let [currDate, setCurrDate] = useState(new Date())
 
     let props = useSpring({
         top: isMobile ? (showMenu ? 40 : 900) : 0
     })
 
+    setInterval(() => {
+        setCurrDate(new Date())
+    }, 10000)
+
     return (
         <animated.aside
             style={props}
-            className={`${showMenu && isMobile ? "shadow-2xl md:shadow-none" : ""} z-50 rounded-t-xl md:rounded-t-none absolute left-0 bottom-0 right-0 md:right-auto  md:w-96 bg-gray-200 overflow-y-scroll border-r border-gray-300 divide-y divide-gray-300 md:divide-y-0`}>
+            className={`${showMenu && isMobile ? "shadow-2xl md:shadow-none" : ""} z-30 rounded-t-xl md:rounded-t-none absolute left-0 bottom-0 right-0 md:right-auto  md:w-96 bg-gray-200 overflow-y-scroll border-r border-gray-300 divide-y divide-gray-300 md:divide-y-0`}>
             <header className="px-3 md:px-4 pb-2 md:pb-0 md:h-14 w-full flex flex-row justify-between bg-gray-200 mt-4">
                 <h1 className="text-2xl md:text-3xl font-bold self-center">
                     Übersicht

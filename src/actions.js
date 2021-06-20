@@ -34,17 +34,21 @@ export const signinUser = (
     email,
     password
 ) => async (dispatch, getState, { api }) => {
-    api.init()
-    let { data: { ok, err }} = await api.signinUser(
-        email,
-        password
-    )
+    try {
+        api.init()
+        let { data: { ok, err }} = await api.signinUser(
+            email,
+            password
+        )
 
-    
-    if(err) {
-        dispatch({ type: "SIGNIN_FAILED"})
-    } else if(ok) {
-        redirect("/app")
+        if(err) {
+            dispatch({ type: "SIGNIN_FAILED"})
+        } else if(ok) {
+            redirect("/app")
+        }
+
+    } catch {
+        dispatch({type: "SIGNIN_FAILED"})
     }
 }
 

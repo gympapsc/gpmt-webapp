@@ -16,7 +16,7 @@ import Secure from '../../components/secure'
 import Aside from '../../components/aside'
 import Shell from '../../components/shell'
 import Dialog from '../../components/dialog'
-import Banner from '../../components/banner'
+import * as Banner from '../../components/banner'
 import api from '../../api/http'
 import { useDictation, useDrinking, useMessages, useMicturition, useStress } from '../../hooks'
 
@@ -36,7 +36,7 @@ const App = () => {
         e.preventDefault()
         let formData = new FormData()
         formData.append("photo", fileInputRef.current.files[0])
-        api.init(authBearer)
+        api.init()
         api.uploadPhoto(formData)
             .then(res => res.data)
             .then(data => dispatch(addPhoto(new Date(data.photo.timestamp).valueOf(), data.photo._id, data.photo.name, `${process.env.NEXT_PUBLIC_API_URL}/photo/${data.photo._id}`)))
@@ -57,7 +57,6 @@ const App = () => {
 
     return (
         <Secure>
-            {/* <Banner /> */}
             <Shell title={title} className="bg-white">
                 <Dialog startDate={startDate}></Dialog>
                 {
@@ -101,10 +100,10 @@ const App = () => {
                         </div>
                         :
                         <div className="sticky bottom-3 lg:w-2/3 flex flex-row mt-auto pt-8 w-full mx-auto text-white justify-center">
-                            <button className="px-3 py-2 text-base md:text-xl font-semibold bg-blue-600 mx-3 rounded-xl shadow-lg transform transition-transform duration-300 hover:scale-125">
+                            <button onClick={utter} className="px-3 py-2 text-base md:text-xl font-semibold bg-blue-600 mx-3 rounded-xl shadow-lg transform transition-transform duration-300 hover:scale-110">
                                 Ja
                             </button>
-                            <button className="px-3 py-2 text-base md:text-xl font-semibold bg-blue-600 mx-3 rounded-xl shadow-lg transform transition-transform duration-300 hover:scale-125">
+                            <button onClick={utter} className="px-3 py-2 text-base md:text-xl font-semibold bg-blue-600 mx-3 rounded-xl shadow-lg transform transition-transform duration-300 hover:scale-110">
                                 Nein
                             </button>
                         </div>

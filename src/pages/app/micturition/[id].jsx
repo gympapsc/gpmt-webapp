@@ -15,7 +15,7 @@ import { useMicturition } from "../../../hooks"
 
 const Edit = () => {
     let router = useRouter()
-    let {id} = router.query
+    let { id } = router.query
     let dispatch = useDispatch()
 
     let entry = useMicturition(new Date())
