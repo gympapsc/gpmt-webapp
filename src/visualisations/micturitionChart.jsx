@@ -26,8 +26,8 @@ const MicturitionChart = ({data, xlabel, ylabel}) => {
         
         let x = d3.scaleTime()
             .domain([
-                new Date(now.getFullYear(), now.getMonth(), now.getDate()), 
-                new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)
+                new Date(now.getFullYear(), now.getMonth(), now.getDate() - 2), 
+                new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours())
             ])
             .range([ 0, width ])
             .clamp(true)
@@ -37,7 +37,7 @@ const MicturitionChart = ({data, xlabel, ylabel}) => {
             .call(
                 d3.axisBottom(x)
                     .tickSize(-height*1.3)
-                    .ticks(d3.timeHour.every(6))
+                    .ticks(d3.timeHour.every(12))
             )
             .call(g =>
                 g.selectAll(".tick")

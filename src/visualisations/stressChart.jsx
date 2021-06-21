@@ -10,7 +10,6 @@ const StressChart = ({data}) => {
     }
 
     useEffect(() => {
-        console.log("STRESS data", data)
         let margin = {top: 10, right: 20, bottom: 20, left: 20},
             width = element.current.clientWidth - margin.left - margin.right,
             height = element.current.clientHeight - margin.top - margin.bottom;
@@ -27,8 +26,8 @@ const StressChart = ({data}) => {
 
         let x = d3.scaleTime()
             .domain([
-                new Date(now.getFullYear(), now.getMonth(), now.getDate()), 
-                new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)
+                new Date(now.getFullYear(), now.getMonth(), now.getDate() - 2), 
+                new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours())
             ])
             .range([ 0, width ])
             .clamp(true)
@@ -38,7 +37,7 @@ const StressChart = ({data}) => {
             .call(
                 d3.axisBottom(x)
                     .tickSize(-height*1.3)
-                    .ticks(d3.timeHour.every(6))
+                    .ticks(d3.timeHour.every(12))
             )
             .call(g =>
                 g.selectAll(".tick")
@@ -47,7 +46,6 @@ const StressChart = ({data}) => {
             )
             .select(".domain").remove()
         
-        console.log(d3.timeHour.ceil(new Date()))
 
         const chart = d3.bin()
             .value(d => d.date)

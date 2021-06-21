@@ -23,8 +23,8 @@ const LineChart = ({data, xlabel, ylabel}) => {
 
         let x = d3.scaleTime()
             .domain([
-                new Date(now.getFullYear(), now.getMonth(), now.getDate()), 
-                new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)
+                new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours()), 
+                new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, now.getHours())
             ])
             .range([ 0, width ])
             .clamp(true)
