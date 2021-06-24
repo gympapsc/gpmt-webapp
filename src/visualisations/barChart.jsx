@@ -12,38 +12,6 @@ const BarChart = ({data}) => {
     }
 
     useEffect(() => {
-        data = data || [
-            [new Date("2020-10-10T00:00:00"), 100],
-            [new Date("2020-10-10T01:00:00"), 300],
-            [new Date("2020-10-10T02:00:00"), 200],
-            [new Date("2020-10-10T03:00:00"), 400],
-            [new Date("2020-10-10T04:00:00"), 300],
-            [new Date("2020-10-10T05:00:00"), 0],
-            [new Date("2020-10-10T06:00:00"), 100],
-            [new Date("2020-10-10T07:00:00"), 200],
-            [new Date("2020-10-10T08:00:00"), 100],
-            [new Date("2020-10-10T09:00:00"), 200],
-            [new Date("2020-10-10T10:00:00"), 300],
-            [new Date("2020-10-10T11:00:00"), 150],
-            [new Date("2020-10-10T12:00:00"), 350],
-            [new Date("2020-10-10T13:00:00"), 0],
-            [new Date("2020-10-10T14:00:00"), 100],
-            [new Date("2020-10-10T15:00:00"), 100],
-            [new Date("2020-10-10T16:00:00"), 50],
-            [new Date("2020-10-10T17:00:00"), 200],
-            [new Date("2020-10-10T18:00:00"), 100],
-            [new Date("2020-10-10T19:00:00"), 160],
-            [new Date("2020-10-10T20:00:00"), 0],
-            [new Date("2020-10-10T21:00:00"), 0],
-            [new Date("2020-10-10T22:00:00"), 200],
-            [new Date("2020-10-10T23:00:00"), 100]
-        ]
-
-        // cd3.bin()
-        //     .value(d => d.date)
-        //     .thresholds(thresholdTime())
-        // (data)
-
         let margin = {top: 10, right: 20, bottom: 20, left: 20},
             width = element.current.clientWidth - margin.left - margin.right,
             height = element.current.clientHeight - margin.top - margin.bottom;

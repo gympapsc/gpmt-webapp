@@ -59,8 +59,8 @@ const DrinkingChart = ({data}) => {
         svg.selectAll(".tick line")
             .attr("stroke", "#EBEBEB")
 
-
-        svg.append('g')
+        if(data.length) {
+            svg.append('g')
             .selectAll("rect")
             .data(chart, d => d)
             .enter()
@@ -70,6 +70,7 @@ const DrinkingChart = ({data}) => {
                 .attr("height", d => height - y(d.reduce((a, d) => a + d.amount, 0) / 1000))
                 .attr("width", d => x(d3.timeHour.ceil(d.x1)) - x(d3.timeHour.floor(d.x0)) - 1)
                 .style("fill", "rgb(79, 70, 229)")
+        }
         
         return () => {
             if(element.current) {

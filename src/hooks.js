@@ -35,8 +35,6 @@ export function useMicturition(startDate) {
 
     useEffect(() => {
         if(typeof window !== 'undefined' && micturition === null) {
-            console.log("LOADING MICTURITION")
-
             dispatch(loadMicturition(startDate))
         }
     })
@@ -57,14 +55,12 @@ export function useMicturitionPredictions(startDate) {
     return predictions || []
 }
 
-
 export function useStress(startDate) {
     let dispatch = useDispatch()
     let stress = useSelector(s => s.stress)
 
     useEffect(() => {
         if(typeof window !== 'undefined' && stress === null) {
-            console.log("LOADING STRESS")
             dispatch(loadStress(startDate))
         }
     })
@@ -96,6 +92,11 @@ export function useUser() {
     })
 
     return user
+}
+
+export function useUtterButtons() {
+    let buttons = useSelector(s => s.user?.utterButtons)
+    return buttons || []
 }
 
 

@@ -6,19 +6,16 @@ const Clock = ({ data }) => {
     const element = useRef(null)
 
     useEffect(() => {
-        // set the dimensions and margins of the graph
         let width = element.current.clientWidth
         let height = element.current.clientWidth
         let margin = 10
 
-        // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
         let radius = Math.min(width, height) / 2 - margin
 
-        // append the svg object to the div called 'my_dataviz'
         let root = d3.select(element.current)
-        .append("svg")
-            .attr("width", width)
-            .attr("height", height);
+            .append("svg")
+                .attr("width", width)
+                .attr("height", height);
 
         let svg = root.append("g")
             .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
@@ -34,12 +31,16 @@ const Clock = ({ data }) => {
 
 
         let color = d3.scaleLinear()
-            .domain([0, 50, 100])
+            .domain([0, 0.5, 1])
             .range(["rgb(5, 150, 105)", "#eee", "rgb(220, 38, 38)"])
+
+        let now = new Date()
+        let lowerBound = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours())
+        let upperBound = new Date(lowerBound.valueOf() + 12 * 60 * 60 * 1000)
 
         let pie = d3.pie()
             .value(d => d.prediction)
-        let data_ready = pie(data)
+        let data_ready = pie(data.filter(d => lowerBound <= new Date(d.date).valueOf() && new Date(d.date).valueOf() <= upperBound))
 
         svg
             .selectAll('whatever')
@@ -55,13 +56,12 @@ const Clock = ({ data }) => {
             .attr('fill', d => color(d.data.prediction))
             .style("stroke-width", "2px")
             .style("opacity", 0.7)
+            .attr("title", d => d.data.date + d.data.prediction.toString())
             .transition()
             .duration(100)
 
-
         svg
             .attr("filter", "url(#blur)")    
-
 
         root.append("circle")
             .attr("r", "115")
@@ -131,7 +131,7 @@ const Clock = ({ data }) => {
     return (
         <div className="w-full space-y-4 mb-4">
             <div style={{
-                maxWidth: 350
+                maxWidth: 360
             }} className="w-full mx-auto" ref={element}></div>
             <div className="w-full space-y-2">
                 <div className="w-full h-2 rounded-full bg-gradient-to-r from-green-300 to-red-300"></div>

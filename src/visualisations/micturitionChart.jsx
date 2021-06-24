@@ -64,7 +64,9 @@ const MicturitionChart = ({data, xlabel, ylabel}) => {
         svg.selectAll(".tick line")
             .attr("stroke", "#EBEBEB")
 
-        svg.append('g')
+
+        if(data.length) {
+            svg.append('g')
             .selectAll("rect")
             .data(chart)
             .enter()
@@ -75,6 +77,8 @@ const MicturitionChart = ({data, xlabel, ylabel}) => {
                 .attr("width", d => x(d3.timeHour.ceil(d.x1)) - x(d3.timeHour.floor(d.x0)) - 1)
                 .style("fill", "rgb(79, 70, 229)")
         
+        }
+
         return () => {
             if(element.current) {
                 element.current.children.forEach(child => {

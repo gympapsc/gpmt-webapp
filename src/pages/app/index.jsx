@@ -13,12 +13,11 @@ import {
 } from '../../actions'
 
 import Secure from '../../components/secure'
-import Aside from '../../components/aside'
 import Shell from '../../components/shell'
 import Dialog from '../../components/dialog'
 import * as Banner from '../../components/banner'
 import api from '../../api/http'
-import { useDictation, useDrinking, useMessages, useMicturition, useStress } from '../../hooks'
+import { useDictation, useDrinking, useMessages, useMicturition, useStress, useUtterButtons } from '../../hooks'
 
 const App = () => {
     let startDate = new Date()
@@ -26,10 +25,15 @@ const App = () => {
     let messageRef = useRef(null)
     let fileInputRef = useRef(null)
     let dispatch = useDispatch()
+    let buttons = useUtterButtons()
 
-    const utter = () => {
-        dispatch(utterMessage(messageRef.current.value))
-        messageRef.current.value = ""
+    const utter = message => {
+        if(message) {
+            dispatch(utterMessage(message))
+        } else {
+            dispatch(utterMessage(messageRef.current.value))
+            messageRef.current.value = ""
+        }
     }
     
     const selectedPhoto = e => {
@@ -53,14 +57,21 @@ const App = () => {
         }
     }
 
-    let a = true
 
     return (
         <Secure>
             <Shell title={title} className="bg-white">
                 <Dialog startDate={startDate}></Dialog>
                 {
-                    a ?
+                    buttons.length ?
+                        <div className="sticky bottom-3 lg:w-2/3 flex flex-row mt-auto pt-8 w-full mx-auto text-white justify-center">
+                            {buttons.map((b, i) => 
+                                <button key={i} onClick={e => utter(b.payload)} className="px-3 py-2 text-base md:text-xl font-semibold bg-blue-600 mx-3 rounded-xl shadow-lg transform transition-transform duration-300 hover:scale-110">
+                                    {b.title}
+                                </button>
+                            )}
+                        </div>
+                        :
                         <div className="sticky bottom-0 lg:w-2/3 flex flex-row mt-auto pt-3 w-full mx-auto">
                             {
                                 !dictation.supported || 
@@ -92,19 +103,10 @@ const App = () => {
                                     <input type="submit" />
                                 </form>
                             </button> 
-                            <button onClick={utter} className="flex-grow-0 w-12 h-12 flex flex-col justify-center items-center text-white bg-indigo-800">
+                            <button onClick={e => utter()} className="flex-grow-0 w-12 h-12 flex flex-col justify-center items-center text-white bg-indigo-800">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
                                 </svg>
-                            </button>
-                        </div>
-                        :
-                        <div className="sticky bottom-3 lg:w-2/3 flex flex-row mt-auto pt-8 w-full mx-auto text-white justify-center">
-                            <button onClick={utter} className="px-3 py-2 text-base md:text-xl font-semibold bg-blue-600 mx-3 rounded-xl shadow-lg transform transition-transform duration-300 hover:scale-110">
-                                Ja
-                            </button>
-                            <button onClick={utter} className="px-3 py-2 text-base md:text-xl font-semibold bg-blue-600 mx-3 rounded-xl shadow-lg transform transition-transform duration-300 hover:scale-110">
-                                Nein
                             </button>
                         </div>
                 }

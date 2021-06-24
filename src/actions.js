@@ -83,11 +83,16 @@ export const authenticateUser = () => async (dispatch, getState, { api }) => {
 }
 
 export const utterMessage = (text) =>  async (dispatch, getState, { api }) => {
-    let { data: { events, micturitionPrediction }} = await api.utterMessage(text)
+    let { data: { buttons, events, micturitionPrediction }} = await api.utterMessage(text)
     processEvents(events, dispatch, getState)
+    dispatch(setUtterButtons(buttons))
+    micturitionPrediction = micturitionPrediction.map(e => ({
+        ...e,
+        date: new Date(e.date),
+        timestamp: new Date(e.timestamp).valueOf()
+    }))
     dispatch(setMicturitionPredictions(micturitionPrediction))
 }
-
 
 const processEvents = (events, dispatch, getState) => {
     for(let event of events) {
@@ -103,6 +108,11 @@ const processEvents = (events, dispatch, getState) => {
                     break
                 case "ADD_DRINKING":
                     dispatch(addDrinking(new Date(event.date), new Date(event.timestamp).valueOf(), event.amount, event._id))
+                    break
+                case "SIGNOUT_USER":
+                    setTimeout(() => {
+                        dispatch(signoutUser())
+                    }, 500)
                     break
             }
         }
@@ -214,6 +224,12 @@ export const setStress = (entries) => ({
     }
 })
 
+export const setUtterButtons = buttons => ({
+    type: "SET_UTTER_BUTTONS",
+    payload: {
+        buttons
+    }
+})
 
 /*
     Load Data
@@ -235,14 +251,15 @@ export const loadMessages = (startDate) => async (dispatch, getState, { api }) =
 export const loadMicturition = startDate => async (dispatch, getState, { api }) => {
     if(!api._pending["micturition"]) {
         api._pending["micturition"] = true
+        console.log("GET_MICTURITION")
         let { data: { entries }} = await api.getMicturition(startDate)
         entries = entries.map(e => ({
             ...e,
             date: new Date(e.date),
             timestamp: new Date(e.timestamp).valueOf()
         }))
-        api._pending["micturition"] = false
         dispatch(setMicturition(entries))
+        api._pending["micturition"] = false
     }
 }
 
@@ -263,20 +280,22 @@ export const loadMicturitionPredictions = startDate => async (dispatch, getState
 export const loadDrinking = startDate => async (dispatch, getState, { api }) => {
     if(!api._pending["drinking"]) {
         api._pending["drinking"] = true
+        console.log("GET_DRINKING")
         let { data: { entries }} = await api.getDrinking(startDate)
         entries = entries.map(e => ({
             ...e,
             date: new Date(e.date),
             timestamp: new Date(e.timestamp).valueOf()
         }))
-        api._pending["drinking"] = false
         dispatch(setDrinking(entries))
+        api._pending["drinking"] = false
     }
 }
 
 export const loadStress = startDate => async (dispatch, getState, { api }) => {
     if(!api._pending["stress"]) {
         api._pending["stress"] = true
+        console.log("GET_STRESS")
         let { data: { entries }} = await api.getStress(startDate)
         entries = entries.map(e => ({
             ...e,
@@ -284,8 +303,8 @@ export const loadStress = startDate => async (dispatch, getState, { api }) => {
             // TODO Fix missing timestamp
             timestamp: new Date(e.date).valueOf()
         }))
-        api._pending["stress"] = false
         dispatch(setStress(entries))
+        api._pending["stress"] = false
     }
 }
 
@@ -305,7 +324,6 @@ export const loadPhotos = (startDate) => async (dispatch, getState, { api }) => 
         api._pending["photos"] = false
     }
 }
-
 
 /*
     Update Data

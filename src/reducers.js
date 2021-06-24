@@ -63,26 +63,20 @@ const reducer = (state=initialState, action) => {
             }
             return state
         case "SET_MICTURITION":
-            if (action.payload.entries.length > 0) {
-                return {
-                    ...state,
-                    micturition: action.payload.entries
-                }
+            return {
+                ...state,
+                micturition: action.payload.entries
             }
-            return state
         case "SET_MICTURITION_PREDICTIONS":
             return {
                 ...state,
                 micturitionPredictions: action.payload.predictions
             }
         case "SET_DRINKING":
-            if (action.payload.entries.length > 0) {
-                return {
-                    ...state,
-                    drinking: action.payload.entries
-                }
+            return {
+                ...state,
+                drinking: action.payload.entries
             }
-            return state
         case "SET_USER":
             return {
                 ...state,
@@ -97,6 +91,14 @@ const reducer = (state=initialState, action) => {
             return {
                 ...state,
                 stress: action.payload.entries
+            }
+        case "SET_UTTER_BUTTONS":
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    utterButtons: action.payload.buttons
+                }
             }
         case "UPDATE_USER":
             return {

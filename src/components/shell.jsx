@@ -27,8 +27,6 @@ const Shell = ({children, title, className, onScroll}) => {
         displayMenu(state)
     }
 
-
-
     return (
         <>
             <Aside showMenu={showMenu}/>

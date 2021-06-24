@@ -13,6 +13,7 @@ import { signoutUser } from "../actions"
 import DrinkingChart from "../visualisations/drinkingChart"
 import MicturitionChart from "../visualisations/micturitionChart"
 import StressChart from "../visualisations/stressChart"
+import { shorten } from "../utils"
 
 const Aside = ({ showMenu }) => {
     let startDate = new Date()
@@ -39,9 +40,9 @@ const Aside = ({ showMenu }) => {
         top: isMobile ? (showMenu ? 40 : 900) : 0
     })
 
-    setInterval(() => {
-        setCurrDate(new Date())
-    }, 10000)
+    // setInterval(() => {
+    //     setCurrDate(new Date())
+    // }, 10000)
 
     return (
         <animated.aside
@@ -71,7 +72,7 @@ const Aside = ({ showMenu }) => {
                 <Link href="/app">
                     <a className="col-span-2 p-3 bg-white rounded-xl">
                         <h3 className="text-md font-semibold">Chat &bull; <span className="text-gray-500">Gestern</span></h3>
-                        <p className="text-gray-400">{messages[0]?.text || "..."}</p>
+                        <p className="text-gray-400">{shorten(messages[0]?.text, 40) || "..."}</p>
                     </a>
                 </Link>
                 <Link href="/app/overview" id="micturition_widget">

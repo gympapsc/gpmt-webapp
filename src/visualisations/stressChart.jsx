@@ -5,10 +5,6 @@ const StressChart = ({data}) => {
 
     let element = useRef(null)
 
-    const update = () => {
-
-    }
-
     useEffect(() => {
         let margin = {top: 10, right: 20, bottom: 20, left: 20},
             width = element.current.clientWidth - margin.left - margin.right,
@@ -65,7 +61,8 @@ const StressChart = ({data}) => {
         svg.selectAll(".tick line")
             .attr("stroke", "#EBEBEB")
 
-        svg.append('g')
+        if(data.length) {
+            svg.append('g')
             .selectAll("rect")
             .data(chart)
             .enter()
@@ -76,6 +73,8 @@ const StressChart = ({data}) => {
                 .attr("width", d => x(d3.timeHour.ceil(d.x1)) - x(d3.timeHour.floor(d.x0)) - 1)
                 .style("fill", "rgb(79, 70, 229)")
         
+        } 
+
         return () => {
             if(element.current) {
                 element.current.children.forEach(child => {
