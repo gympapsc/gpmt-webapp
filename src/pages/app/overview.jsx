@@ -204,8 +204,10 @@ const Micturition = () => {
 }
 
 
-export default () => (
-    <Secure>
-        <Micturition />
-    </Secure>
-)
+export default function SecureMicturitionEdit() {
+    return (
+        <Secure>
+            <Micturition />
+        </Secure>
+    )
+}

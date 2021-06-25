@@ -99,7 +99,6 @@ export function useUtterButtons() {
     return buttons || []
 }
 
-
 export function useDictation(onresult) {
     if(typeof window === "typeof") {
         let SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition

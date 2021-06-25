@@ -1,18 +1,19 @@
 import reducer from "./reducers"
 
-describe("redux reducer", () => {
+describe("redux action reducer", () => {
     
     it("should default to initial state", () => {
         const action = { type: "" }
-        const initialState = { messages: [] }
+        const initialState = { messages: null }
         
         const state = reducer(initialState, action)
 
         expect(state).toEqual(initialState)
     })
 
-    it("should add message on ADD_MESSAGE action", () => {
+    it("should add message", () => {
         const message = {
+            _id: "093498124",
             message: "Hello World",
             sender: "user",
             timestamp: new Date().valueOf()
@@ -21,90 +22,380 @@ describe("redux reducer", () => {
             type: "ADD_MESSAGE",
             payload: message
         }
-        const initialState = { messages: [], user: {} }
+
+        const initialState = { 
+            messages: null, 
+            user: null 
+        }
         
         const state = reducer(initialState, action)
 
         expect(state.messages).toContainEqual(message)
     })
 
-    it("should set messages on SET_MESSAGES", () => {
-        const messages = [
-            {
-                message: "Hello World",
-                sender: "user",
-                timestamp: new Date().valueOf()
-            }
-        ]
-        const action = {
-            type: "SET_MESSAGES",
-            payload: {
-                messages
-            }
+    it("should add micturition", () => {
+        const micturition = {
+                _id: "0123456789",
+                date: new Date(),
+                timestamp: new Date().valueOf(),
+                updatedAt: new Date().valueOf(),
         }
-        const initialState = { messages: [], user: {} }
+        const action = {
+            type: "ADD_MICTURITION",
+            payload: micturition
+        }
+        const initialState = {
+            micturition: null,
+            user: null 
+        }
         
         const state = reducer(initialState, action)
 
-        expect(state.messages).toEqual(messages)
+        expect(state.micturition).toContainEqual(micturition)
     })
 
-    it("should set no messages on empty set", () => {
-        const messages = []
-        const action = {
-            type: "SET_MESSAGES",
-            payload: {
-                messages
-            }
+    it("should add drinking", () => {
+        const drinking = {
+            _id: "9876543210",
+            amount: 400,
+            date: new Date(),
+            timestamp: new Date().valueOf(),
+            updatedAt: new Date().valueOf()
         }
-        const initialState = { messages: [], user: {} }
+        const action = {
+            type: "ADD_DRINKING",
+            payload: drinking            
+        }
+        const initialState = { 
+            messages: null,
+            drinking: null,
+            user: null 
+        }
         
         const state = reducer(initialState, action)
 
-        expect(state.messages).toEqual(messages)
+        expect(state.drinking).toContainEqual(drinking)
     })
 
-    it("should set auth token on SET_AUTH_TOKEN", () => {
-        const auth_token = "abcdefghijklmnopqrstuvwxyz"
-        const action = {
-            type: "SET_AUTH_TOKEN",
+    it("should add photo", () => {
+        let now = new Date()
+        let action = {
+            type: "ADD_PHOTO",
             payload: {
-                bearer: auth_token
+                name: "test photo 2",
+                _id: "2",
+                timestamp: now.valueOf(),
+                updatedAt: now.valueOf()
             }
         }
-        const initialState = { messages: [], user: {}}
+        let initialState = {
+            photos: [{
+                name: "test photo 1",
+                _id: "1",
+                timestamp: now.valueOf(),
+                updatedAt: now.valueOf()
+            }]
+        }
 
         const state = reducer(initialState, action)
 
-        expect(state.bearer).toEqual(auth_token)
-    })
-
-    it("should set user on SET_USER", () => {
-        const user = {
-            email: "timmy@taylor.com",
-            password: "password",
-            firstname: "timmy",
-            surname: "taylor",
-            sex: "m",
-            height: 180,
-            weight: 80,
-            _id: "123456789"
-        }
-        const action = {
-            type: "SET_USER",
-            payload: {
-                user
-            }
-        }
-        const initialState = { messages: [], user: {}}
-
-        const state = reducer(initialState, action)
-
-        expect(state.user).toEqual(user)
-        expect(state).toEqual({
-            messages: [],
-            user
+        expect(state.photos.length).toBe(2)
+        expect(state.photos.find(p => p._id === "2")).toStrictEqual({
+            name: "test photo 2",
+            _id: "2",
+            timestamp: now.valueOf(),
+            updatedAt: now.valueOf()
         })
+    })
+
+    it("should set messages", () => {
+
+    })
+
+    it("should set user", () => {
+
+    })
+
+    it("should set stress", () => {
+
+    })
+
+    it("should set micturition prediction", () => {
+
+    })
+
+    it("should set drinking", () => {
+        const drinking = [{
+            _id: "0123456789",
+            amount: 100,
+            date: new Date(),
+            timestamp: new Date().valueOf(),
+            updatedAt: new Date().valueOf(),
+        }]
+        const action = {
+            type: "SET_DRINKING",
+            payload: {
+                entries: drinking
+            }
+        }
+        const initialState = {
+            drinking: null,
+            user: null 
+        }
+        
+        const state = reducer(initialState, action)
+
+        expect(state.drinking).toStrictEqual(drinking)
+    })
+
+    it("should set micturition", () => {
+        const micturition = [{
+            _id: "0123456789",
+            date: new Date(),
+            timestamp: new Date().valueOf(),
+            updatedAt: new Date().valueOf(),
+        }]
+        const action = {
+            type: "SET_MICTURITION",
+            payload: {
+                entries: micturition
+            }
+        }
+        const initialState = {
+            micturition: null,
+            user: null 
+        }
+        
+        const state = reducer(initialState, action)
+
+        expect(state.micturition).toStrictEqual(micturition)
+    })
+
+    it("should set error signin failed", () => {
+        let action = {
+            type: "SIGNIN_FAILED",
+            payload: {
+                reason: "Server error 500"
+            }
+        }
+        let initialState = {
+            user: null,
+            error: {}
+        }
+
+        const state = reducer(initialState, action)
+
+        expect(state.errors).not.toStrictEqual({})
+    })
+
+    it("should update stress", () => {
+        let now = new Date()
+        const action = {
+            type: "UPDATE_STRESS",
+            payload: {
+                _id: "0123456789",
+                level: 2
+            }
+        }
+        const initialState = {
+            stress: [{
+                _id: "0123456789",
+                level: 3,
+                date: now,
+                timestamp: now.valueOf(),
+                updatedAt: now.valueOf(),
+            }],
+            user: null
+        }
+        
+        const state = reducer(initialState, action)
+
+        expect(state.stress.find(d => d._id === "0123456789")).toStrictEqual(
+            {
+                _id: "0123456789",
+                level: 2,
+                date: now,
+                timestamp: now.valueOf(),
+                updatedAt: now.valueOf(),
+            }
+        )
+    })
+
+    it("should update micturition", () => {
+        let now = new Date()
+        const action = {
+            type: "UPDATE_MICTURITION",
+            payload: {
+                _id: "0123456789",
+                date: new Date(2021, 0, 1)
+            }
+        }
+        const initialState = {
+            micturition: [{
+                _id: "0123456789",
+                date: now,
+                timestamp: now.valueOf(),
+                updatedAt: now.valueOf(),
+            }],
+            user: null
+        }
+        
+        const state = reducer(initialState, action)
+
+        expect(state.micturition.find(d => d._id === "0123456789")).toStrictEqual(
+            {
+                _id: "0123456789",
+                date: new Date(2021, 0, 1),
+                timestamp: now.valueOf(),
+                updatedAt: now.valueOf(),
+            }
+        )
+    })
+
+    it("should update drinking", () => {
+        let now = new Date()
+        const action = {
+            type: "UPDATE_DRINKING",
+            payload: {
+                _id: "0123456789",
+                amount: 200
+            }
+        }
+        const initialState = {
+            drinking: [{
+                _id: "0123456789",
+                amount: 300,
+                date: now,
+                timestamp: now.valueOf(),
+                updatedAt: now.valueOf(),
+            }],
+            user: null
+        }
+        
+        const state = reducer(initialState, action)
+
+        expect(state.drinking.find(d => d._id === "0123456789")).toStrictEqual(
+            {
+                _id: "0123456789",
+                amount: 200,
+                date: now,
+                timestamp: now.valueOf(),
+                updatedAt: now.valueOf(),
+            }
+        )
+    })
+
+    it("should update user", () => {
+        let now = new Date()
+        const action = {
+            type: "UPDATE_USER",
+            payload: {
+                _id: "0123456789",
+                firstname: "Testing",
+                surname: "Talyor",
+                birthDate: new Date(2000, 10, 1),
+                sex: "w",
+                weight: 100,
+                height: 190,
+                email: "testing@taylor.com"
+            }
+        }
+        const initialState = {
+            user: {
+                _id: "0123456789",
+                firstname: "Bob",
+                surname: "Debug",
+                birthDate: new Date(2001, 1, 1),
+                sex: "m",
+                weight: 90,
+                height: 180,
+                email: "bob@debug.com"
+            },
+            user: null
+        }
+        
+        const state = reducer(initialState, action)
+
+        expect(state.user).toStrictEqual(
+            {
+                _id: "0123456789",
+                firstname: "Testing",
+                surname: "Talyor",
+                birthDate: new Date(2000, 10, 1),
+                sex: "w",
+                weight: 100,
+                height: 190,
+                email: "testing@taylor.com"
+            }
+        )
+    })
+
+    it("should delete drinking", () => {
+        const action = {
+            type: "DELETE_DRINKING",
+            payload: {
+                _id: "0123456789"
+            }
+        }
+        const initialState = {
+            drinking: [{
+                _id: "0123456789",
+                amount: 300,
+                date: new Date(),
+                timestamp: new Date().valueOf(),
+                updatedAt: new Date().valueOf(),
+            }],
+            user: null
+        }
+        
+        const state = reducer(initialState, action)
+
+        expect(state.drinking.length).toBe(0)
+    })
+
+    it("should delete micturition", () => {
+        const action = {
+            type: "DELETE_MICTURITION",
+            payload: {
+                _id: "0123456789"
+            }
+        }
+        const initialState = {
+            micturition: [{
+                _id: "0123456789",
+                date: new Date(),
+                timestamp: new Date().valueOf(),
+                updatedAt: new Date().valueOf(),
+            }],
+            user: null
+        }
+        
+        const state = reducer(initialState, action)
+
+        expect(state.micturition.length).toBe(0)
+    })
+
+    it("should delete stress", () => {
+        const action = {
+            type: "DELETE_STRESS",
+            payload: {
+                _id: "0123456789"
+            }
+        }
+        const initialState = {
+            stress: [{
+                _id: "0123456789",
+                date: new Date(),
+                level: 4,
+                timestamp: new Date().valueOf(),
+                updatedAt: new Date().valueOf(),
+            }],
+            user: null
+        }
+        
+        const state = reducer(initialState, action)
+
+        expect(state.stress.length).toBe(0)
     })
 
 })

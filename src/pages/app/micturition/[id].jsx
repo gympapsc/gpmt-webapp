@@ -21,7 +21,6 @@ const Edit = () => {
     let entry = useMicturition(new Date())
         .find(m => m._id === id)
 
-
     let changeMicturition = date => {
         dispatch(updateMicturition({
             ...entry,

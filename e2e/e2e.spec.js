@@ -4,7 +4,7 @@ import path from 'path'
 
 import { getDocument, queries, waitFor } from 'pptr-testing-library'
 
-const { getByText, getByPlaceholderText } = queries
+const { getByText, getByPlaceholderText, getByLabelText } = queries
 
 const delay = (fn, ms) => new Promise((res, rej) => setTimeout(async () => res(await fn()), ms))
 
@@ -21,7 +21,7 @@ describe('authentication', () => {
 
         await page.screenshot({path: path.resolve(__dirname, '../screenshots/signin.signin.png')})
         
-        let button = await getByText(document, /Sign in/i)
+        let button = await getByText(document, /Anmelden/i)
 
         await button.click()
 
@@ -53,7 +53,7 @@ describe('authentication', () => {
         await birthDateField.type("09/12/2002")
 
         await page.screenshot({path: path.resolve(__dirname, '../screenshots/signup.signup.png')})
-        let button = await getByText(document, /Sign up/i)
+        let button = await getByText(document, /Registrieren/i)
 
         await button.click()
 
@@ -67,13 +67,13 @@ describe('authentication', () => {
         await page.goto("http://localhost:5000/signin")
         let document = await getDocument(page)
         
-        let emailField = await getByPlaceholderText(document, /email/)
-        let passwordField = await getByPlaceholderText(document, /password/)
+        let emailField = await getByPlaceholderText(document, /Email/)
+        let passwordField = await getByPlaceholderText(document, /Passwort/)
 
         await emailField.type("t@t.com")
         await passwordField.type("password")
 
-        let signinButton = await getByText(document, /Sign in/i)
+        let signinButton = await getByText(document, /Anmelden/i)
         await signinButton.click()
 
         await page.waitFor(1000)
@@ -89,7 +89,7 @@ describe('authentication', () => {
         expect(localStorageData["auth_token"]).toBeDefined()
 
         document = await getDocument(page)
-        let signoutButton = await getByText(document, /Sign out/i)
+        let signoutButton = await getByText(document, /Abmelden/i)
         await signoutButton.click()
 
         await page.waitFor(1000)
@@ -103,7 +103,6 @@ describe('authentication', () => {
             return json;
         });
         expect(localStorageData["auth_token"]).toBeUndefined()
-        
     })
 })
 
@@ -113,13 +112,14 @@ describe("messaging", () => {
 
         let document = await getDocument(page)
         
-        let firstnameField = await getByPlaceholderText(document, /firstname/)
-        let surnameField = await getByPlaceholderText(document, /surname/)
-        let emailField = await getByPlaceholderText(document, /email/)
-        let passwordField = await getByPlaceholderText(document, /password/)
-        let weightField = await getByPlaceholderText(document, /weight/)
-        let heightField = await getByPlaceholderText(document, /height/)
-        let birthDateField = await getByPlaceholderText(document, /birth date/)
+        let firstnameField = await getByLabelText(document, /Vorname/)
+        let surnameField = await getByLabelText(document, /Nachname/)
+        let emailField = await getByLabelText(document, /Email/)
+        let passwordField = await getByLabelText(document, /Password/)
+        let passwordField = await getByLabelText(document, /Password Wiederholden/)
+        let weightField = await getByLabelText(document, /weight/)
+        let heightField = await getByLabelText(document, /height/)
+        let birthDateField = await getByLabelText(document, /birth date/)
         
         await firstnameField.type('hakim')
         await surnameField.type('rachidi')

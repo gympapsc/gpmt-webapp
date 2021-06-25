@@ -116,6 +116,17 @@ const reducer = (state=initialState, action) => {
                     signin: action.payload?.reason || true
                 }
             }
+        case "UPDATE_STRESS":
+            return {
+                ...state,
+                stress: [
+                    ...state.stress.filter(d => d._id !== action.payload._id),
+                    {
+                        ...state.stress.find(d => d._id === action.payload._id),
+                        ...action.payload
+                    }
+                ]
+            }
         case "UPDATE_DRINKING":
             return {
                 ...state,
@@ -141,23 +152,17 @@ const reducer = (state=initialState, action) => {
         case "DELETE_DRINKING":
             return {
                 ...state,
-                drinking: [
-                    ...state.drinking.filter(d => d._id !== action.payload._id)
-                ]
+                drinking: state.drinking.filter(d => d._id !== action.payload._id)
             }
         case "DELETE_MICTURITION":
             return {
                 ...state,
-                micturition: [
-                    ...state.micturition.filter(m => m._id !== action.payload._id)
-                ]
+                micturition: state.micturition.filter(m => m._id !== action.payload._id)
             }
         case "DELETE_STRESS":
             return {
                 ...state,
-                stress: [
-                    ...state.stress.filter(s => s._id !== action.payload._id)
-                ]
+                stress: state.stress.filter(s => s._id !== action.payload._id)
             }
         case "USER_CONNECTION":
             return {

@@ -1,6 +1,6 @@
-import { redirect } from './utils'
+import { redirect, shorten } from './utils'
 
-describe("redirect to path", () => {
+describe("redirect to browser", () => {
 
     it("should redirect to /", () => {
         delete window.location
@@ -30,4 +30,18 @@ describe("redirect to path", () => {
         expect(window.location.assign).toHaveBeenCalledWith("http://localhost/path")
     })
 
+})
+
+describe("shorten string", () => {
+    it("it should return string as is if short enough", () => {
+        let string = "123456789"
+
+        expect(shorten(string, 9)).toEqual(string)
+    })
+
+    it("it should return short string", () => {
+        let string = "1234567890"
+
+        expect(shorten(string, 9)).toEqual("123456...")
+    })
 })

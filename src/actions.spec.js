@@ -1,87 +1,73 @@
 import {
-    utterMessage,
-    addMessage,
-    assignUser,
+    loadDrinking,
+    loadMessages,
+    loadMicturition,
+    loadMicturitionPredictions,
+    loadPhotos,
+    loadStress,
+    updateDrinking,
+    updateMicturition,
+    updateStress,
+    deleteDrinking,
+    deleteMicturition,
+    deleteStress,
     signinUser,
-    signupUser
+    signupUser,
+    signoutUser,
+    authenticateUser
 } from "./actions.js"
 
 
-describe("action creators", () => {
+describe("action thunks", () => {
+    test("sign in user", () => {
+    })
+
+    test("loading drinking", async () => {
+    })
+
+    test("loading micturition", async () => {
+        
+    })
+
+    test("loading user", async () => {
+        
+    })
+
+    test("loading stress", async () => {
+        
+    })
+
+    test("loading photos", async () => {
+        
+    })
+
+
+    test("update drinking", async () => {
+        
+    })
+
+    test("update micturition", async () => {
+        
+    })
+
+    test("update user", async () => {
+
+    })
+
+    test("update stress", async () => {
+
+    })
+
     
-    it("should create UTTER_MESSAGE action", () => {
-        const text = "Hello World"
+    test("delete drinking", async () => {
 
-        const action = utterMessage(text)
-
-        expect(action)
-            .toEqual({
-                type: "UTTER_MESSAGE",
-                payload: {
-                    sender: "user",
-                    text
-                }        
-            })
     })
 
-    it("should create ADD_MESSAGE action", () => {
-        const text = "Hello World"
-        const sender = "user"
-        const timestamp = new Date().valueOf()
+    test("delete micturition", async () => {
 
-        const action = addMessage(text, sender, timestamp)
-
-        expect(action)
-            .toEqual({
-                type: "ADD_MESSAGE",
-                payload: {
-                    text,
-                    sender,
-                    timestamp
-                }
-            })
     })
 
-    it("should create ASSIGN_USER", () => {
-        const action = assignUser()
+    test("delete stress", async () => {
 
-        expect(action)
-            .toEqual({
-                type: "ASSIGN_USER"
-            })
-    })
-
-    it("should create SIGNIN_USER", () => {
-        const email = "timmy@taylor.com"
-        const password = "password"
-        const action = signinUser(email, password)
-
-        expect(action)
-            .toEqual({
-                type: "SIGNIN_USER",
-                payload: {
-                    email,
-                    password
-                }
-            })
-    })
-
-    it("should create SIGNUP_USER", () => {
-        const user = {
-            firstname: "timmy",
-            surname: "taylor",
-            email: "timmy@taylor",
-            password: "password",
-            weight: 80,
-            height: 180,
-            birthDate: new Date()
-        }
-        const action = signupUser(user)
-
-        expect(action)
-            .toEqual({
-                type: "SIGNUP_USER",
-                payload: user
-            })
     })
 })

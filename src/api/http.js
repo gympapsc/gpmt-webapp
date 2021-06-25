@@ -1,6 +1,9 @@
 import axios from "axios"
 
-let client
+let client = axios.create({
+    baseURL: process.env.NEXT_PUBLIC_API_URL,
+    withCredentials: true
+})
 
 const api = {
     init: () => {
