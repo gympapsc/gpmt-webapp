@@ -1,31 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1624649754308" clover="3.2.0">
-  <project timestamp="1624649754308" name="All files">
-    <metrics statements="22" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="20" coveredmethods="1" elements="42" coveredelements="4" complexity="0" loc="22" ncloc="22" packages="1" files="1" classes="1"/>
-    <file name="http.js" path="/mnt/hkrdata/src/gpmt/gpmt-webapp/src/api/http.js">
-      <metrics statements="22" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="20" coveredmethods="1"/>
-      <line num="3" count="1" type="stmt"/>
-      <line num="8" count="1" type="stmt"/>
-      <line num="10" count="0" type="stmt"/>
-      <line num="15" count="1" type="stmt"/>
-      <line num="16" count="0" type="stmt"/>
-      <line num="18" count="0" type="stmt"/>
-      <line num="20" count="0" type="stmt"/>
-      <line num="21" count="0" type="stmt"/>
-      <line num="22" count="0" type="stmt"/>
-      <line num="23" count="0" type="stmt"/>
-      <line num="24" count="0" type="stmt"/>
-      <line num="25" count="0" type="stmt"/>
-      <line num="26" count="0" type="stmt"/>
-      <line num="28" count="0" type="stmt"/>
-      <line num="29" count="0" type="stmt"/>
-      <line num="30" count="0" type="stmt"/>
-      <line num="31" count="0" type="stmt"/>
-      <line num="33" count="0" type="stmt"/>
-      <line num="34" count="0" type="stmt"/>
-      <line num="35" count="0" type="stmt"/>
-      <line num="37" count="0" type="stmt"/>
+<coverage generated="1624650988811" clover="3.2.0">
+  <project timestamp="1624650988811" name="All files">
+    <metrics statements="35" coveredstatements="31" conditionals="34" coveredconditionals="26" methods="10" coveredmethods="10" elements="79" coveredelements="67" complexity="0" loc="35" ncloc="35" packages="1" files="1" classes="1"/>
+    <file name="reducers.js" path="/mnt/hkrdata/src/gpmt/gpmt-webapp/src/reducers.js">
+      <metrics statements="35" coveredstatements="31" conditionals="34" coveredconditionals="26" methods="10" coveredmethods="10"/>
+      <line num="1" count="1" type="stmt"/>
+      <line num="13" count="1" type="cond" truecount="0" falsecount="1"/>
+      <line num="14" count="19" type="cond" truecount="19" falsecount="4"/>
+      <line num="16" count="1" type="stmt"/>
+      <line num="26" count="1" type="stmt"/>
+      <line num="34" count="1" type="stmt"/>
       <line num="42" count="0" type="stmt"/>
+      <line num="50" count="1" type="stmt"/>
+      <line num="58" count="1" type="stmt"/>
+      <line num="63" count="1" type="stmt"/>
+      <line num="68" count="1" type="stmt"/>
+      <line num="73" count="1" type="stmt"/>
+      <line num="78" count="1" type="stmt"/>
+      <line num="83" count="0" type="stmt"/>
+      <line num="88" count="1" type="stmt"/>
+      <line num="93" count="0" type="stmt"/>
+      <line num="101" count="1" type="stmt"/>
+      <line num="109" count="1" type="stmt"/>
+      <line num="117" count="1" type="stmt"/>
+      <line num="120" count="1" type="stmt"/>
+      <line num="122" count="1" type="stmt"/>
+      <line num="128" count="1" type="stmt"/>
+      <line num="131" count="1" type="stmt"/>
+      <line num="133" count="1" type="stmt"/>
+      <line num="139" count="1" type="stmt"/>
+      <line num="142" count="1" type="stmt"/>
+      <line num="144" count="1" type="stmt"/>
+      <line num="150" count="1" type="stmt"/>
+      <line num="152" count="1" type="stmt"/>
+      <line num="155" count="1" type="stmt"/>
+      <line num="157" count="1" type="stmt"/>
+      <line num="160" count="1" type="stmt"/>
+      <line num="162" count="1" type="stmt"/>
+      <line num="165" count="0" type="stmt"/>
+      <line num="170" count="1" type="stmt"/>
     </file>
   </project>
 </coverage>

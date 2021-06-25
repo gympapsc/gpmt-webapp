@@ -9,6 +9,10 @@ const gender = {
     d: { id: 3, name: "divers"}
 }
 
+export function Select({value, onChange}) {
+  
+}
+
 export function SexSelect({value, onChange}) {
     const [selected, setSelected] = useState(gender[value])
 

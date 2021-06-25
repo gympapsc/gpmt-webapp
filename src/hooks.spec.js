@@ -11,40 +11,41 @@ import {
 import { renderHook } from '@testing-library/react-hooks'
 
 
-describe("useDrinking hook", () => {
-    let startDate = new Date()
+
+it("useUser hook", () => {
     
-    const { drinking } = renderHook(() => useDrinking(startDate))
 })
 
-describe("useMicturition hook", () => {
-
+it("useDrinking hook", () => {
+    // let startDate = new Date()
+    
+    // const { drinking } = renderHook(() => useDrinking(startDate))
 })
 
-describe("useStress hook", () => {
-
-})
-
-describe("useUser hook", () => {
+it("useMicturition hook", () => {
 
 })
 
-describe("useMicturitionPredictions hook", () => {
+it("useStress hook", () => {
 
 })
 
-describe("useMessages hook", () => {
+it("useMicturitionPredictions hook", () => {
 
 })
 
-describe("usePhotos hook", () => {
+it("useMessages hook", () => {
 
 })
 
-describe("useUtterButtons hook", () => {
+it("usePhotos hook", () => {
 
 })
 
-// describe("useDictation hook", () => {
+it("useUtterButtons hook", () => {
+
+})
+
+// it("useDictation hook", () => {
 
 // })

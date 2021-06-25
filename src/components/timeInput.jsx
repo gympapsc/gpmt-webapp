@@ -1,8 +1,7 @@
 import React from "react"
+import PropTypes from "prop-types"
 
 const TimeInput = ({label, value, onChange}) => {
-
-
     let [hour, setHour] = useState(value.getMinutes())
     let [minute, setMinute] = useState(value.getMinutes())
 
@@ -42,6 +41,12 @@ const TimeInput = ({label, value, onChange}) => {
             </div>
         </>
     )
+}
+
+TimeInput.propTypes = {
+    label: PropTypes.string,
+    value: PropTypes.string,
+    onChange: PropTypes.func
 }
 
 export default TimeInput

@@ -1,6 +1,6 @@
 import React from "react"
 import { Switch, Transition } from "@headlessui/react"
-
+import PropTypes from "prop-types"
 
 const Toggle = ({value, title, description, onChange}) => {
     return (
@@ -27,6 +27,13 @@ const Toggle = ({value, title, description, onChange}) => {
             </div>
         </Switch.Group>
     )
+}
+
+Toggle.propTypes = {
+    value: PropTypes.string,
+    title: PropTypes.string,
+    description: PropTypes.string,
+    onChange: PropTypes.func
 }
 
 export default Toggle

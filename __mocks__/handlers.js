@@ -23,8 +23,14 @@ let data = {
     }],
     micturition: [{
     }],
-    predictions: [{
-    }],
+    predictions: new Array(24).map(i => (
+        {
+            _id: "0123456789" + i,
+            date: new Date(now + i * 60 * 60 * 1000),
+            prediction: Math.random(),
+            timestamp: now
+        }
+    )),
     photos: [],
     messages: [
         {

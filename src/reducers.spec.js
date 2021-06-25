@@ -109,19 +109,107 @@ describe("redux action reducer", () => {
     })
 
     it("should set messages", () => {
+        const messages = [{
+            _id: "0123456789",
+            text: "Hallo",
+            sender: "user",
+            timestamp: new Date().valueOf(),
+            updatedAt: new Date().valueOf(),
+        }]
+        const action = {
+            type: "SET_MESSAGES",
+            payload: {
+                messages
+            }
+        }
+        const initialState = {
+            messages: null,
+            user: null 
+        }
+        
+        const state = reducer(initialState, action)
 
+        expect(state.messages).toStrictEqual(messages)
     })
 
     it("should set user", () => {
+        const user = {
+            _id: "1234567890",
+            timestamp: new Date().valueOf(),
+            updatedAt: new Date().valueOf(),
+            firstname: "Testing",
+            surname: "Taylor",
+            email: "testing@taylor.com",
+            weight: 80,
+            height: 180,
+            birthDate: new Date(2000, 0, 1),
+            sex: "m"
+        }
 
+        const action = {
+            type: "SET_USER",
+            payload: {
+                user
+            }
+        }
+        const initialState = {
+            user: null
+        }
+        
+        const state = reducer(initialState, action)
+
+        expect(state.user).toStrictEqual(user)
     })
 
     it("should set stress", () => {
+        const stress = [{
+            _id: "0123456789",
+            level: 1,
+            date: new Date(),
+            timestamp: new Date().valueOf(),
+            updatedAt: new Date().valueOf(),
+        }]
+        const action = {
+            type: "SET_STRESS",
+            payload: {
+                entries: stress
+            }
+        }
+        const initialState = {
+            stress: null,
+            user: null 
+        }
+        
+        const state = reducer(initialState, action)
 
+        expect(state.stress).toStrictEqual(stress)
     })
 
     it("should set micturition prediction", () => {
+        let now = new Date().valueOf()
+        const predictions = [...Array(24).keys()].map(i => (
+            {
+                _id: "0123456789" + i,
+                date: new Date(now + i * 60 * 60 * 1000),
+                prediction: Math.random(),
+                timestamp: now
+            }
+        ))
+        
+        const action = {
+            type: "SET_MICTURITION_PREDICTIONS",
+            payload: {
+                predictions
+            }
+        }
+        const initialState = {
+            micturitionPredictions: null,
+            user: null 
+        }
+        
+        const state = reducer(initialState, action)
 
+        expect(state.micturitionPredictions).toStrictEqual(predictions)
     })
 
     it("should set drinking", () => {

@@ -1,4 +1,5 @@
 import React from "react"
+import PropTypes from "prop-types"
 
 const NumberInput = ({label, value, onChange}) => {
     return (
@@ -13,6 +14,12 @@ const NumberInput = ({label, value, onChange}) => {
                 />
         </>
     )
+}
+
+NumberInput.propTypes = {
+    label: PropTypes.string,
+    value: PropTypes.any,
+    onChange: PropTypes.func
 }
 
 export default NumberInput

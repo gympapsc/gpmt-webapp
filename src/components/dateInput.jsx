@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import PropTypes from "prop-types"
 
 const DateInput = ({label, value, onChange}) => {
 
@@ -51,6 +52,12 @@ const DateInput = ({label, value, onChange}) => {
             </div>
         </>
     )
+}
+
+DateInput.propTypes = {
+    label: PropTypes.string,
+    value: PropTypes.any,
+    onChange: PropTypes.func
 }
 
 export default DateInput

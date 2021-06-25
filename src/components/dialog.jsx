@@ -1,5 +1,6 @@
 import React from "react"
 import Link from "next/link"
+import PropTypes from "prop-types"
 import { useDrinking, useMessages, useMicturition, usePhotos, useStress } from "../hooks"
 
 const WEEKDAY = [
@@ -32,6 +33,11 @@ const PhotoEntry = ({name, url}) => (
     </div>
 )
 
+PhotoEntry.propTypes = {
+    name: PropTypes.string,
+    url: PropTypes.string
+}
+
 const StressEntry = ({ id, level }) => (
     <Link href={`/app/stress/${id}`}>
         <a href="#" className="text-md text-white bg-green-600 w-48 md:52 rounded-xl py-2 px-3 self-center focus:ring-2 focus:outline-none focus:ring-blue-500 focus:ring-offset-1">
@@ -40,6 +46,11 @@ const StressEntry = ({ id, level }) => (
         </a>
     </Link>
 )
+
+StressEntry.propTypes = {
+    id: PropTypes.string,
+    level: PropTypes.number
+}
 
 const MicturitionEntry = ({date, id}) => (
     <Link href={`/app/micturition/${id}`}>
@@ -50,6 +61,11 @@ const MicturitionEntry = ({date, id}) => (
     </Link>
 )
 
+MicturitionEntry.propTypes = {
+    date: PropTypes.any,
+    id: PropTypes.string
+}
+
 const DrinkingEntry = ({amount, id}) => (
     <Link href={`/app/drinking/${id}`}>
         <a href="#" className="text-md text-white bg-pink-500 w-48 md:52 rounded-xl py-2 px-3 self-center focus:ring-2 focus:outline-none focus:ring-blue-500 focus:ring-offset-1">
@@ -58,6 +74,11 @@ const DrinkingEntry = ({amount, id}) => (
         </a>
     </Link>
 )
+
+DrinkingEntry.propTypes = {
+    amount: PropTypes.number,
+    id: PropTypes.string
+}
         
 const BotMessage = ({text}) => (
     <div className="text-lg lg:text-xl font-semibold text-blue-900 text-opacity-80 max-w-xs md:max-w-md rounded-xl py-1 px-2 md:px-3 text-left self-start">
@@ -65,18 +86,32 @@ const BotMessage = ({text}) => (
     </div>
 )
 
+BotMessage.propTypes = {
+    text: PropTypes.string
+}
+
 const UserMessage = ({text}) => (
     <div className="text-lg lg:text-xl font-semibold text-gray-800 max-w-xs md:max-w-md rounded-xl py-1 px-2 md:px-3 text-right self-end">
         {text}
     </div>
 )
 
+UserMessage.propTypes = {
+    text: PropTypes.string
+}
+
+
 const DateTitle  = ({text}) => (
     <h4 className="text-lg md:text-xl text-gray-700 self-center my-2 font-semibold">
         {text}
     </h4>
 )
-    
+
+DateTitle.propTypes = {
+    text: PropTypes.string
+}
+
+
 const DialogEntry = ({entry}) => {
     switch(entry.type) {
         case "MICTURITION":
@@ -96,6 +131,10 @@ const DialogEntry = ({entry}) => {
         default:
             return <span>{entry}</span>
     }
+}
+
+DialogEntry.propTypes = {
+    entry: PropTypes.any
 }
 
 const addDateLabels = entries => {
@@ -144,5 +183,10 @@ const Dialog = ({startDate}) => {
         </div>
     )
 }
+
+Dialog.propTypes = {
+    startDate: PropTypes.any
+}
+
 
 export default Dialog
