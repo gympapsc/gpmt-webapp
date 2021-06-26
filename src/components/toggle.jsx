@@ -30,7 +30,7 @@ const Toggle = ({value, title, description, onChange}) => {
 }
 
 Toggle.propTypes = {
-    value: PropTypes.string,
+    value: PropTypes.bool,
     title: PropTypes.string,
     description: PropTypes.string,
     onChange: PropTypes.func

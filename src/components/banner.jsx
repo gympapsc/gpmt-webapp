@@ -58,7 +58,7 @@ export const InfoBanner = () => {
     )
 }
 
-export const ErrorBanner = ({message, messageShort, buttonTitle, dismisable=true}) => {
+export const ErrorBanner = ({message, messageShort, buttonTitle, dismissable=true}) => {
     const [shown, setShown] = useState(true)
 
     return (
@@ -99,9 +99,10 @@ export const ErrorBanner = ({message, messageShort, buttonTitle, dismisable=true
                             </div>
                         }
                         {
-                            dismisable &&
+                            dismissable &&
                             <div className="order-2 flex-shrink-0 sm:order-3 sm:ml-3">
                                 <button 
+                                    role="dismiss"
                                     type="button" 
                                     className="-mr-1 flex p-2 rounded-md hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-white sm:-mr-2"
                                     onClick={() => setShown(!shown)}

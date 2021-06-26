@@ -173,7 +173,6 @@ const Dialog = ({startDate}) => {
     dialog = addDateLabels(dialog)
         .sort((a, b) => a.timestamp - b.timestamp)
 
-    console.log(dialog)
 
     return (
         <div className="flex flex-col px-3 w-full lg:w-3/4 xl:w-2/3 mx-auto space-y-3 pt-8">

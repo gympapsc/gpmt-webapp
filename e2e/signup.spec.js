@@ -27,7 +27,7 @@ describe("user sign up", () => {
         let passwordRepeatField = await getByLabelText(document, /Password Wiederholden/)
         let weightField = await getByLabelText(document, /Gewicht/)
         let heightField = await getByLabelText(document, /Größe/)
-        let birthDateField = await getByLabelText(document, /Geburtstag/)
+        let birthDayField = await getByLabelText(document, /Geburtstag/)
         let birthMonthField = await getByLabelText(document, /Geburtsmonat/)
         let birthYearField = await getByLabelText(document, /Geburtsjahr/)
         
@@ -38,9 +38,11 @@ describe("user sign up", () => {
         await passwordRepeatField.type('password')
         await weightField.type("2")
         await heightField.type("8")
-        await birthDateField.type("09/12/2002")
+        await birthDayField.type("12")
+        await birthMonthField.type("9")
+        await birthYearField.type("2002")
 
-        await page.screenshot({path: path.resolve(__dirname, '../screenshots/messaging.signup.png')})
+        await page.screenshot({path: path.resolve(__dirname, '../screenshots/signup.filled_form.png')})
         let button = await getByText(document, /Sign up/i)
 
         await button.click()
@@ -58,9 +60,6 @@ describe("user sign up", () => {
             await page.screenshot({path: path.resolve(__dirname, '../screenshots/messaging.type.png')})
         }, 1000)
         await sendButton.click()
-
-        await waitFor(() => getByText(document, "user: Hello"))
-        await waitFor(() => getByText(document, /bot: (.*)+/))
 
         await delay(async () => {
             await page.screenshot({path: path.resolve(__dirname, '../screenshots/messaging.send.png')})

@@ -124,7 +124,6 @@ const Signup = () => {
             sex
         } = data
         
-        console.log(sex)
         let birthDate = new Date(parseInt(birthYear), parseInt(birthMonth) - 1, parseInt(birthDay))
 
         dispatch(
@@ -256,7 +255,7 @@ const Signup = () => {
                                 {...register("height", 
                                     { 
                                         required: "Du musst deine Größe in cm angeben",
-                                        min: { value: 50, message: "Du musst noch wachsen"}
+                                        min: { value: 50, message: "Du bist zu klein"}
                                     }
                                 )}/>
                             <span className="text-xs text-red-500">{errors.height?.message}&nbsp;</span>
@@ -274,7 +273,7 @@ const Signup = () => {
                                 {...register("weight", 
                                     { 
                                         required: "Gewicht ist erforderlich",
-                                        min: { value: 10, message: "Bist du etwa so leicht?"}
+                                        min: { value: 10, message: "Du bist zu leicht leicht"}
                                     }
                                 )}/>
                             <span className="text-xs text-red-500">{errors.weight?.message}&nbsp;</span>
@@ -290,7 +289,7 @@ const Signup = () => {
                                     <input
                                         id="tag"
                                         type="number"
-                                        placeholder="TT"
+                                        placeholder="Tag"
                                         className="color transition ease-in-out duration-200 w-full border border-gray-300 focus:border-transparent bg-white px-2 md:px-3 py-2 md:py-3 rounded-lg focus:ring-offset-gray-100 focus:ring-2 focus:ring-offset-1 focus:ring-blue-600 focus:outline-none"
                                         {
                                             ...register("birthDay", {
@@ -314,7 +313,7 @@ const Signup = () => {
                                     <input
                                         id="monat"
                                         type="number"
-                                        placeholder="MM"
+                                        placeholder="Monat"
                                         className="color transition ease-in-out duration-200 w-full border border-gray-300 focus:border-transparent bg-white px-2 md:px-3 py-2 md:py-3 rounded-lg focus:ring-offset-gray-100 focus:ring-2 focus:ring-offset-1 focus:ring-blue-600 focus:outline-none"
                                         {
                                             ...register("birthMonth", {
@@ -330,7 +329,7 @@ const Signup = () => {
                                     <input
                                         id="jahr"
                                         type="number"
-                                        placeholder="JJJJ"
+                                        placeholder="Jahr"
                                         className="color transition ease-in-out duration-200 w-full border border-gray-300 focus:border-transparent bg-white px-2 md:px-3 py-2 md:py-3 rounded-lg focus:ring-offset-gray-100 focus:ring-2 focus:ring-offset-1 focus:ring-blue-600 focus:outline-none"
                                         {
                                             ...register("birthYear", {
@@ -364,7 +363,7 @@ const Signup = () => {
                                 className="color transition ease-in-out duration-200 w-full border border-gray-300 focus:border-transparent bg-white px-2 md:px-3 py-2 md:py-3 rounded-lg focus:ring-offset-gray-100 focus:ring-2 focus:ring-offset-1 focus:ring-blue-600 focus:outline-none"
                                 {...register("password", 
                                     { 
-                                        required: "Password ist erfoderlich",
+                                        required: "Passwort ist erfoderlich",
                                         minLength: { value: 7, message: "Password muss länger als 6 Buchstaben lang sein"},
                                         pattern: { value: /[A-Z]/, message: "Password muss Groß- und Kleinbuchstaben enthalten"}
                                     }
@@ -383,7 +382,7 @@ const Signup = () => {
                                 className="color transition ease-in-out duration-200 w-full border border-gray-300 focus:border-transparent bg-white px-2 md:px-3 py-2 md:py-3 rounded-lg focus:ring-offset-gray-100 focus:ring-2 focus:ring-offset-1 focus:ring-blue-600 focus:outline-none"
                                 {...register("password_repeat", 
                                     { 
-                                        required: "Du muss das Password wiederholen",
+                                        required: "Du muss das Passwort wiederholen",
                                         validate: {
                                             matchesPassword: value => {
                                                 const { password } = getValues()

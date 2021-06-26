@@ -5,7 +5,7 @@ export const redirect = path => {
 }
 
 export const shorten = (string, maxlen) => {
-    if(string.length <= maxlen) {
+    if(!string || string.length <= maxlen) {
         return string
     }
     return string?.substring(0, maxlen - 3) + "..."

@@ -23,12 +23,12 @@ let data = {
     }],
     micturition: [{
     }],
-    predictions: new Array(24).map(i => (
+    predictions: [...Array(24).keys()].map(i => (
         {
             _id: "0123456789" + i,
-            date: new Date(now + i * 60 * 60 * 1000),
+            date: new Date(new Date().valueOf() + i * 60 * 60 * 1000),
             prediction: Math.random(),
-            timestamp: now
+            timestamp: new Date().valueOf()
         }
     )),
     photos: [],
@@ -108,7 +108,7 @@ export const handlers = [
         if(req.cookies["authToken"] === "testing@taylor.com") {
             return res(
                 ctx.json({
-                    micturition: data.micturition
+                    entries: data.micturition
                 })
             )
         } else {
@@ -185,7 +185,11 @@ export const handlers = [
     
     rest.get(`${url}/drinking`, (req, res, ctx) => {
         if(req.cookies["authToken"] === "testing@taylor.com") {
-
+            return res(
+                ctx.json({
+                    entries: data.drinking
+                })
+            )
         } else {
             return res(
                 ctx.status(403),
@@ -248,7 +252,7 @@ export const handlers = [
         if(req.cookies["authToken"] === "testing@taylor.com") {
             return res(
                 ctx.json({
-                    stress: data.stress
+                    entries: data.stress
                 })
             )
         } else {

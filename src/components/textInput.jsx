@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 
-const TextInput = ({label, value, onChange}) => {
+const TextInput = ({label, value, onChange, placeholder}) => {
     return (
         <>
             <label className="text-sm text-gray-800" htmlFor={label}>{label}</label>
@@ -10,6 +10,7 @@ const TextInput = ({label, value, onChange}) => {
                 type="text"
                 id={label}
                 value={value}
+                placeholder={placeholder}
                 onChange={e => onChange(e.target.value)}
                 />
         </>
@@ -19,7 +20,8 @@ const TextInput = ({label, value, onChange}) => {
 TextInput.propTypes = {
     label: PropTypes.string,
     value: PropTypes.string,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    placeholder: PropTypes.string
 }
 
 export default TextInput

@@ -122,7 +122,6 @@ export function useDictation(onresult) {
         return {
             supported: true,
             start: () => {
-                console.log(recognition)
                 recognition.start()
             }
         }

@@ -251,7 +251,6 @@ export const loadMessages = (startDate) => async (dispatch, getState, { api }) =
 export const loadMicturition = startDate => async (dispatch, getState, { api }) => {
     if(!api._pending["micturition"]) {
         api._pending["micturition"] = true
-        console.log("GET_MICTURITION")
         let { data: { entries }} = await api.getMicturition(startDate)
         entries = entries.map(e => ({
             ...e,
@@ -280,7 +279,6 @@ export const loadMicturitionPredictions = startDate => async (dispatch, getState
 export const loadDrinking = startDate => async (dispatch, getState, { api }) => {
     if(!api._pending["drinking"]) {
         api._pending["drinking"] = true
-        console.log("GET_DRINKING")
         let { data: { entries }} = await api.getDrinking(startDate)
         entries = entries.map(e => ({
             ...e,
@@ -295,7 +293,6 @@ export const loadDrinking = startDate => async (dispatch, getState, { api }) => 
 export const loadStress = startDate => async (dispatch, getState, { api }) => {
     if(!api._pending["stress"]) {
         api._pending["stress"] = true
-        console.log("GET_STRESS")
         let { data: { entries }} = await api.getStress(startDate)
         entries = entries.map(e => ({
             ...e,

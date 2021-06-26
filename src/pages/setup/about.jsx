@@ -48,7 +48,7 @@ const About = () => {
                         </button>
                     </div>
                 </div>
-        </div>
+            </div>
         </Secure>
     )
 }

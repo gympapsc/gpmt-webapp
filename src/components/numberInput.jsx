@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 
-const NumberInput = ({label, value, onChange}) => {
+const NumberInput = ({label, value, onChange, placeholder}) => {
     return (
         <>
             <label className="text-sm text-gray-800" htmlFor={label}>{label}</label>
@@ -10,6 +10,7 @@ const NumberInput = ({label, value, onChange}) => {
                 type="number"
                 id={label}
                 value={value}
+                placeholder={placeholder}
                 onChange={e => onChange(e.target.value)}
                 />
         </>
@@ -19,6 +20,7 @@ const NumberInput = ({label, value, onChange}) => {
 NumberInput.propTypes = {
     label: PropTypes.string,
     value: PropTypes.any,
+    placeholder: PropTypes.string,
     onChange: PropTypes.func
 }
 

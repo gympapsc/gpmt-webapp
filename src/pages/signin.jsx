@@ -10,7 +10,7 @@ import { ErrorBanner } from "../components/banner"
 
 
 const Signin = () => {
-    const { register, handleSubmit, watch, formState: { errors, isValid, isDirty}} = useForm()
+    const { register, handleSubmit, formState: { errors, isValid, isDirty}} = useForm()
     let dispatch = useDispatch()
     let signinError = useSelector(state => state.errors.signin) ? "Anmeldedaten sind falsch." : false
 
