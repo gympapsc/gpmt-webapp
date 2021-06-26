@@ -17,7 +17,7 @@ import Shell from '../../components/shell'
 import Aside from '../../components/aside'
 import BarChart from '../../visualisations/barChart'
 import LineChart from '../../visualisations/lineChart'
-import { useDrinking, useMicturition, useUser, useMicturitionPredictions} from '../../hooks'
+import { useDrinking, useMicturition, useUser, useMicturitionPredictions, usePhotos} from '../../hooks'
 import MicturitionChart from '../../visualisations/micturitionChart'
 import DrinkingChart from '../../visualisations/drinkingChart'
 
@@ -40,6 +40,7 @@ const Micturition = () => {
         .map(m => ({type:"micturition", ...m}))
     let drinking = useDrinking(new Date())
         .map(d => ({type: "drinking", ...d}))
+    let photos = usePhotos(new Date())
     let entries = [...micturition, ...drinking].sort((a, b) => b.timestamp - a.timestamp)
 
     const deleteEntry = (type, _id) => () => {
@@ -52,9 +53,9 @@ const Micturition = () => {
     
     return (
         <Shell title={"Übersicht"} className="bg-gray-100">
-            <div className="flex flex-col w-full space-y-4">
+            <div className="flex flex-col w-full space-y-4 pb-12">
                 {
-                    entries.length != 0 ? 
+                    entries.length !== 0 ? 
                     <div className="space-y-5">
                         <div className="space-y-4 py-6 md:py-8 bg-white w-full">
                             <div className="grid grid-cols-2 gap-2 px-3 md:px-5 xl:gap-3 mx-auto">
@@ -86,10 +87,10 @@ const Micturition = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex flex-col px-3 md:px-4 mx-auto">
+                        <div className="flex flex-col md:px-4 mx-auto">
                             <h3 className="mb-2 font-semibold text-lg md:text-xl">Einträge</h3>
-                            <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                                <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                            <div className="-my-2 overflow-x-hidden">
+                                <div className="py-2 align-middle inline-block min-w-full">
                                     <div className="border overflow-hidden border-gray-200 sm:rounded-lg">
                                         <table className="min-w-full divide-y divide-gray-200">
                                             <thead className="bg-gray-50">
@@ -140,20 +141,17 @@ const Micturition = () => {
                         </div>
                         <div className="flex flex-col px-3 md:px-4 mx-auto">
                             <h3 className="mb-2 font-semibold text-lg md:text-xl">Fotos</h3>
-                            <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                                <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                            <div className="-my-2 overflow-x-auto">
+                                <div className="py-2 align-middle inline-block min-w-full">
                                     <div className="border overflow-hidden border-gray-200 sm:rounded-lg">
                                         <table className="min-w-full divide-y divide-gray-200">
                                             <thead className="bg-gray-50">
                                                 <tr>
                                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                        Datum
+                                                        Photo
                                                     </th>
                                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                         Uhrzeit
-                                                    </th>
-                                                    <th scope="col" className="relative px-6 py-3">
-                                                        <span className="sr-only">Bearbeiten</span>
                                                     </th>
                                                     <th scope="col" className="relative px-6 py-3">
                                                         <span className="sr-only">Löschen</span>
@@ -162,20 +160,13 @@ const Micturition = () => {
                                             </thead>
                                             <tbody className="bg-white divide-y divide-gray-200">
 
-                                                {entries.map((e, i) => (
+                                                {photos.map((e, i) => (
                                                     <tr key={i}>
                                                         <td className="px-6 py-4 whitespace-nowrap">
-                                                            {WEEKDAY[e?.date.getDay()]}
+                                                            <img src={e.url} className="rounded-md max-h-14"/>
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap">
-                                                            {e?.date.getHours()}:{e?.date.getMinutes()}
-                                                        </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                            <Link href={`/app/${e.type}/${e._id}`}>
-                                                                <a className="text-indigo-600 p-2 hover:bg-indigo-100 rounded-lg transition-colors ease-in-out duration-100">
-                                                                    Bearbeiten
-                                                                </a>
-                                                            </Link>
+                                                            {e?.name}
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                             <Link href={`/app/${e.type}/${e._id}`}>
