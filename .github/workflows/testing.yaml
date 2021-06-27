@@ -8,6 +8,7 @@ env:
     AZURE_WEBAPP_NAME: gpmt
     AZURE_WEBAPP_PACKAGE_PATH: './out'
     NODE_VERSION: '14.x'
+    NEXT_PUBLIC_API_URL: 'http://testing.gpmt.org'
 
 jobs:
     unittest:
