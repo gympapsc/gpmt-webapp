@@ -1,6 +1,6 @@
 import React from "react"
 import { Provider } from "react-redux"
-import { render, fireEvent, waitFor, screen } from '@testing-library/react'
+import { render, fireEvent, waitFor, screen } from "@testing-library/react"
 
 import DrinkingEdit from "../../src/pages/app/drinking/[id]"
 import store from "../../src/store"
@@ -36,7 +36,7 @@ describe("/app/drinking edit page", () => {
             </Provider>
         )
 
-        await waitFor(() => screen.getAllByText('Übersicht'))
+        await waitFor(() => screen.getAllByText("Übersicht"))
 
         expect(screen.getAllByText("Übersicht")).toBeDefined()
         expect(screen.getAllByText(/Löschen/i)).toBeDefined()
@@ -49,9 +49,9 @@ describe("/app/drinking edit page", () => {
             </Provider>
         )
 
-        await waitFor(() => screen.getAllByText('Übersicht'))
+        await waitFor(() => screen.getAllByText("Übersicht"))
         // wait for entry to load
-        await waitFor(() => screen.getAllByText('800'))
+        await waitFor(() => screen.getAllByText("800"))
 
         expect(screen.getByPlaceholderText(/Jahr/i).value).toEqual("2020")
         expect(screen.getByPlaceholderText(/Monat/i).value).toEqual("1")
@@ -67,7 +67,7 @@ describe("/app/drinking edit page", () => {
             </Provider>
         )
 
-        await waitFor(() => screen.getAllByText('Übersicht'))
+        await waitFor(() => screen.getAllByText("Übersicht"))
 
         fireEvent.change(screen.getByPlaceholderText(/Jahr/i), {
             target: {
@@ -93,7 +93,7 @@ describe("/app/drinking edit page", () => {
             </Provider>
         )
 
-        await waitFor(() => screen.getAllByText('Übersicht'))
+        await waitFor(() => screen.getAllByText("Übersicht"))
 
         fireEvent.change(screen.getByTitle(/Trinkmenge/i), {
             target: {
@@ -113,7 +113,7 @@ describe("/app/drinking edit page", () => {
             </Provider>
         )
 
-        await waitFor(() => screen.getAllByText('Übersicht'))
+        await waitFor(() => screen.getAllByText("Übersicht"))
 
         fireEvent.click(screen.getByText(/Löschen/i))
         await waitFor(() => expect(store.getState().drinking.find(e => e._id === eid)).toBeUndefined())

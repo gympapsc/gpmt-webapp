@@ -8,7 +8,7 @@ export function useDrinking(startDate) {
     let drinking = useSelector(s => s.drinking)
 
     useEffect(() => {
-        if(typeof window !== 'undefined' && drinking === null) {
+        if(typeof window !== "undefined" && drinking === null) {
             dispatch(loadDrinking(startDate))
         }
     })
@@ -21,7 +21,7 @@ export function useMessages(startDate) {
     let messages = useSelector(s => s.messages)
 
     useEffect(() => {
-        if(typeof window !== 'undefined' && messages === null) {
+        if(typeof window !== "undefined" && messages === null) {
             dispatch(loadMessages(startDate))
         }
     })
@@ -34,7 +34,7 @@ export function useMicturition(startDate) {
     let micturition = useSelector(s => s.micturition)
 
     useEffect(() => {
-        if(typeof window !== 'undefined' && micturition === null) {
+        if(typeof window !== "undefined" && micturition === null) {
             dispatch(loadMicturition(startDate))
         }
     })
@@ -47,7 +47,7 @@ export function useMicturitionPredictions(startDate) {
     let predictions = useSelector(s => s.micturitionPredictions)
 
     useEffect(() => {
-        if(typeof window !== 'undefined' && predictions === null) {
+        if(typeof window !== "undefined" && predictions === null) {
             dispatch(loadMicturitionPredictions(startDate))
         }
     })
@@ -60,7 +60,7 @@ export function useStress(startDate) {
     let stress = useSelector(s => s.stress)
 
     useEffect(() => {
-        if(typeof window !== 'undefined' && stress === null) {
+        if(typeof window !== "undefined" && stress === null) {
             dispatch(loadStress(startDate))
         }
     })
@@ -73,7 +73,7 @@ export function usePhotos(startDate) {
     let photos = useSelector(s => s.photos)
 
     useEffect(() => {
-        if(typeof window !== 'undefined' && photos === null) {
+        if(typeof window !== "undefined" && photos === null) {
             dispatch(loadPhotos(startDate))
         }
     })
@@ -86,7 +86,7 @@ export function useUser() {
     let user = useSelector(s => s.user)
 
     useEffect(() => {
-        if(typeof window !== 'undefined' && user === null) {
+        if(typeof window !== "undefined" && user === null) {
             dispatch(authenticateUser())             
         }
     })

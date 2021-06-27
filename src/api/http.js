@@ -15,7 +15,7 @@ const api = {
     signinUser: (email, password) => client.post("/signin", { email, password }),
     signupUser: (user) => client.post("/signup", { user }),
     
-    utterMessage: text => client.post(`/conversation/utter`, { text }),
+    utterMessage: text => client.post("/conversation/utter", { text }),
 
     getMessages: () => client.get("/conversation"),
     getMicturition: () => client.get("/micturition"),

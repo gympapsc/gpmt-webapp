@@ -11,7 +11,7 @@ export const signupUser = ({
     sex
 }) => async (dispatch, getState, { api }) => {
     await api.init()
-    let { data: {ok, err} } = await api.signupUser({
+    let { data: {ok} } = await api.signupUser({
         firstname,
         surname,
         email,
@@ -52,7 +52,7 @@ export const signinUser = (
     }
 }
 
-export const signoutUser = () => (dispatch, getState, { api }) => {
+export const signoutUser = () => (dispatch, getState) => {
     if(typeof window !== "undefined") {
         redirect("/signin")
     }
@@ -62,7 +62,7 @@ export const authenticateUser = () => async (dispatch, getState, { api }) => {
     if(typeof window !== undefined) {
         api.init()
         try {
-            let { data: {user, err} } = await api.getUserInfo()
+            let { data: {user} } = await api.getUserInfo()
 
             if(!user) {
                 return redirect("/signin")
@@ -94,7 +94,7 @@ export const utterMessage = (text) =>  async (dispatch, getState, { api }) => {
     dispatch(setMicturitionPredictions(micturitionPrediction))
 }
 
-const processEvents = (events, dispatch, getState) => {
+const processEvents = (events, dispatch) => {
     for(let event of events) {
         if(event.text) {
             dispatch(addMessage(event.text, event.sender, new Date(event.timestamp).valueOf()))
@@ -338,30 +338,36 @@ export const updateDrinking = d => async (dispatch, getState, { api }) => {
 }
 
 export const updateMicturition = m => async (dispatch, getState, { api }) => {
-    let {data: { ok }} = await api.updateMicturition(m)
+    let { data: { ok }} = await api.updateMicturition(m)
 
-    dispatch({
-        type: "UPDATE_MICTURITION",
-        payload: m
-    })
+    if(ok) {
+        dispatch({
+            type: "UPDATE_MICTURITION",
+            payload: m
+        })
+    }
 }
 
 export const updateStress = s => async (dispatch, getState, { api }) => {
     let { data: { ok }} = await api.updateStress(s)
 
-    dispatch({
-        type: "UPDATE_STRESS",
-        payload: s
-    })
+    if(ok) {
+        dispatch({
+            type: "UPDATE_STRESS",
+            payload: s
+        })
+    }
 }
 
 export const updateUser = u => async (dispatch, getState, { api }) => {
-    let { data: { ok } } = await api.updateUser(u)
+    let { data: { ok}} = await api.updateUser(u)
 
-    dispatch({
-        type: "UPDATE_USER",
-        payload: u
-    })
+    if(ok) {
+        dispatch({
+            type: "UPDATE_USER",
+            payload: u
+        })
+    }
 }
 
 /*

@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import React, { useState, useRef } from "react"
+import { useSelector, useDispatch } from "react-redux"
 import { useSpring, animated } from "react-spring"
 import { useMediaQuery } from "react-responsive"
 
@@ -9,18 +9,18 @@ import {
     signoutUser,
     uploadPhoto,
     addPhoto
-} from '../../actions'
+} from "../../actions"
 
-import Secure from '../../components/secure'
-import Shell from '../../components/shell'
-import Dialog from '../../components/dialog'
-import * as Banner from '../../components/banner'
+import Secure from "../../components/secure"
+import Shell from "../../components/shell"
+import Dialog from "../../components/dialog"
+import * as Banner from "../../components/banner"
 
-import api from '../../api/http'
+import api from "../../api/http"
 import { 
     useDictation, 
     useUtterButtons 
-} from '../../hooks'
+} from "../../hooks"
 
 const App = () => {
     let startDate = new Date()
@@ -50,7 +50,7 @@ const App = () => {
     }
 
     const dictation = useDictation(result => console.log(result))
-    let [title, setTitle] = useState('Heute')
+    let [title, setTitle] = useState("Heute")
 
     let startDictation = () => {
         if(dictation.supported) {
