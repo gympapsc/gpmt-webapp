@@ -19,10 +19,9 @@ describe("/app page", () => {
             </Provider>
         )
 
-        await waitFor(() => screen.getAllByText('Übersicht'))
+        await waitFor(() => screen.getAllByText(/Hallo/i))
 
         expect(screen.getAllByText("Übersicht")).toBeDefined()
-        expect(screen.getAllByText(/Hallo/i)).toBeDefined()
         expect(screen.getAllByText(/Hallo, ich bin dein.*/i)).toBeDefined()
     })
 
@@ -33,7 +32,7 @@ describe("/app page", () => {
             </Provider>
         )
 
-        await waitFor(() => screen.getAllByText('Übersicht'))
+        await waitFor(() => screen.getAllByText(/Hallo/i))
 
         fireEvent.change(screen.getByPlaceholderText(/Nachricht/i), {
             target: {

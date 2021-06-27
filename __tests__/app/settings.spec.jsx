@@ -33,6 +33,18 @@ describe("/app/settings page", () => {
 
         await waitFor(() => screen.getAllByText('Übersicht'))
 
-        expect(screen.getAllByText("Übersicht")).toBeDefined()
+        fireEvent.change(screen.getByLabelText(/Vorname/), {
+            target: {
+                value: "Bob"
+            }
+        })
+        fireEvent.change(screen.getByLabelText(/Nachname/), {
+            target: {
+                value: "Debug"
+            }
+        })
+
+        await waitFor(() => expect(store.getState().user.firstname).toEqual("Bob"))
+        expect(store.getState().user.surname).toEqual("Debug")
     })
 })

@@ -362,7 +362,7 @@ export const handlers = [
         }
     }),
     rest.put(`${url}/user`, (req, res, ctx) => {
-        let {update} = req.body
+        let update = req.body
 
         if(req.cookies["authToken"] === "testing@taylor.com") {
             data.user = {
@@ -372,7 +372,7 @@ export const handlers = [
             }
             return res(
                 ctx.json({
-                    ok
+                    ok: true
                 })
             )
         } else {
