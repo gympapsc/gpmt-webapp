@@ -1,5 +1,4 @@
 import { rest } from "msw"
-import { Result } from "postcss"
 
 const url = process.env.NEXT_PUBLIC_API_URL
 
@@ -18,10 +17,24 @@ const testingUser = {
 
 let data = {
     stress: [{
+        _id: "123456789",
+        timestamp: new Date().valueOf(),
+        updatedAt: new Date().valueOf(),
+        date: new Date(2020, 0, 1, 10, 0),
+        level: 2
     }],
     drinking: [{
+        _id: "123456789",
+        timestamp: new Date().valueOf(),
+        updatedAt: new Date().valueOf(),
+        date: new Date(2020, 0, 1, 10, 0),
+        amount: 800
     }],
     micturition: [{
+        _id: "123456789",
+        timestamp: new Date().valueOf(),
+        updatedAt: new Date().valueOf(),
+        date: new Date(2020, 0, 1, 10, 0)
     }],
     predictions: [...Array(24).keys()].map(i => (
         {
@@ -78,18 +91,20 @@ export const handlers = [
         }
     }),
     rest.post(`${url}/conversation/utter`, (req, res, ctx) => {
-        let { text } = req.body 
+        let { text } = req.body
         if(req.cookies["authToken"] === "testing@taylor.com") {
-            data.messages.push({
+            let message = {
                 text,
                 sender: "user",
                 _id: new Date().valueOf().toString(),
-                timestamp: new Date().valueOf(),
-                updatedAt: new Date().valueOf()
-            })
+                timestamp: new Date().valueOf()
+            }
+            data.messages.push(message)
             return res(
                 ctx.json({
-                    messages: data.messages,
+                    events: [
+                        message
+                    ],
                     micturitionPrediction: data.predictions,
                     buttons: []
                 })
@@ -120,7 +135,7 @@ export const handlers = [
             )
         }
     }),
-    rest.put(`${url}/micutition/:id`, (req, res, ctx) => {
+    rest.put(`${url}/micturition/:id`, (req, res, ctx) => {
         let { id } = req.params
         let { date } = req.body
         if(req.cookies["authToken"] === "testing@taylor.com") {

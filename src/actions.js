@@ -329,10 +329,12 @@ export const loadPhotos = (startDate) => async (dispatch, getState, { api }) => 
 export const updateDrinking = d => async (dispatch, getState, { api }) => {
     let {data: { ok }} = await api.updateDrinking(d)
 
-    dispatch({
-        type: "UPDATE_DRINKING",
-        payload: d
-    })
+    if(ok) {
+        dispatch({
+            type: "UPDATE_DRINKING",
+            payload: d
+        })
+    }
 }
 
 export const updateMicturition = m => async (dispatch, getState, { api }) => {

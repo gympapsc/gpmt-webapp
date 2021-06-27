@@ -5,7 +5,9 @@ import thunk from "redux-thunk"
 import api from "./api/http"
 
 const logger = store => next => action => {
-    console.log(action.type, action.payload)
+    if (!(process.env.NODE_ENV === "test" || process.env.NODE_ENV === "production")) {
+        console.log(action.type, action.payload)
+    }
     next(action)
 }
 

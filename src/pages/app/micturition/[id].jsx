@@ -41,7 +41,7 @@ const Edit = () => {
                 <div className="flex flex-col px-3 w-full lg:w-3/4 xl:w-2/3 mx-auto space-y-4 my-5">
                     <form className="mt-3 space-y-4">
                         <div className="col-span-full">
-                            <DateTimeInput value={entry?.date} onChange={changeMicturition} label="Datum" />       
+                            <DateTimeInput value={entry?.date || new Date()} onChange={changeMicturition} label="Datum" />       
                         </div>
 
                         <div className="flex flex-row w-full">

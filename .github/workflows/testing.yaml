@@ -1,0 +1,38 @@
+name: Unit testing
+
+on:
+    push:
+        branches: [ master ]
+
+env:
+    AZURE_WEBAPP_NAME: gpmt
+    AZURE_WEBAPP_PACKAGE_PATH: './out'
+    NODE_VERSION: '14.x'
+
+jobs:
+    unittest:
+        name: Unittest
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v2
+
+        - name: Use Node.js ${{ env.NODE_VERSION }}
+          uses: actions/setup-node@v1
+          with:
+            node-version: ${{ env.NODE_VERSION }}
+
+        - name: Cache node modules
+          id: cache-node
+          uses: actions/cache@v2
+          with:
+            path: node_modules
+            key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+            restore-keys: ${{ runner.os }}-node-
+
+        - name: npm install
+          if: steps.cache-node.outputs.cache-hit != 'true'
+          run: npm ci
+        
+        - name: Run jest unittest
+          run: npm run test:unit
+        

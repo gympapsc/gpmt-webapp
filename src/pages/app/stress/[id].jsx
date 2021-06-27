@@ -1,4 +1,4 @@
-import React, { useState} from "react"
+import React, { useState, useRef } from "react"
 import { useRouter } from "next/router"
 import { useDispatch, useSelector } from "react-redux"
 
@@ -13,18 +13,19 @@ import {
 } from "../../../actions"
 import { useStress } from "../../../hooks"
 
-const Edit = () => {
+const StressEdit = () => {
     let router = useRouter()
+    let inputRef = useRef(null)
     let {id} = router.query
     let dispatch = useDispatch()
-    let [stress, setLevel] = useState(entry?.level)
 
-    let entry = useStress(new Date()).find(s => s._id === id)
+    let entry = useStress(new Date())
+        .find(s => s._id === id)
 
     let changeLevel = level => {
         dispatch(updateStress({
             ...entry,
-            level
+            level: parseInt(level)
         }))
     }
 
@@ -49,20 +50,21 @@ const Edit = () => {
                     <form className="mt-3 space-y-4">
                         <div className="col-span-full">
                             <label className="text-sm text-gray-600" htmlFor="amount">Stresslevel</label>
-                            <h4 className="text-2xl font-semibold">{stress}<span className="text-sm">. level</span></h4>
+                            <h4 className="text-2xl font-semibold">{inputRef.current?.value || 1}<span className="text-sm">. level</span></h4>
                             <input
+                                ref={inputRef}
                                 type="range"
                                 className="block w-full"
                                 id="amount"
                                 min="1"
                                 max="5"
-                                value={stress}
-                                onChange={e => setLevel(e.target.value)}
-                                onBlur={e => changeLevel(stress)}
+                                defaultValue={entry?.level || 1}
+                                onBlur={e => changeLevel(e.target.value)}
+                                title="Stressstufe"
                                 />
                             </div>
                         <div className="col-span-full">
-                            <DateTimeInput value={entry?.date} onChange={changeDate} label="Datum" />       
+                            <DateTimeInput value={entry?.date || new Date(2000, 0, 1, 0, 0)} onChange={changeDate} label="Datum" />       
                         </div>
 
                         <div className="flex flex-row w-full">
@@ -79,4 +81,4 @@ const Edit = () => {
     )
 }
 
-export default Edit
+export default StressEdit

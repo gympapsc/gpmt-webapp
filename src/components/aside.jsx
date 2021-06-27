@@ -80,8 +80,12 @@ const Aside = ({ showMenu }) => {
                     <a className="col-span-1 h-32 text-white rounded-xl bg-gradient-to-l from-green-500 to-green-600 flex flex-col p-3">
                         <h3 className="text-md font-semibold">Miktion</h3>
                         <div className="mt-auto">
-                            <h5 className="text-sm -mb-1 tracking-wide">{currDate.getHours()}:{currDate.getMinutes()}</h5>
-                            <h4 className="text-2xl md:text-3xl font-bold">83<span className="text-xl">%</span></h4>
+                            <h5 className="text-sm font-semibold -mb-1 tracking-wide opacity-90">{currDate.getHours()}:{currDate.getMinutes()}</h5>
+                            <h4 className="text-2xl md:text-3xl font-bold">{
+                                prediction.length ?
+                                Math.round(prediction.find(p => p.date.getHours() === currDate.getHours()).prediction * 100)
+                                : "00"
+                            }<span className="text-xl">%</span></h4>
                         </div>
                     </a>
                 </Link>

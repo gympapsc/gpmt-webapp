@@ -1,26 +1,19 @@
 import React, { useState } from 'react'
 import Link from "next/link"
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import {
-    utterMessage,
-    getMessages,
-    signoutUser,
-    getMicturition,
-    getDrinking,
     deleteMicturition,
-    deleteDrinking
+    deleteDrinking,
+    deleteStress
 } from '../../actions'
 
 import Secure from '../../components/secure'
 import Shell from '../../components/shell'
-import Aside from '../../components/aside'
-import BarChart from '../../visualisations/barChart'
 import LineChart from '../../visualisations/lineChart'
-import { useDrinking, useMicturition, useUser, useMicturitionPredictions, usePhotos} from '../../hooks'
+import { useDrinking, useMicturition, useUser, useMicturitionPredictions, usePhotos, useStress} from '../../hooks'
 import MicturitionChart from '../../visualisations/micturitionChart'
 import DrinkingChart from '../../visualisations/drinkingChart'
-
 
 const WEEKDAY = [
     "Sonntag",
@@ -32,7 +25,7 @@ const WEEKDAY = [
     "Samstag"   
 ]
 
-const Micturition = () => {
+const MicturitionOverview = () => {
     let dispatch = useDispatch()
     let predictions = useMicturitionPredictions()
     
@@ -40,14 +33,18 @@ const Micturition = () => {
         .map(m => ({type:"micturition", ...m}))
     let drinking = useDrinking(new Date())
         .map(d => ({type: "drinking", ...d}))
+    let stress = useStress(new Date())
+        .map(s => ({type: "stress", ...s}))
     let photos = usePhotos(new Date())
-    let entries = [...micturition, ...drinking].sort((a, b) => b.timestamp - a.timestamp)
+    let entries = [...micturition, ...drinking, ...stress].sort((a, b) => b.timestamp - a.timestamp)
 
     const deleteEntry = (type, _id) => () => {
         if(type === "micturition") {
             dispatch(deleteMicturition(_id))
         } else if(type === "drinking") {
             dispatch(deleteDrinking(_id))
+        } else if(type === "stress") {
+            dispatch(deleteStress(_id))
         }
     }
     
@@ -148,10 +145,10 @@ const Micturition = () => {
                                             <thead className="bg-gray-50">
                                                 <tr>
                                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                        Photo
+                                                        Foto
                                                     </th>
                                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                        Uhrzeit
+                                                        Name
                                                     </th>
                                                     <th scope="col" className="relative px-6 py-3">
                                                         <span className="sr-only">Löschen</span>
@@ -195,10 +192,10 @@ const Micturition = () => {
 }
 
 
-export default function SecureMicturitionEdit() {
+export default function SecureMicturitionOverview() {
     return (
         <Secure>
-            <Micturition />
+            <MicturitionOverview />
         </Secure>
     )
 }

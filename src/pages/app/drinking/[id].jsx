@@ -59,10 +59,11 @@ const DrinkingEdit = () => {
                                     value={amount}
                                     onChange={e => setAmount(e.target.value)}
                                     onBlur={e => changeAmount(e.target.value)}
+                                    title="Trinkmenge"
                                     />
                             </div>
                             <div className="col-span-full">
-                                <DateTimeInput label="Datum" value={entry?.date} onChange={changeDate} />
+                                <DateTimeInput label="Datum" value={entry?.date || new Date()} onChange={changeDate} />
                             </div>
                         </div>
 

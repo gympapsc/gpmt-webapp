@@ -6,7 +6,6 @@ import Secure from "../../components/secure"
 const About = () => {
     let router = useRouter()
 
-
     const next = () => {
         router.push("/app")
     }

@@ -2,7 +2,7 @@ import React from "react"
 import { Provider } from "react-redux"
 import { render, fireEvent, waitFor, screen } from '@testing-library/react'
 
-import Overview from "../../src/pages/app/overview"
+import MicturitionOverview from "../../src/pages/app/overview"
 import store from "../../src/store"
 import api from "../../src/api/http"
 
@@ -13,12 +13,14 @@ describe("/overview page", () => {
 
         render(
             <Provider store={store}>
-                <Overview />
+                <MicturitionOverview />
             </Provider>
         )
 
         await waitFor(() => screen.getAllByText('Übersicht'))
 
-        expect(screen.getAllByText("Übersicht")).toBeTruthy()
+        expect(screen.getAllByText("Übersicht")).toBeDefined()
+        expect(screen.getAllByText(/Einträge/i)).toBeDefined()
+
     })
 })
