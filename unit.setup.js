@@ -1,6 +1,6 @@
 import { server } from "./__mocks__/server"
 
-jest.setTimeout(10000)
+jest.setTimeout(20000)
 
 beforeAll(() => server.listen())
 afterEach(() => server.resetHandlers())
