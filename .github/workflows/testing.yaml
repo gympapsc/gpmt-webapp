@@ -1,4 +1,4 @@
-name: Unit testing
+name: Testing
 
 on:
     push:
@@ -11,6 +11,33 @@ env:
     NEXT_PUBLIC_API_URL: 'http://testing.gpmt.org'
 
 jobs:
+    lint:
+        name: Lint
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v2
+
+        - name: Use Node.js ${{ env.NODE_VERSION }}
+          uses: actions/setup-node@v1
+          with:
+            node-version: ${{ env.NODE_VERSION }}
+
+        - name: Cache node modules
+          id: cache-node
+          uses: actions/cache@v2
+          with:
+            path: node_modules
+            key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+            restore-keys: ${{ runner.os }}-node-
+        
+        - name: npm install
+          if: steps.cache-node.outputs.cache-hit != 'true'
+          run: npm ci
+        
+        - name: Run eslint
+          run: npm run lint
+
+
     unittest:
         name: Unittest
         runs-on: ubuntu-latest
