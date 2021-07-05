@@ -27,7 +27,7 @@ const MicturitionChart = ({data, xlabel, ylabel}) => {
         let x = d3.scaleTime()
             .domain([
                 new Date(now.getFullYear(), now.getMonth(), now.getDate() - 2), 
-                new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours())
+                new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 1)
             ])
             .range([ 0, width ])
             .clamp(true)

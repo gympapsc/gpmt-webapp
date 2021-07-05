@@ -3,7 +3,7 @@ import PropTypes from "prop-types"
 
 const DateTimeInput = ({label, value, onChange}) => (
     <>
-        <label className="text-sm text-gray-600" htmlFor="day">{label}</label>
+        <label className="text-xs text-gray-600 uppercase" htmlFor="day">{label}</label>
         <div className="grid grid-cols-3 gap-2">
             <div>
                 <input
@@ -36,7 +36,7 @@ const DateTimeInput = ({label, value, onChange}) => (
                     />
             </div>
         </div>
-        <label className="text-sm text-gray-600" htmlFor="hour">Uhrzeit</label>
+        <label className="text-xs text-gray-600 uppercase" htmlFor="hour">Uhrzeit</label>
         <div className="grid grid-cols-2 gap-2">
             <div>
                 <input

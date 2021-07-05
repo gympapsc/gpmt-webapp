@@ -28,6 +28,8 @@ const WEEKDAY = [
 const MicturitionOverview = () => {
     let dispatch = useDispatch()
     let predictions = useMicturitionPredictions()
+
+    let user = useUser()
     
     let micturition = useMicturition(new Date())
         .map(m => ({type:"micturition", ...m}))
@@ -58,6 +60,7 @@ const MicturitionOverview = () => {
                             <div className="grid grid-cols-2 gap-2 px-3 md:px-5 xl:gap-3 mx-auto">
                                 <div className="col-span-full xl:col-span-1 flex flex-col">
                                     <div>
+                                        <h1>{user?.micturitionFrequency} pro Tag</h1>
                                         <h2 className="text-lg md:text-xl font-semibold text-gray-800">Gestern</h2>
                                         <p className="text-gray-500 text-sm md:text-md">Alle Trink- und Miktionseinträge die du in den letzten 24 Stunden gemacht hast.</p>
                                     </div>

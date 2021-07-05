@@ -9,7 +9,6 @@ import {
 
 import Secure from "../../components/secure"
 import Shell from "../../components/shell"
-import Aside from "../../components/aside"
 import DateInput from "../../components/dateInput"
 import TextInput from "../../components/textInput"
 import NumberInput from "../../components/numberInput"
@@ -63,9 +62,21 @@ const Settings = () => {
 
 
                     <div className="space-y-4 py-5">
-                        <Toggle title="Nachrichten aktivieren" description="Wenn aktiv werden Nachrichten angezeigt" value={enabled} onChange={setEnabled} />
-                        <Toggle title="Spracheingabe" description="Ermöglicht das Aufnehmen von Nachrichten" value={enabled} onChange={setEnabled} />
-                        <Toggle title="Kumulative Vorhersage" description="Zeigt die Vorhersage über den Tag kumulativ an" value={enabled} onChange={setEnabled} />
+                        <Toggle 
+                            title="Spracheingabe" 
+                            description="Wenn aktiviert, ermöglicht das Aufnehmen von Nachrichten" 
+                            value={user?.settings.voiceInput} 
+                            onChange={voiceInput => changeUser({settings: { ...user.settings, voiceInput }})} />
+                        <Toggle 
+                            title="Lautsprecherausgabe" 
+                            description="Liest alle Nachricht vor" 
+                            value={user?.settings.voiceOutput} 
+                            onChange={voiceOutput => changeUser({settings: { ...user.settings, voiceOutput }})} />
+                        <Toggle 
+                            title="Kumulative Vorhersage" 
+                            description="Zeigt die Vorhersage über den Tag kumulativ an" 
+                            value={user?.settings.cumulativePrediction} 
+                            onChange={cumulativePrediction => changeUser({settings: { ...user.settings, cumulativePrediction }})} />
                     </div>
                 </form>
             </div>

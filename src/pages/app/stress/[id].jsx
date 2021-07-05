@@ -49,7 +49,7 @@ const StressEdit = () => {
                 <div className="flex flex-col px-3 w-full lg:w-3/4 xl:w-2/3 mx-auto space-y-4 my-5">
                     <form className="mt-3 space-y-4">
                         <div className="col-span-full">
-                            <label className="text-sm text-gray-600" htmlFor="amount">Stresslevel</label>
+                            <label className="text-xs text-gray-600 uppercase" htmlFor="amount">Stresslevel</label>
                             <h4 className="text-2xl font-semibold">{inputRef.current?.value || 1}<span className="text-sm">. level</span></h4>
                             <input
                                 ref={inputRef}
@@ -70,7 +70,7 @@ const StressEdit = () => {
                         <div className="flex flex-row w-full">
                             <button
                                 onClick={deleteEntry} 
-                                className="py-2 w-full text-center text-white bg-red-600 rounded-lg">
+                                className="py-2 w-full text-center text-white bg-red-600 rounded-lg font-medium">
                                     Löschen
                             </button>
                         </div>

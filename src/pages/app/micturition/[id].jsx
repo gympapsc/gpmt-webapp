@@ -47,7 +47,7 @@ const Edit = () => {
                         <div className="flex flex-row w-full">
                             <button
                                 onClick={deleteEntry} 
-                                className="py-2 w-full text-center text-white bg-red-600 rounded-lg">
+                                className="py-2 w-full text-center text-white bg-red-600 rounded-lg font-medium">
                                     Löschen
                             </button>
                         </div>

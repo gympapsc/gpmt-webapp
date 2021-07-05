@@ -83,7 +83,7 @@ export const authenticateUser = () => async (dispatch, getState, { api }) => {
 }
 
 export const utterMessage = (text) =>  async (dispatch, getState, { api }) => {
-    let { data: { buttons, events, micturitionPrediction }} = await api.utterMessage(text)
+    let { data: { buttons, events, micturitionPrediction, micturitionFrequency }} = await api.utterMessage(text)
     processEvents(events, dispatch, getState)
     dispatch(setUtterButtons(buttons))
     micturitionPrediction = micturitionPrediction.map(e => ({
@@ -92,6 +92,8 @@ export const utterMessage = (text) =>  async (dispatch, getState, { api }) => {
         timestamp: new Date(e.timestamp).valueOf()
     }))
     dispatch(setMicturitionPredictions(micturitionPrediction))
+    let user = getState().user
+    dispatch(setUser({ ...user, micturitionFrequency }))
 }
 
 const processEvents = (events, dispatch) => {

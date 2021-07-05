@@ -69,7 +69,7 @@ const Aside = ({ showMenu }) => {
                     </Link>
                 </div>
             </header>
-            <div className="p-2 md:p-4 grid grid-cols-2 gap-3">
+            <div className="p-2 md:p-3 grid grid-cols-2 gap-2 md:gap-3">
                 <Link href="/app">
                     <a className="col-span-2 p-3 bg-white rounded-xl">
                         <h3 className="text-md font-semibold">Chat &bull; <span className="text-gray-500">Gestern</span></h3>
