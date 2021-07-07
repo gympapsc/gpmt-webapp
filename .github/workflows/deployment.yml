@@ -1,0 +1,83 @@
+name: Deploy to Azure Static Web Apps
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  NODE_VERSION: "14.x"
+
+jobs:
+  testing:
+    name: Testing
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Cache node modules
+        id: cache-node
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-
+
+      - name: npm install
+        if: steps.cache-node.outputs.cache-hit != 'true'
+        run: npm ci
+      
+      - name: Run jest unittest
+        run: npm run test:unit
+    
+    
+  deploy:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    name: "Deployment to Azure"
+    needs: testing
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          
+      - name: Cache node modules
+        id: cache-node
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-
+
+      - name: npm install
+        if: steps.cache-node.outputs.cache-hit != 'true'
+        run: npm ci
+        
+      - name: Build next js application
+        run: npm run build 
+
+      - name: Azure Static Web Apps Deploy
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          # Action to perform
+          action: "upload"
+          # Directory location of the application source code
+          app_location: /src
+          # Required token
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_TOKEN }}
+          output_location: /out
+  
