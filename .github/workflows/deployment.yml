@@ -75,7 +75,7 @@ jobs:
           # Action to perform
           action: "upload"
           # Directory location of the application source code
-          app_location: /src
+          app_location: /
           # Required token
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_TOKEN }}
           output_location: /out
