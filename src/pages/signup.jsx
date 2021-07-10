@@ -1,5 +1,6 @@
 import React, { useState, Fragment } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { useDispatch } from "react-redux"
 import { Controller, useForm } from "react-hook-form"
 import { Listbox, Transition } from "@headlessui/react"
@@ -144,7 +145,12 @@ const Signup = () => {
     return (
         <div className="absolute top-0 bottom-0 w-full bg-gray-100">
             <div className="px-3 w-full md:w-5/6 lg:w-3/4 xl:w-2/3 mx-auto">
-                <h1 className="text-2xl md:text-3xl font-bold mx-auto mt-10">Gymnasium Papenburg<br/> Miktionstagebuch</h1>
+                <div className="mt-10 flex flex-row justify-start">
+                    <div className="w-16 h-16 my-4">
+                        <Image src="/img/gympap.png" width="500" height="500" />
+                    </div>
+                    <h1 className="text-2xl md:text-3xl font-bold ml-4 self-center">Gymnasium Papenburg<br/> Miktionstagebuch</h1>
+                </div>
                 <Link href="/signin">
                     <a className="text-sm md:text-lg text-blue-600">
                         Anmelden

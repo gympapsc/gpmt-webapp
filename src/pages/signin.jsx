@@ -1,5 +1,6 @@
 import React, {useState} from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { useDispatch, useSelector } from "react-redux"
 import {useForm} from "react-hook-form"
 
@@ -25,6 +26,9 @@ const Signin = () => {
                 <ErrorBanner message="Deine Anmeldedaten sind ungültig" messageShort="Passwort ist falsch" dismisable={true} />
             }
             <div className="px-3 self-center w-full md:w-5/6 lg:w-3/4 xl:w-2/3 mx-auto bg-gray-100">
+                <div className="w-16 h-16 mx-auto mb-8">
+                    <Image src="/img/gympap.png" width="500" height="500" />
+                </div>
                 <h1 className="text-2xl md:text-3xl font-bold text-center mx-auto mb-6">Gymnasium Papenburg<br/> Miktionstagebuch</h1>
                 <form className="space-y-5 max-w-md w-full mx-auto" onSubmit={handleSubmit(submit)}>
                     <div className="w-full space-y-1">
