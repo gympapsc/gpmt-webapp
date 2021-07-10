@@ -62,7 +62,7 @@ const Signin = () => {
                             Passwort vergessen
                         </a>
                     </div>
-                    <button className="color transition ease-in-out duration-200 bg-blue-600  hover:bg-blue-500 text-white p-2 rounded-lg w-full focus:ring-2 focus:ring-offset-1 focus:ring-blue-600 focus:outline-none">
+                    <button className="color transition ease-in-out duration-200 font-medium  bg-blue-600  hover:bg-blue-500 text-white p-2 rounded-lg w-full focus:ring-2 focus:ring-offset-1 focus:ring-blue-600 focus:outline-none">
                         Anmelden
                     </button> 
                 </form>

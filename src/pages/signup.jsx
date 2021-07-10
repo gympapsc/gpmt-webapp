@@ -401,7 +401,7 @@ const Signup = () => {
                         </div>
                     </div>
                     <div className="w-full flex flex-col">
-                        <button className="color transition ease-in-out duration-200 w-full self-end md:w-64 mt-12 p-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg focus:ring-2 focus:ring-offset-1 focus:ring-blue-600 focus:outline-none">
+                        <button className="color transition font-medium ease-in-out duration-200 w-full self-end md:w-64 mt-12 p-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg focus:ring-2 focus:ring-offset-1 focus:ring-blue-600 focus:outline-none">
                             Registrieren
                         </button>
                     </div>
