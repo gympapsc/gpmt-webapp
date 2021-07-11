@@ -8,7 +8,7 @@ on:
 
 env:
   NODE_VERSION: "14.x"
-  AZURE_WEBAPP_NAME: "gympapmt"
+  AZURE_WEBAPP_NAME: "gpmt"
   NEXT_PUBLIC_API_URL: "https://api-gpmt.westeurope.cloudapp.azure.com"
 
 jobs:
