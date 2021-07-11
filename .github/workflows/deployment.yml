@@ -1,4 +1,4 @@
-name: Deployment to Azure Static Web Apps
+name: Deployment to Azure App Service
 
 on:
   push:
@@ -8,6 +8,7 @@ on:
 
 env:
   NODE_VERSION: "14.x"
+  AZURE_WEBAPP_NAME: "gympapmt"
   NEXT_PUBLIC_API_URL: "https://api-gpmt.westeurope.cloudapp.azure.com"
 
 jobs:
@@ -44,6 +45,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
       - name: Use Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v1
         with:
@@ -60,10 +65,14 @@ jobs:
       - name: npm install
         if: steps.cache-node.outputs.cache-hit != 'true'
         run: npm ci
-      - name: Azure Static Web Apps Deploy
-        uses: Azure/static-web-apps-deploy@v1
+      
+      - name: build application
+        run: npm run build
+      
+      - uses: azure/webapps-deploy@v2
         with:
-          action: "upload"
-          app_location: /
-          output_location: /out
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_TOKEN }}
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+      
+      - name: logout
+        run: |
+          az logout
