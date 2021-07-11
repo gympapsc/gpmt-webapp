@@ -12,7 +12,12 @@ const testingUser = {
     weight: 80,
     height: 180,
     birthDate: new Date(2000, 0, 1),
-    sex: "m"
+    sex: "m",
+    settings: {
+        voiceInput: false,
+        voiceOutput: false,
+        cumulativePrediction: false
+    }
 }
 
 let data = {
@@ -59,18 +64,7 @@ let data = {
             timestamp: new Date().valueOf()
         }
     ],
-    user: {
-        _id: "1234567890",
-        timestamp: new Date().valueOf(),
-        updatedAt: new Date().valueOf(),
-        firstname: "Testing",
-        surname: "Taylor",
-        email: "testing@taylor.com",
-        weight: 80,
-        height: 180,
-        birthDate: new Date(2000, 0, 1),
-        sex: "m"
-    } 
+    user: testingUser
 }
 
 export const handlers = [
