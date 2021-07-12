@@ -3,6 +3,8 @@ name: Testing
 on:
     push:
         branches: [ master ]
+    pull_request:
+       types: [opened, edited]
 
 env:
     AZURE_WEBAPP_NAME: gpmt

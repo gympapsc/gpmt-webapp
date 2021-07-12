@@ -1,11 +1,6 @@
 name: Deployment to Azure App Service
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-
+on: [release]
 env:
   NODE_VERSION: "15.x"
   AZURE_WEBAPP_NAME: "gympapmt"

@@ -1,6 +1,8 @@
 # Gymnasium Papenburg Miktionstagebuch Webapp
 
-[![Deploy to Azure Web Services](https://github.com/gympapsc/gpmt-webapp/actions/workflows/deployment.yaml/badge.svg)](https://github.com/gympapsc/gpmt-webapp/actions/workflows/deployment.yaml)
+[![Testing](https://github.com/gympapsc/gpmt-webapp/actions/workflows/testing.yaml/badge.svg?branch=master)](https://github.com/gympapsc/gpmt-webapp/actions/workflows/testing.yaml)
+
+[![Deployment to Azure App Service](https://github.com/gympapsc/gpmt-webapp/actions/workflows/deployment.yml/badge.svg)](https://github.com/gympapsc/gpmt-webapp/actions/workflows/deployment.yml)
 
 
 ### E2E test setup
