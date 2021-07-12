@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { useSpring, animated } from "react-spring"
+import { useSpring, animated } from "@react-spring/web"
 import { useMediaQuery } from "react-responsive"
 
 import {

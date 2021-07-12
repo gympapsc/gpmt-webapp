@@ -1,7 +1,7 @@
 import React, {useState, useRef, useEffect} from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
-import { useSpring, animated } from "react-spring" 
+import { useSpring, animated } from "@react-spring/web" 
 import { useMediaQuery } from "react-responsive"
 import Aside from "../components/aside"
 

@@ -2,7 +2,7 @@ import React, {useState} from "react"
 import PropTypes from "prop-types"
 import { useDispatch, useSelector } from "react-redux"
 import Link from "next/link"
-import { useSpring, animated } from "react-spring"
+import { useSpring, animated } from "@react-spring/web"
 import { useMediaQuery } from "react-responsive"
 
 import Clock from "../visualisations/clock"

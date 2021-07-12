@@ -49,29 +49,20 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v1
+      - uses: azure/docker-login@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          
-      - name: Cache node modules
-        id: cache-node
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: ${{ runner.os }}-node-
+          login-server: ${{ secrets.REGISTRY_USERNAME }}.azurecr.io
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+      
+      - run: |
+          docker build . -t ${{ secrets.REGISTRY_USERNAME }}.azurecr.io/gpmt-webapp:${{ github.sha }}
+          docker push ${{ secrets.REGISTRY_USERNAME }}.azurecr.io/gpmt-webapp:${{ github.sha }}
 
-      - name: npm install
-        if: steps.cache-node.outputs.cache-hit != 'true'
-        run: npm ci
-      
-      - name: build application
-        run: npm run build
-      
       - uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          images: ${{ secrets.REGISTRY_USERNAME }}.azurecr.io/gpmt-webapp:${{ github.sha }}
       
       - name: logout
         run: |
