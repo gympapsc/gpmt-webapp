@@ -14,6 +14,9 @@ RUN npm install
 # Rebuild the source code only when needed
 FROM node:alpine AS builder
 WORKDIR /app
+
+ENV NEXT_PUBLIC_API_URL "https://api-gpmt.westeurope.cloudapp.azure.com"
+
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
 RUN npm run build && npm install --only=production
