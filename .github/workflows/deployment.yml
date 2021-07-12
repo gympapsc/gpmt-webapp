@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 env:
-  NODE_VERSION: "14.x"
+  NODE_VERSION: "15.x"
   AZURE_WEBAPP_NAME: "gympapmt"
   NEXT_PUBLIC_API_URL: "https://api-gpmt.westeurope.cloudapp.azure.com"
 
@@ -24,7 +24,6 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: npm install
-        if: steps.cache-node.outputs.cache-hit != 'true'
         run: npm install
       
       - name: Run jest unittest
