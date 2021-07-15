@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { authenticateUser, loadDrinking, loadMessages, loadMicturition, loadPhotos, loadStress, loadMicturitionPredictions} from "./actions"
-
+import api from "./api/http"
 
 export function useDrinking(startDate) {
     let dispatch = useDispatch()
@@ -97,6 +97,15 @@ export function useUser() {
 export function useUtterButtons() {
     let buttons = useSelector(s => s.user?.utterButtons)
     return buttons || []
+}
+
+export function useApiVersion() {
+    let version = "0.0.0"
+    useEffect(async () => {
+        version = await api.info()
+            .then(res => res.data.version)
+    })
+    return version
 }
 
 export function useDictation(onresult) {

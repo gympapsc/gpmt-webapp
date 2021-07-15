@@ -14,7 +14,7 @@ import TextInput from "../../components/textInput"
 import NumberInput from "../../components/numberInput"
 import { SexSelect } from "../../components/select"
 import Toggle from "../../components/toggle"
-import { useUser } from "../../hooks"
+import { useApiVersion, useUser } from "../../hooks"
 
 
 
@@ -23,6 +23,7 @@ const Settings = () => {
     let [enabled, setEnabled] = useState(false)
 
     let user = useUser()
+    let apiVersion = useApiVersion()
 
     let changeUser = update => {
         dispatch(updateUser({
@@ -77,6 +78,19 @@ const Settings = () => {
                             description="Zeigt die Vorhersage über den Tag kumulativ an" 
                             value={user?.settings.cumulativePrediction} 
                             onChange={cumulativePrediction => changeUser({settings: { ...user.settings, cumulativePrediction }})} />
+                    </div>
+
+                    <hr />
+
+                    <div className="bg-white rounded-lg flex flex-col items-stretch">
+                        <div className="text-md flex justify-between p-4">
+                            <span>App Version</span>
+                            <span className="tracking-wide">{process.env.NEXT_PUBLIC_APP_VERSION}</span>
+                        </div>
+                        <div className="text-md flex justify-between p-4">
+                            <span>Api Version</span>
+                            <span className="tracking-wide">{apiVersion}</span>
+                        </div>
                     </div>
                 </form>
             </div>

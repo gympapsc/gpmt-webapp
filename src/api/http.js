@@ -12,6 +12,7 @@ const api = {
             withCredentials: true
         })
     },
+    info: () => client.get("/"),
     signinUser: (email, password) => client.post("/signin", { email, password }),
     signupUser: (user) => client.post("/signup", { user }),
     

@@ -1,6 +1,6 @@
 {
   "name": "gpmt-webapp",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "description": "Gymnasium Papenburg Miktionstagebuch Webapp",
   "main": "index.js",
   "scripts": {

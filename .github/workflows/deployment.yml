@@ -51,7 +51,11 @@ jobs:
           password: ${{ secrets.REGISTRY_PASSWORD }}
       
       - run: |
-          docker build . -t ${{ secrets.REGISTRY_USERNAME }}.azurecr.io/gpmt-webapp:${{ github.event.release.tag_name }}
+          docker build ./ \
+          -t ${{ secrets.REGISTRY_USERNAME }}.azurecr.io/gpmt-webapp:${{ github.event.release.tag_name }} \
+          --build-args APP_VERSION=${{ github.event.release.tag_name }}
+        
+      - run: |
           docker push ${{ secrets.REGISTRY_USERNAME }}.azurecr.io/gpmt-webapp:${{ github.event.release.tag_name }}
 
       - uses: azure/webapps-deploy@v2
