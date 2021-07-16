@@ -16,8 +16,9 @@ FROM node:alpine AS builder
 WORKDIR /app
 
 ARG APP_VERSION="0.0.0"
+ARG API_URL="https://api.gympapmt.de"
 
-ENV NEXT_PUBLIC_API_URL "https://api.gympapmt.de"
+ENV NEXT_PUBLIC_API_URL ${API_URL}
 ENV NEXT_PUBLIC_APP_VERSION ${APP_VERSION}
 
 COPY . .

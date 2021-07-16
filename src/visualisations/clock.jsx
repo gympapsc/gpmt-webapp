@@ -36,7 +36,7 @@ const Clock = ({ data }) => {
 
         let now = new Date()
         let lowerBound = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours())
-        let upperBound = new Date(lowerBound.valueOf() + 12 * 60 * 60 * 1000)
+        let upperBound = new Date(lowerBound.valueOf() + 11 * 60 * 60 * 1000)
 
         let pie = d3.pie()
             .value(d => d.prediction)

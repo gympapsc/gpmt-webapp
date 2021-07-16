@@ -82,11 +82,12 @@ const Settings = () => {
 
                     <hr />
 
-                    <div className="bg-white rounded-lg flex flex-col items-stretch">
+                    <div className="bg-white rounded-lg flex flex-col items-stretch my-5 border-none">
                         <div className="text-md flex justify-between p-4">
                             <span>App Version</span>
                             <span className="tracking-wide">{process.env.NEXT_PUBLIC_APP_VERSION}</span>
                         </div>
+                        <hr />
                         <div className="text-md flex justify-between p-4">
                             <span>Api Version</span>
                             <span className="tracking-wide">{apiVersion}</span>
