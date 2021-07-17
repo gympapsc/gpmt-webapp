@@ -1,19 +1,92 @@
-import React, { useState } from 'react'
+import React, { useState, Fragment } from "react"
 import Link from "next/link"
-import { useDispatch } from 'react-redux'
+import { useDispatch } from "react-redux"
+import { Listbox, Switch, Transition } from "@headlessui/react"
+import { SelectorIcon, CheckIcon } from "@heroicons/react/solid"
 
 import {
     deleteMicturition,
     deleteDrinking,
     deleteStress
-} from '../../actions'
+} from "../../actions"
 
-import Secure from '../../components/secure'
-import Shell from '../../components/shell'
-import LineChart from '../../visualisations/lineChart'
-import { useDrinking, useMicturition, useUser, useMicturitionPredictions, usePhotos, useStress} from '../../hooks'
-import MicturitionChart from '../../visualisations/micturitionChart'
-import DrinkingChart from '../../visualisations/drinkingChart'
+import Secure from "../../components/secure"
+import Shell from "../../components/shell"
+import LineChart from "../../visualisations/lineChart"
+import { useDrinking, useMicturition, useUser, useMicturitionPredictions, usePhotos, useStress} from "../../hooks"
+import MicturitionChart from "../../visualisations/micturitionChart"
+import DrinkingChart from "../../visualisations/drinkingChart"
+
+
+const timeRanges = {
+    d: { id: 0, name: "Letzten 24 Stunden" },
+    w: { id: 1, name: "Letzte Woche"},
+    m: { id: 2, name: "Letzten Monat"},
+    y: { id: 3, name: "Letztes Jahr"}
+}
+
+function TimeSelect({value, onChange}) {
+    const [selected, setSelected] = useState(timeRanges[value])
+
+    const changeRange = s => {
+        setSelected(s)
+        onChange(s.name[0])
+    }
+
+  return (
+    <div>
+      <Listbox value={selected} onChange={changeRange}>
+        <div className="w-full relative">
+          <Listbox.Button className="text-lg md:text-xl font-semibold text-gray-800">
+            <span className="truncate">{selected.name}</span>
+          </Listbox.Button>
+          <Transition
+            as={Fragment}
+            enter="transition ease-in duration-75"
+            leave="transition ease-in duration-150"
+            leaveFrom="opacity-150"
+            leaveTo="opacity-0"
+          >
+            <Listbox.Options className="absolute w-80 py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-md max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+              {Object.values(timeRanges).map(r => (
+                <Listbox.Option
+                  key={r.id}
+                  className={({ active }) =>
+                    `${active ? "text-blue-900 bg-blue-100" : "text-gray-900"}
+                          cursor-default select-none relative py-2 pl-10 pr-4`
+                  }
+                  value={r}
+                >
+                  {({ selected, active }) => (
+                    <>
+                      <span
+                        className={`${
+                          selected ? "font-medium" : "font-normal"
+                        } block truncate`}
+                      >
+                        {r.name}
+                      </span>
+                      {selected ? (
+                        <span
+                          className={`${
+                            active ? "text-blue-600" : "text-blue-600"
+                          }
+                                absolute inset-y-0 left-0 flex items-center pl-3`}
+                        >
+                            <CheckIcon className="w-5 h-5" aria-hidden="true" />
+                        </span>
+                      ) : null}
+                    </>
+                  )}
+                </Listbox.Option>
+              ))}
+            </Listbox.Options>
+          </Transition>
+        </div>
+      </Listbox>
+    </div>
+  )
+}
 
 const WEEKDAY = [
     "Sonntag",
@@ -57,11 +130,34 @@ const MicturitionOverview = () => {
                     entries.length !== 0 ? 
                     <div className="space-y-5">
                         <div className="space-y-4 py-6 md:py-8 bg-white w-full">
-                            <div className="grid grid-cols-2 gap-2 px-3 md:px-5 xl:gap-3 mx-auto">
+                            <div className="grid grid-cols-3 px-3 md:px-5 my-2 md:my-4 max-w-screen-xl mx-auto" style={{maxWidth: "700"}}>
+                                <div className="mr-auto">
+                                    <h6 className="uppercase text-xs lg:text-sm font-semibold tracking-wide text-gray-600 md:mb-2">Miktionsfrequenz</h6>
+                                    <h2 className="text-lg md:text-2xl font-bold ">
+                                        &#8960; {Math.round(user?.micturitionFrequency * 1000) / 1000}
+                                        {" "}<span className="text-sm md:text-base text-gray-600 font-semibold">pro Tag</span>
+                                    </h2>
+                                </div>
+                                <div className="mx-auto">
+                                    <h6 className="uppercase text-xs lg:text-sm font-semibold tracking-wide text-gray-600 md:mb-2">Trinkmenge</h6>
+                                    <h2 className="text-lg md:text-2xl font-bold">
+                                        &#8960; {Math.round(user?.micturitionFrequency * 1000) / 1000} L 
+                                        {" "}<span className="text-sm md:text-base text-gray-600 font-semibold"> pro Tag</span>
+                                    </h2>
+                                </div>
+                                <div className="ml-auto">
+                                    <h6 className="uppercase text-xs lg:text-sm font-semibold tracking-wide text-gray-600 md:mb-2">Miktionsfrequenz</h6>
+                                    <h2 className="text-lg md:text-2xl font-bold ">
+                                        &#8960; {Math.round(user?.micturitionFrequency * 1000) / 1000} 
+                                        {" "}<span className="text-sm md:text-base text-gray-600 font-semibold">pro Tag</span>
+                                    </h2>
+                                </div>
+                            </div>
+                            <hr className="mx-3 md:px-5" />
+                            <div className="grid grid-cols-2 gap-2 px-3 md:px-5 xl:gap-3 mx-auto my-4">
                                 <div className="col-span-full xl:col-span-1 flex flex-col">
                                     <div>
-                                        <h1>{user?.micturitionFrequency} pro Tag</h1>
-                                        <h2 className="text-lg md:text-xl font-semibold text-gray-800">Gestern</h2>
+                                        <TimeSelect value="w" onChange={() => {}} />
                                         <p className="text-gray-500 text-sm md:text-md">Alle Trink- und Miktionseinträge die du in den letzten 24 Stunden gemacht hast.</p>
                                     </div>
                                     <div className="grid grid-rows-2 mt-auto">
@@ -87,7 +183,7 @@ const MicturitionOverview = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex flex-col md:px-4 mx-auto">
+                        <div className="flex flex-col md:px-4 mx-auto max-w-screen-xl">
                             <h3 className="mb-2 font-semibold text-lg md:text-xl">Einträge</h3>
                             <div className="-my-2 overflow-x-hidden">
                                 <div className="py-2 align-middle inline-block min-w-full">
@@ -139,7 +235,7 @@ const MicturitionOverview = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex flex-col px-3 md:px-4 mx-auto">
+                        <div className="flex flex-col px-3 md:px-4 mx-auto max-w-screen-xl">
                             <h3 className="mb-2 font-semibold text-lg md:text-xl">Fotos</h3>
                             <div className="-my-2 overflow-x-auto">
                                 <div className="py-2 align-middle inline-block min-w-full">

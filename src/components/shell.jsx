@@ -33,7 +33,7 @@ const Shell = ({children, title, className, onScroll}) => {
             <animated.div
                 style={props}>
                 <main onClick={e => toggleMenu(e, false)} className={`absolute z-0 top-0 left-0 md:left-96 right-0 bottom-0 flex flex-col overflow-y-scroll ${className}`}>
-                    <header className="sticky px-3 bg-gray-50 py-1 md:py-2 top-0 right-0 flex flex-row w-full justify-between border-b bg-opacity-80 backdrop-filter backdrop-blur-xl">
+                    <header className="sticky px-3 bg-gray-50 py-1 md:py-2 top-0 right-0 flex flex-row w-full justify-between border-b bg-opacity-60 backdrop-filter backdrop-blur-lg">
                         <button onClick={e => toggleMenu(e, !showMenu)} className="text-blue-500 md:invisible self-center flex flex-row">
                             <span>Übersicht</span>
                         </button>

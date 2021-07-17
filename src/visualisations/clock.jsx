@@ -1,11 +1,12 @@
-import React, {useRef, useEffect} from 'react'
+import React, {useRef, useEffect} from "react"
 import { useSelector } from "react-redux"
-import * as d3 from 'd3'
+import * as d3 from "d3"
 
 const Clock = ({ data }) => {
     const element = useRef(null)
 
     useEffect(() => {
+        let clock
         let width = element.current.clientWidth
         let height = element.current.clientWidth
         let margin = 10
@@ -29,6 +30,55 @@ const Clock = ({ data }) => {
                 .attr("edgeMode", "wrap")
                 .attr("stdDeviation", "15")
 
+        // tooltip
+
+        let text
+        const mousedown = (elem, d) => {
+            clock
+                .transition()
+                .duration(150)
+                .style("opacity", 0)
+            
+            if(!text) {
+                text = root.append("g")
+                .append("text")
+                .attr("x", height / 2 - 90)
+                .attr("y", width / 2 - 90)
+                .attr("text-anchor", "middle")
+                .html("Hello")
+                
+                
+                
+                // text.transition()
+                // .delay(150)
+                // .duration(150)
+                // .style("opacity", 1)
+            }
+        }
+
+        const mouseup = (elem, d) => {
+            // text?.transition()
+            //     .duration(150)
+            //     .style("opacity", 0)
+            // text?.transition()
+            //     .delay(150)
+            //     .remove()
+            // text = null
+            // clock
+            //     .transition()
+            //     .delay(150)
+            //     .duration(150)
+            //     .style("opacity", 1)
+        }
+
+        const mousemove = d => {
+            console.log(d)
+        }
+
+        const mouseleave = d => {
+            console.log(d)
+        }
+
 
         let color = d3.scaleLinear()
             .domain([0, 0.5, 1])
@@ -43,17 +93,20 @@ const Clock = ({ data }) => {
         let data_ready = pie(data.filter(d => lowerBound <= new Date(d.date).valueOf() && new Date(d.date).valueOf() <= upperBound))
 
         svg
-            .selectAll('whatever')
+            .append("g")
+            .on("mouseout", mouseup)
+            .selectAll("whatever")
             .data(data_ready)
             .enter()
-            .append('path')
-            .attr('d', d3.arc()
-                .innerRadius(80)
+            .append("path")
+            .attr("d", d3.arc()
+                .innerRadius(30)
                 .outerRadius(radius)
                 .startAngle((d) =>  d.data.date.getHours() * Math.PI * 2 / 12)
                 .endAngle((d) => (d.data.date.getHours() + 1) * Math.PI * 2 / 12 )
             )
-            .attr('fill', d => color(d.data.prediction))
+            .on("click", mousedown)
+            .attr("fill", d => color(d.data.prediction))
             .style("stroke-width", "2px")
             .style("opacity", 0.7)
             .attr("title", d => d.data.date + d.data.prediction.toString())
@@ -69,7 +122,7 @@ const Clock = ({ data }) => {
             .attr("cy", height / 2)
             .attr("fill", "#e5e7eb")
         
-        let clock = root.append("g")
+        clock = root.append("g")
 
         for(let i = 0; i < 12; i++) {
             clock

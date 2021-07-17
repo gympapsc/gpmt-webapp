@@ -300,7 +300,7 @@ export const loadStress = startDate => async (dispatch, getState, { api }) => {
             ...e,
             date: new Date(e.date),
             // TODO Fix missing timestamp
-            timestamp: new Date(e.date).valueOf()
+            timestamp: new Date(e.timestamp).valueOf()
         }))
         dispatch(setStress(entries))
         api._pending["stress"] = false

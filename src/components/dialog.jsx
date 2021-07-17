@@ -40,9 +40,16 @@ PhotoEntry.propTypes = {
 
 const StressEntry = ({ id, level }) => (
     <Link href={`/app/stress/${id}`}>
-        <a href="#" className="text-md text-white bg-green-600 w-48 md:52 rounded-xl py-2 px-3 self-center focus:ring-2 focus:outline-none focus:ring-blue-500 focus:ring-offset-1">
-            <h6 className="text-xs font-semibold text-white text-opacity-80 tracking-wider uppercase">Stress</h6>
-            <h5 className="text-xl md:text-2xl font-semibold">{level}<span className="text-base md:text-lg">. level</span></h5>
+        <a href="#" className="text-md text-white bg-green-200 w-48 md:52 rounded-xl py-2 px-3 self-center focus:ring-2 focus:outline-none focus:ring-blue-500 focus:ring-offset-1">
+            <div className="flex flex-row justify-between">
+                <h6 className="text-xs font-semibold text-green-900 text-opacity-80 tracking-wider uppercase">Stress</h6>
+                <button className="text-green-900 -mr-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+            <h5 className="text-xl md:text-2xl font-semibold text-green-800">{level}<span className="text-base md:text-lg">. level</span></h5>
         </a>
     </Link>
 )
@@ -54,9 +61,16 @@ StressEntry.propTypes = {
 
 const MicturitionEntry = ({date, id}) => (
     <Link href={`/app/micturition/${id}`}>
-        <a href="#" className="text-md text-white bg-indigo-600 w-48 md:52 rounded-xl py-2 px-3 self-center focus:ring-2 focus:outline-none focus:ring-blue-500 focus:ring-offset-1">
-            <h6 className="text-xs font-semibold text-white text-opacity-80 tracking-wider uppercase">Miktion</h6>
-            <h5 className="text-xl md:text-2xl font-semibold">{date.getHours() < 10 ? '0' + date.getHours(): date.getHours()}:{date.getMinutes() < 10 ? '0' + date.getMinutes(): date.getMinutes()}</h5>
+        <a href="#" className="text-md text-white bg-indigo-200 w-48 md:52 rounded-xl py-2 px-3 self-center focus:ring-2 focus:outline-none focus:ring-indigo-800 focus:ring-offset-1">
+            <div className="flex flex-row justify-between">
+                <h6 className="text-xs font-semibold text-indigo-900 text-opacity-80 tracking-wider uppercase">Miktion</h6>
+                <button className="text-indigo-900 -mr-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+            <h5 className="text-xl md:text-2xl font-semibold text-indigo-900">{date.getHours() < 10 ? '0' + date.getHours(): date.getHours()}:{date.getMinutes() < 10 ? '0' + date.getMinutes(): date.getMinutes()}</h5>
         </a>
     </Link>
 )
@@ -68,9 +82,16 @@ MicturitionEntry.propTypes = {
 
 const DrinkingEntry = ({amount, id}) => (
     <Link href={`/app/drinking/${id}`}>
-        <a href="#" className="text-md text-white bg-pink-500 w-48 md:52 rounded-xl py-2 px-3 self-center focus:ring-2 focus:outline-none focus:ring-blue-500 focus:ring-offset-1">
-            <h6 className="text-xs font-semibold text-white text-opacity-80 tracking-wider uppercase">Trinken</h6>
-            <h5 className="text-xl md:text-2xl font-semibold">{amount}<span className="text-base md:text-lg">ml</span></h5>
+        <a href="#" className="text-md text-white bg-pink-200 w-48 md:52 rounded-xl py-2 px-3 self-center focus:ring-2 focus:outline-none focus:ring-pink-800 focus:ring-offset-1">
+            <div className="flex flex-row justify-between">
+                <h6 className="text-xs font-semibold text-pink-900 text-opacity-80 tracking-wider uppercase">Trinken</h6>
+                <button className="text-pink-900 -mr-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+            <h5 className="text-xl md:text-2xl font-semibold text-pink-900">{amount}<span className="text-base md:text-lg">ml</span></h5>
         </a>
     </Link>
 )
