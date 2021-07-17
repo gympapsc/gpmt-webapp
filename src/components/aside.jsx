@@ -16,7 +16,23 @@ import MicturitionChart from "../visualisations/micturitionChart"
 import StressChart from "../visualisations/stressChart"
 import { shorten } from "../utils"
 
+import * as d3 from "d3" 
+
+const cumulativeData = (d, selector) => {
+    let sum = 0
+    return d.map(e => {
+        sum += e[selector] / 8
+        return {
+            ...e,
+            [selector]: sum
+        }
+    })
+}
+
+
 const Aside = ({ showMenu }) => {
+    let formatTime = d3.timeFormat("%H:%M")
+
     let startDate = new Date()
     let dispatch = useDispatch()
     let messages = useMessages(startDate)
@@ -77,13 +93,17 @@ const Aside = ({ showMenu }) => {
                     </a>
                 </Link>
                 <Link href="/app/overview" id="micturition_widget">
-                    <a className="col-span-1 h-32 text-white rounded-xl bg-gradient-to-l from-green-500 to-green-600 flex flex-col p-3">
+                    <a className={`
+                        col-span-1 h-32 text-white rounded-xl bg-gradient-to-l 
+                        ${Math.round(prediction.find(p => p.date.getHours() === currDate.getHours())?.prediction * 100) < 50 ? "from-green-500 to-green-600" : "from-red-400 to-red-500"} 
+                        flex flex-col p-3
+                    `}>
                         <h3 className="text-md font-semibold">Miktion</h3>
                         <div className="mt-auto">
-                            <h5 className="text-sm font-semibold -mb-1 tracking-wide opacity-90">{currDate.getHours()}:{currDate.getMinutes()}</h5>
+                            <h5 className="text-xs font-semibold -mb-1 tracking-wide opacity-90">{currDate.getHours()}:{currDate.getMinutes()}</h5>
                             <h4 className="text-2xl md:text-3xl font-bold">{
                                 prediction.length ?
-                                Math.round(prediction.find(p => p.date.getHours() === currDate.getHours()).prediction * 100)
+                                Math.round(prediction.find(p => p.date.getHours() === currDate.getHours())?.prediction * 100)
                                 : "00"
                             }<span className="text-xl">%</span></h4>
                         </div>
@@ -93,7 +113,10 @@ const Aside = ({ showMenu }) => {
                     <a className="col-span-1 h-32 rounded-xl bg-white flex flex-col p-3">
                         <h3 className="text-md font-semibold">Nächste Miktion</h3>
                         <div className="mt-auto">
-                            <h4 className="text-2xl md:text-3xl font-bold">19:45</h4>
+                            <h5 className="text-gray-600 text-xs font-semibold -mb-1 tracking-wide">Morgen</h5>
+                            <h4 className="text-2xl md:text-3xl font-bold">
+                                {formatTime(cumulativeData(prediction, "prediction").find(p => p?.prediction > 1)?.date || new Date())}
+                            </h4>
                         </div>
                     </a>
                 </Link>
