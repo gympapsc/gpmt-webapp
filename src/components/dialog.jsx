@@ -15,7 +15,7 @@ const WEEKDAY = [
 
 const PhotoEntry = ({name, url}) => (
     <div className="block self-end">
-        <img  className="rounded-t-xl w-64 lg:w-72 xl:w-80" src={url} />
+        <img  className="rounded-t-xl w-64 lg:w-72 xl:w-80" src={url} alt={name} />
         <div className="bg-gray-100 p-3 rounded-b-xl flex flex-row justify-between">
             <div>
                 <h4 className="text-lg font-semibold">{name}</h4>
