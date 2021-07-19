@@ -68,7 +68,7 @@ const DrinkingChart = ({data}) => {
                 .attr("x", d => x(d3.timeHour.floor(d.x0)))
                 .attr("y", d => y(d.reduce((a, d) => a + d.amount, 0) / 1000))
                 .attr("height", d => height - y(d.reduce((a, d) => a + d.amount, 0) / 1000))
-                .attr("width", d => x(d3.timeHour.ceil(d.x1)) - x(d3.timeHour.floor(d.x0)) - 1)
+                .attr("width", d => x(d3.timeHour.offset(d.x0, 1)) - x(d.x0) - 1)
                 .style("fill", "rgb(79, 70, 229)")
         }
         

@@ -43,7 +43,7 @@ const StressChart = ({data}) => {
             .select(".domain").remove()
         
 
-        const chart = d3.bin()
+        let chart = d3.bin()
             .value(d => d.date)
             .thresholds(() => x.ticks(d3.timeHour.every(1)))
         (data)
@@ -62,16 +62,29 @@ const StressChart = ({data}) => {
             .attr("stroke", "#EBEBEB")
 
         if(data.length) {
-            svg.append('g')
-            .selectAll("rect")
-            .data(chart)
-            .enter()
-                .append("rect")
-                .attr("x", d => x(d3.timeHour.floor(d.x0)))
-                .attr("y", d => y(d.reduce((a, d) => a + d.level, 0) / d.length))
-                .attr("height", d => height - y(d.reduce((a, d) => a + d.level, 0) / d.length))
-                .attr("width", d => x(d3.timeHour.ceil(d.x1)) - x(d3.timeHour.floor(d.x0)) - 1)
-                .style("fill", "rgb(79, 70, 229)")
+            chart = chart.filter(d => d.reduce((a, d) => a + d.level, 0) / d.length > 0)
+            svg.append("path")
+                .datum(chart)
+                .attr("fill", "rgb(79, 70, 229)")
+                .attr("fill-opacity", .3)
+                .attr("stroke", "none")
+                .attr("d", d3.area()
+                    .x(d => x(d3.timeHour.floor(d.x0)))
+                    .y0( height )
+                    .y1(d => y(d.reduce((a, d) => a + d.level, 0) / d.length))
+                )
+
+
+            svg
+                .append("g")
+                .selectAll("circle")
+                .data(chart)
+                .enter()
+                    .append("circle")
+                    .attr("cx", d => x(d3.timeHour.floor(d.x0)))
+                    .attr("cy", d => y(d.reduce((a, d) => a + d.level, 0) / d.length))
+                    .attr("r", 4)
+                    .style("fill", "rgb(79, 70, 229)")
         
         } 
 

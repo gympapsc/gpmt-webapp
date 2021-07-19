@@ -51,6 +51,7 @@ const MicturitionChart = ({data, xlabel, ylabel}) => {
             .thresholds(() => x.ticks(d3.timeHour.every(1)))
         (data)
 
+
         let y = d3.scaleLinear()
             .domain([0, 3])
             .range([ height, 0])
@@ -67,16 +68,16 @@ const MicturitionChart = ({data, xlabel, ylabel}) => {
 
         if(data.length) {
             svg.append('g')
-            .selectAll("rect")
-            .data(chart)
-            .enter()
-                .append("rect")
-                .attr("x", d => x(d3.timeHour.floor(d.x0)))
-                .attr("y", d => y(d.length))
-                .attr("height", d => height - y(d.length))
-                .attr("width", d => x(d3.timeHour.ceil(d.x1)) - x(d3.timeHour.floor(d.x0)) - 1)
-                .style("fill", "rgb(79, 70, 229)")
-        
+                .selectAll("rect")
+                .data(chart)
+                .enter()
+                    .append("rect")
+                    .attr("x", d => x(d3.timeHour.floor(d.x0)))
+                    .attr("y", d => y(d.length))
+                    .attr("height", d => height - y(d.length))
+                    .attr("width", d => x(d3.timeHour.offset(d.x0, 1)) - x(d.x0) - 1)
+                    .style("fill", "rgb(79, 70, 229)")
+            
         }
 
         return () => {
