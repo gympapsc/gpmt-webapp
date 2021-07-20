@@ -25,7 +25,7 @@ export function SexSelect({value, onChange}) {
     <div>
       <Listbox value={selected} onChange={changeSex}>
         <div className="w-full relative">
-          <Listbox.Button className="relative color transition ease-in-out duration-200 border border-gray-300  w-full py-2 md:py-3 pl-3 pr-10 text-left bg-white rounded-lg  cursor-default focus:outline-none focus:ring-2 focus:ring-blue-500 focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500 text-sm md:text-base">
+          <Listbox.Button className="relative color transition ease-in-out duration-200 border border-gray-200  w-full py-2 md:py-3 pl-3 pr-10 text-left bg-white rounded-lg  cursor-default focus:outline-none focus:ring-2 focus:ring-blue-500 focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500 text-sm md:text-base">
             <span className="block truncate">{selected.name}</span>
             <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
               <SelectorIcon
@@ -46,7 +46,7 @@ export function SexSelect({value, onChange}) {
                 <Listbox.Option
                   key={s.id}
                   className={({ active }) =>
-                    `${active ? 'text-blue-900 bg-blue-100' : 'text-gray-900'}
+                    `${active ? "text-blue-900 bg-blue-100" : "text-gray-900"}
                           cursor-default select-none relative py-2 pl-10 pr-4`
                   }
                   value={s}
@@ -55,7 +55,7 @@ export function SexSelect({value, onChange}) {
                     <>
                       <span
                         className={`${
-                          selected ? 'font-medium' : 'font-normal'
+                          selected ? "font-medium" : "font-normal"
                         } block truncate`}
                       >
                         {s.name}
@@ -63,7 +63,7 @@ export function SexSelect({value, onChange}) {
                       {selected ? (
                         <span
                           className={`${
-                            active ? 'text-blue-600' : 'text-blue-600'
+                            active ? "text-blue-600" : "text-blue-600"
                           }
                                 absolute inset-y-0 left-0 flex items-center pl-3`}
                         >

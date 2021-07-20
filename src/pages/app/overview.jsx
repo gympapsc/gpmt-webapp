@@ -215,15 +215,15 @@ const MicturitionOverview = () => {
                                                         <td className="px-6 py-4 whitespace-nowrap">
                                                             {e?.date.getHours()}:{e?.date.getMinutes()}
                                                         </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
                                                             <Link href={`/app/${e.type}/${e._id}`}>
-                                                                <a className="text-indigo-600 p-2 hover:bg-indigo-100 rounded-lg transition-colors ease-in-out duration-100">
+                                                                <a className="font-medium text-indigo-600 p-2 hover:bg-indigo-100 rounded-lg transition-colors ease-in-out duration-100">
                                                                     Bearbeiten
                                                                 </a>
                                                             </Link>
                                                         </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                            <button onClick={deleteEntry(e.type, e._id)} className="text-indigo-600 p-2 hover:bg-indigo-100 rounded-lg transition-colors ease-in-out duration-100">
+                                                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
+                                                            <button onClick={deleteEntry(e.type, e._id)} className="font-medium text-indigo-600 p-2 hover:bg-indigo-100 rounded-lg transition-colors ease-in-out duration-100">
                                                                 Löschen
                                                             </button>
                                                         </td>

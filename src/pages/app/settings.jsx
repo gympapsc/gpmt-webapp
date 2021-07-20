@@ -33,7 +33,7 @@ const Settings = () => {
     }
 
     return (
-        <Shell title="Einstellungen" className="bg-gray-100">
+        <Shell title="Einstellungen" className="bg-gray-50">
             <div className="px-3 w-full lg:w-5/6 xl:w-2/3 mx-auto my-5 divide-y divide-gray-500">
                 <form className="divide-y divide-gray-300" action="#" method="GET">
                     <div className="grid grid-cols-6 gap-4 py-5">
@@ -83,12 +83,12 @@ const Settings = () => {
                     <hr />
 
                     <div className="bg-white rounded-lg flex flex-col items-stretch my-5 border-none">
-                        <div className="text-md flex justify-between p-4">
+                        <div className="text-md flex justify-between px-2 py-2 md:px-4 md:py-3">
                             <span>App Version</span>
                             <span className="tracking-wide">{process.env.NEXT_PUBLIC_APP_VERSION}</span>
                         </div>
                         <hr />
-                        <div className="text-md flex justify-between p-4">
+                        <div className="text-md flex justify-between px-2 py-2 md:px-4 md:py-3">
                             <span>Api Version</span>
                             <span className="tracking-wide">{apiVersion}</span>
                         </div>

@@ -144,7 +144,7 @@ const Signup = () => {
 
     return (
         <div className="absolute top-0 bottom-0 w-full bg-gray-100">
-            <div className="px-3 w-full md:w-5/6 lg:w-3/4 xl:w-2/3 mx-auto">
+            <div className="px-3 w-full md:w-5/6 lg:w-3/4 xl:w-2/3 mx-auto pb-12 md:pb-0">
                 <div className="mt-10 flex flex-row justify-start">
                     <div className="w-16 h-16 my-4">
                         <Image src="/img/gympap.png" width="500" height="500" />

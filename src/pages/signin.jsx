@@ -7,7 +7,7 @@ import {useForm} from "react-hook-form"
 import {
     signinUser
 } from "../actions"
-import { ErrorBanner } from "../components/banner"
+import { ErrorBanner, WarningBanner } from "../components/banner"
 
 
 const Signin = () => {
@@ -23,9 +23,9 @@ const Signin = () => {
         <div className="absolute top-0 bottom-0 w-full bg-gray-100 flex flex-row">
             {
                 signinError &&
-                <ErrorBanner message="Deine Anmeldedaten sind ungültig" messageShort="Passwort ist falsch" dismisable={true} />
+                <ErrorBanner message="Deine Anmeldedaten sind ungültig" messageShort="Anmeldung ist fehlgeschlagen" dismisable={true} />
             }
-            <div className="px-3 self-center w-full md:w-5/6 lg:w-3/4 xl:w-2/3 mx-auto bg-gray-100">
+            <div className="px-2 self-center w-full md:w-5/6 lg:w-3/4 xl:w-2/3 mx-auto bg-gray-100">
                 <div className="w-16 h-16 mx-auto mb-8">
                     <Image src="/img/gympap.png" width="500" height="500" />
                 </div>

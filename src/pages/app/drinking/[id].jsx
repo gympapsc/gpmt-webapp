@@ -43,7 +43,7 @@ const DrinkingEdit = () => {
     return (
         <>
             <Aside />
-            <Shell title={"Trinkeintrag"} className="bg-gray-100">
+            <Shell title={"Trinkeintrag"} className="bg-gray-50">
                 <div className="flex flex-col px-3 w-full lg:w-3/4 xl:w-2/3 mx-auto my-5 space-y-4">
                     <form className="mt-3 space-y-4">
                         <div className="space-y-5">

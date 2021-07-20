@@ -2,9 +2,9 @@ import React, { useState, useRef } from "react"
 import { useRouter } from "next/router"
 import { useDispatch, useSelector } from "react-redux"
 
-import Aside from '../../../components/aside'
-import Secure from '../../../components/secure'
-import Shell from '../../../components/shell'
+import Aside from "../../../components/aside"
+import Secure from "../../../components/secure"
+import Shell from "../../../components/shell"
 import DateTimeInput from "../../../components/datetimeInput"
 
 import {
@@ -45,7 +45,7 @@ const StressEdit = () => {
     return (
         <Secure>
             <Aside />
-            <Shell title={"Stresseintrag"} className="bg-gray-100">
+            <Shell title={"Stresseintrag"} className="bg-gray-50">
                 <div className="flex flex-col px-3 w-full lg:w-3/4 xl:w-2/3 mx-auto space-y-4 my-5">
                     <form className="mt-3 space-y-4">
                         <div className="col-span-full">
