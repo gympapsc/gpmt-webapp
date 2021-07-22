@@ -102,8 +102,10 @@ export function useUtterButtons() {
 export function useApiVersion() {
     let version = "0.0.0"
     useEffect(async () => {
-        version = await api.info()
-            .then(res => res.data.version)
+        if(typeof window !== "undefined") {
+            version = await api.info()
+                .then(res => res.data.version)
+        }
     })
     return version
 }
