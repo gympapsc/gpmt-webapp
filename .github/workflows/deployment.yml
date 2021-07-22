@@ -53,7 +53,7 @@ jobs:
       - run: |
           docker build ./ \
           -t ${{ secrets.REGISTRY_USERNAME }}.azurecr.io/gpmt-webapp:${{ github.event.release.tag_name }} \
-          --build-args APP_VERSION=${{ github.event.release.tag_name }}
+          --build-arg APP_VERSION=${{ github.event.release.tag_name }}
         
       - run: |
           docker push ${{ secrets.REGISTRY_USERNAME }}.azurecr.io/gpmt-webapp:${{ github.event.release.tag_name }}
