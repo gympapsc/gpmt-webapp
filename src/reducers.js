@@ -97,6 +97,11 @@ const reducer = (state=initialState, action) => {
                     utterButtons: action.payload.buttons
                 }
             }
+        case "SET_SPEECH_TOKEN":
+            return {
+                ...state,
+                speech: action.payload
+            }
         case "UPDATE_USER":
             return {
                 ...state,

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { authenticateUser, loadDrinking, loadMessages, loadMicturition, loadPhotos, loadStress, loadMicturitionPredictions} from "./actions"
+import { authenticateUser, loadDrinking, loadMessages, loadMicturition, loadPhotos, loadStress, loadMicturitionPredictions, setSpeechToken} from "./actions"
 import api from "./api/http"
 import * as speechsdk from "microsoft-cognitiveservices-speech-sdk"
 
@@ -111,46 +111,15 @@ export function useApiVersion() {
     return version
 }
 
-export function useDictation(onresult) {
-    if(typeof window === "typeof") {
-        let SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition
-
-        if(!SpeechRecognition) {
-            return {
-                supported: false
-            }
-        }
-        
-
-        let recognition = new SpeechRecognition()
-        recognition.onresult = event => {
-            onresult(event.results[0][0].transcript)
-        }
-
-        recognition.onspeechend = function() {
-            recognition.stop();
-        }
-
-        return {
-            supported: true,
-            start: () => {
-                recognition.start()
-            }
-        }
-    }
-
-    return {
-        supported: false
-    }
-}
-
 export function useSpeechConfig() {
     let [config, setConfig] = useState(null)
+    let dispatch = useDispatch()
     useEffect(async () => {
         if(typeof window !== "undefined" && config === null) {
-            const { data: {token, region}} = await api.getSpeechToken();
-            let c = speechsdk.SpeechConfig.fromAuthorizationToken(token, region);
-            c.speechRecognitionLanguage = "de-DE";
+            const { data: {token, region}} = await api.getSpeechToken()
+            dispatch(setSpeechToken(token, region))
+            let c = speechsdk.SpeechConfig.fromAuthorizationToken(token, region)
+            c.speechRecognitionLanguage = "de-DE"
             setConfig(c)
         }
     })

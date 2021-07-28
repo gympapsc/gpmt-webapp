@@ -1,4 +1,6 @@
 import { redirect } from "./utils"
+import * as speechsdk from "microsoft-cognitiveservices-speech-sdk"
+
 
 export const signupUser = ({
     firstname, 
@@ -84,7 +86,7 @@ export const authenticateUser = () => async (dispatch, getState, { api }) => {
 
 export const utterMessage = (text) =>  async (dispatch, getState, { api }) => {
     let { data: { buttons, events, micturitionPrediction, micturitionFrequency }} = await api.utterMessage(text)
-    processEvents(events, dispatch, getState)
+    await processEvents(events, dispatch, getState)
     dispatch(setUtterButtons(buttons))
     micturitionPrediction = micturitionPrediction.map(e => ({
         ...e,
@@ -96,10 +98,36 @@ export const utterMessage = (text) =>  async (dispatch, getState, { api }) => {
     dispatch(setUser({ ...user, micturitionFrequency }))
 }
 
-const processEvents = (events, dispatch) => {
+const tts = async (text, getState) => {
+    let speechCredentials = getState()?.speech
+    const speechConfig = speechsdk.SpeechConfig.fromAuthorizationToken(speechCredentials.token, speechCredentials.region)
+    speechConfig.speechSynthesisLanguage = "de-DE"
+    speechConfig.speechSynthesisVoiceName = "de-DE-KatjaNeural"
+    const audioConfig = speechsdk.AudioConfig.fromDefaultSpeakerOutput()
+    const speechSynthesizer = new speechsdk.SpeechSynthesizer(speechConfig, audioConfig)
+    return new Promise((res, rej) => {
+        speechSynthesizer.speakTextAsync(
+            text,
+            result => {
+                synthesizer.close()
+                res(result)
+            },
+            error => {
+                synthesizer.close()
+                rej(error)
+            }
+        )
+    })
+}
+
+const processEvents = async (events, dispatch, getState) => {
     for(let event of events) {
         if(event.text) {
             dispatch(addMessage(event.text, event.sender, new Date(event.timestamp).valueOf()))
+            if(event.sender !== "user") {
+                await tts(event.text, getState)
+            }
+
         } else if(event.type) {
             switch(event.type) {
                 case "ADD_MICTURITION":
@@ -230,6 +258,14 @@ export const setUtterButtons = buttons => ({
     type: "SET_UTTER_BUTTONS",
     payload: {
         buttons
+    }
+})
+
+export const setSpeechToken = (token, region) => ({
+    type: "SET_SPEECH_TOKEN",
+    payload: {
+        token,
+        region
     }
 })
 
