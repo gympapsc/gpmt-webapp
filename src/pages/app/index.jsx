@@ -2,6 +2,8 @@ import React, { useState, useRef } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useSpring, animated } from "@react-spring/web"
 import { useMediaQuery } from "react-responsive"
+import * as speechsdk from "microsoft-cognitiveservices-speech-sdk";
+import { ResultReason } from "microsoft-cognitiveservices-speech-sdk";
 
 import {
     utterMessage,
@@ -17,8 +19,8 @@ import Dialog from "../../components/dialog"
 import * as Banner from "../../components/banner"
 
 import api from "../../api/http"
-import { 
-    useDictation, 
+import {
+    useSpeechConfig, 
     useUtterButtons 
 } from "../../hooks"
 
@@ -49,12 +51,21 @@ const App = () => {
             .then(data => dispatch(addPhoto(new Date(data.photo.timestamp).valueOf(), data.photo._id, data.photo.name, `${process.env.NEXT_PUBLIC_API_URL}/photo/${data.photo._id}`)))
     }
 
-    const dictation = useDictation(result => console.log(result))
     let [title, setTitle] = useState("Heute")
 
-    let startDictation = () => {
-        if(dictation.supported) {
-            dictation.start()
+    console.log(speechsdk)
+    const audioConfig = speechsdk.AudioConfig.fromDefaultMicrophoneInput();
+    const speechConfig = useSpeechConfig()
+
+    const stt = () => {
+        if(typeof window !== "undefined" && speechConfig) {
+            console.log(speechConfig, audioConfig)
+            const recognizer = new speechsdk.SpeechRecognizer(speechConfig, audioConfig)
+            recognizer.recognizeOnceAsync(result => {
+                if(result.reason === ResultReason.RecognizedSpeech) {
+                    utter(result.text)
+                }
+            })
         }
     }
 
@@ -72,14 +83,12 @@ const App = () => {
                     </div>
                     :
                     <div className="sticky bottom-0 lg:w-2/3 flex flex-row mt-auto pt-3 w-full mx-auto">
-                        {
-                            !dictation.supported || 
-                            <button onClick={startDictation} className="flex-grow-0 w-12 h-12 flex flex-col justify-center items-center text-white bg-indigo-800">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                                </svg>
-                            </button>
-                        }
+                    
+                        <button onClick={() => stt()} className="flex-grow-0 w-12 h-12 flex flex-col justify-center items-center text-white bg-indigo-800">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                            </svg>
+                        </button>
                         <input
                             className="h-12 flex-grow px-3 md:px-4 bg-gray-300 border-0 focus:outline-none focus:ring-2 focus:ring-inset"
                             ref={messageRef}

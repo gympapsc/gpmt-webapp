@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { authenticateUser, loadDrinking, loadMessages, loadMicturition, loadPhotos, loadStress, loadMicturitionPredictions} from "./actions"
 import api from "./api/http"
+import * as speechsdk from "microsoft-cognitiveservices-speech-sdk"
 
 export function useDrinking(startDate) {
     let dispatch = useDispatch()
@@ -141,4 +142,17 @@ export function useDictation(onresult) {
     return {
         supported: false
     }
+}
+
+export function useSpeechConfig() {
+    let [config, setConfig] = useState(null)
+    useEffect(async () => {
+        if(typeof window !== "undefined" && config === null) {
+            const { data: {token, region}} = await api.getSpeechToken();
+            let c = speechsdk.SpeechConfig.fromAuthorizationToken(token, region);
+            c.speechRecognitionLanguage = "de-DE";
+            setConfig(c)
+        }
+    })
+    return config
 }

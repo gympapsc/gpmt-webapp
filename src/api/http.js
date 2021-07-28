@@ -25,6 +25,7 @@ const api = {
     getStress: () => client.get("/stress"),
     getPhotos: () => client.get("/photo"),
     getUserInfo: () => client.get("/user"),
+    getSpeechToken: () => client.get("/speech/token"),
     
     updateMicturition: update => client.put(`/micturition/${update._id}`, update),
     updateDrinking: update => client.put(`/drinking/${update._id}`, update),
