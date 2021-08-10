@@ -2,7 +2,8 @@ version: "3"
 
 services:
   gpmt-api:
-    image: gpmtcontainerregistry.azurecr.io/gpmt-api:latest
+    image: hakrac/gpmt-api:latest
+    # image: gpmtcontainerregistry.azurecr.io/gpmt-api:latest
     networks:
       - gpmt-testing-network
     volumes:
