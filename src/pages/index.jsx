@@ -13,9 +13,8 @@ const Index = () => {
                 </div>
                 <h1 className="text-4xl self-center text-center">Gymnasium Papenburg <br/> Miktionstagebuch</h1>
                 <p className="font-normal mt-4 px-8 text-center">
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, 
-                    sed diam nonumy eirmod tempor invidunt ut labore et dolore
-                    magna aliquyam erat, sed diam voluptua.
+                    Ein intelligentes Miktionstagebuch, dass Multiple Sklerose Patienten 
+                    im Alltag unterstützt und zukünkftige Toilettengänge vorhersagt.
                 </p>
                 <div className="w-full flex flex-row justify-around items-center mt-8">
                     <Link href="/signup">
