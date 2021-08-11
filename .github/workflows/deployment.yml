@@ -69,7 +69,7 @@ jobs:
           path: rasa
       
       - name: Start rasa services in background
-        run: docker-compose -f rasa/docker-compose.yml up -d
+        run: bash rasa/install.sh
 
       - name: Checkout api repo
         uses: actions/checkout@v2
@@ -78,14 +78,23 @@ jobs:
           path: api
 
       - name: Start api services in background
-        run: docker-compose -f api/docker-compose.yml up -d
+        run: bash api/install.sh
+
+      - name: Checkout net repo
+        uses: actions/checkout@v2
+        with:
+          repository: gympapsc/gpmt-net
+          path: net
+      
+      - name: Start analysis service
+        run: bash net/install.sh
 
       - name: Run tests
         run: npm run test:e2e
       
       - name: Shutdown api and rasa services
-        run: docker-compose -f api/docker-compose.yml up -d && docker-compose -f rasa/docker-compose.yml
-        
+        run: bash net/uninstall.sh && bash api/uninstall.sh && bash rasa/uninstall.sh
+
   deployment:
     runs-on: ubuntu-latest
     name: Deployment to Azure
