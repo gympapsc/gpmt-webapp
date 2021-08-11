@@ -79,8 +79,11 @@ jobs:
               repository: gympapsc/gpmt-rasa
               path: rasa
           
+          - run: ls ./rasa
+          - run: cat ./rasa/install.sh
+          
           - name: Start rasa services in background
-            run: bash rasa/install.sh
+            run: bash ./rasa/install.sh
 
           - name: Checkout api repo
             uses: actions/checkout@v2
