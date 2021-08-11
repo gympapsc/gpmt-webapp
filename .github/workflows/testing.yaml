@@ -39,10 +39,12 @@ jobs:
         - name: Run eslint
           run: npm run lint
 
-
-    test:
-        name: Testing
+    e2e:
+        name: End-to-End Test
         runs-on: ubuntu-latest
+        env:
+          NEXT_PUBLIC_API_URL: "http://localhost:8089/"
+          NEXT_PUBLIC_APP_VERION: "0.0.0"
         steps:
           - uses: actions/checkout@v2
 
