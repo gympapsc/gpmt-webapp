@@ -37,30 +37,7 @@ const LineChart = ({data, xlabel, ylabel}) => {
             .append("g")
                 .attr("transform",
                     "translate(" + margin.left + "," + margin.top + ")")
-
-        // let Tooltip = d3.select(element.current)
-        //     .append("div")
-        //     .style("opacity", 0)
-        //     .attr("class", "tooltip")
-        //     .style("background-color", "white")
-        //     .style("padding", "5px")
         
-        // let mouseover = d => {
-        //     Tooltip
-        //         .style("opacity", 1)
-        // }
-        // let mousemove = d => {
-        //     Tooltip
-        //         .html("Value is " + d.value)
-        //         .style("left", (d3.mouse(this)[0] + 70) + "px")
-        //         .style("top", d3.mouse(this)[1] + "px")
-        // }
-        // let mouseleave = d => {
-        //     Tooltip
-        //         .style("opacity", 0)
-        // }
-
-
         let now = new Date()
 
         let x = d3.scaleTime()
@@ -113,8 +90,72 @@ const LineChart = ({data, xlabel, ylabel}) => {
             .attr("d", d3.line()
                 .x(d => x(d.date))
                 .y(d => y(d.prediction))
-                .curve(d3.curveMonotoneX))
-            
+                .curve(d3.curveMonotoneX)
+            )
+
+        let marker, tooltip
+
+        Svg.append("g")
+            .selectAll("circle")
+            .data(data)
+            .enter()
+                .append("circle")
+                .attr("cx", d => x(d.date))
+                .attr("cy", d => y(d.prediction))
+                .attr("r", 3)
+                .attr("fill", "blue")
+        
+        d3.select(element.current)
+            .on("mouseover", (e, d) => {
+                if(marker) {
+                    marker
+                        .attr("x1", e.offsetX - margin.left)
+                        .attr("x2", e.offsetX - margin.left)
+                    tooltip
+                        .attr("x", e.offsetX - margin.left)
+                        .attr("y", 100)
+                        .attr("text-anchor", "middle")
+
+                } else {
+                    let prediction = data.find(p => d3.timeHour.floor(x.invert(e.offsetX - margin.left)).valueOf() === p.date.valueOf())                
+                    marker = Svg
+                        .append("line", ":first-child")
+                        .attr("x1", e.offsetX - margin.left)
+                        .attr("x2", e.offsetX - margin.left)
+                        .attr("y1", y(0) + margin.top)
+                        .attr("y2", y(100) + margin.top)
+                        .attr("stroke", "rgba(256, 0, 0, 0.4)")
+                        .attr("stroke-width", "3px")
+                    tooltip = Svg
+                        .append("text")
+                        .html(prediction.prediction)
+                        .attr("x", e.offsetX - margin.left)
+                        .attr("y", 100)
+                        .attr("text-anchor", "middle")
+
+                }
+            })
+            .on("mousemove", (e, d) => {
+                marker
+                    .attr("x1", e.offsetX - margin.left)
+                    .attr("x2", e.offsetX - margin.left)
+                let prediction = data.find(p => d3.timeHour.floor(x.invert(e.offsetX - margin.left)).valueOf() === p.date.valueOf())
+                
+                if(prediction) {
+                    tooltip
+                        .html(`${Math.round(prediction?.prediction * 1000)/10}%`)
+                    tooltip
+                        .attr("x", e.offsetX - margin.left)
+                        .attr("y", 100)
+                }
+
+                
+            })
+            .on("mouseleave", (e, d) => {
+                marker.remove()
+                tooltip.remove()
+                marker = undefined
+            })
 
         return () => {
             if(element.current) {

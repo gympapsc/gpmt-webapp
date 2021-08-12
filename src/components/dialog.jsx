@@ -1,7 +1,9 @@
-import React from "react"
+import React, {Fragment} from "react"
 import Link from "next/link"
 import PropTypes from "prop-types"
 import { useDrinking, useMessages, useMicturition, usePhotos, useStress } from "../hooks"
+import { Menu, Transition } from "@headlessui/react"
+import { deleteDrinking, deleteMicturition } from "../actions"
 
 const WEEKDAY = [
     "Sonntag",
@@ -13,23 +15,9 @@ const WEEKDAY = [
     "Samstag"   
 ]
 
-const PhotoEntry = ({name, url}) => (
+const PhotoEntry = ({url}) => (
     <div className="block self-end">
-        <img  className="rounded-t-xl w-64 lg:w-72 xl:w-80" src={url} alt={name} />
-        <div className="bg-gray-100 p-3 rounded-b-xl flex flex-row justify-between">
-            <div>
-                <h4 className="text-lg font-semibold">{name}</h4>
-                <span className="block text-gray-600 text-sm">
-                    Automatische Bilderkennung
-                </span>
-            </div>
-            <button className="hover:text-blue-600">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                    <path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd" />
-                </svg>
-            </button>
-        </div>
+        <img className="rounded-lg w-64 lg:w-72 xl:w-80" src={url} />
     </div>
 )
 
@@ -64,11 +52,57 @@ const MicturitionEntry = ({date, id}) => (
         <a href="#" className="text-md text-white bg-indigo-200 w-48 md:52 rounded-xl py-2 px-3 self-center focus:ring-2 focus:outline-none focus:ring-indigo-800 focus:ring-offset-1">
             <div className="flex flex-row justify-between">
                 <h6 className="text-xs font-semibold text-indigo-900 text-opacity-80 tracking-wider uppercase">Miktion</h6>
-                <button className="text-indigo-900 -mr-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
-                    </svg>
-                </button>
+                <Menu className="relative h-5" as="div">
+                    <Menu.Button className="text-indigo-900 -mr-1" >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
+                        </svg>
+                    </Menu.Button>
+                    <Transition
+                        as={Fragment}
+                        enter="transition ease-out duration-75"
+                        enterFrom="transform opacity-0 scale-95"
+                        enterTo="transform opacity-100 scale-100"
+                        leave="transition ease-in duration-75"
+                        leaveFrom="transform opacity-100 scale-100"
+                        leaveTo="transform opacity-0 scale-95"
+                    >
+                        <Menu.Items className="absolute -mr-5 right-0 w-56 mt-1 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <div className="px-1 py-1">
+                                <Menu.Item>
+                                    {({active}) => (
+                                        <div className={`
+                                            rounded-sm
+                                            ${ active ? "bg-indigo-600 text-white" : "bg-white text-gray-900"}
+                                            `}>
+                                            <Link href={`/app/micturition/${id}`}>
+                                                <a className={`
+                                                    text-sm px-2 py-2 flex w-full items-center group
+                                                `}
+                                                >
+                                                    Bearbeiten
+                                                </a>
+                                            </Link>
+                                        </div>
+                                    )}
+                                </Menu.Item>
+                                <Menu.Item>
+                                    {({active}) => (
+                                        <button
+                                            onClick={e => deleteMicturition(id) + e.stopPropagation()} 
+                                            className={`
+                                                ${ active ? "bg-indigo-600 text-white" : "bg-white text-gray-900"}
+                                                text-sm px-2 py-2 flex w-full items-center group rounded-sm
+                                            `}
+                                        >
+                                            Löschen
+                                        </button>
+                                    )}
+                                </Menu.Item>
+                            </div>
+                        </Menu.Items>
+                    </Transition>
+                </Menu>                
             </div>
             <h5 className="text-xl md:text-2xl font-semibold text-indigo-900">{date.getHours() < 10 ? "0" + date.getHours(): date.getHours()}:{date.getMinutes() < 10 ? "0" + date.getMinutes(): date.getMinutes()}</h5>
         </a>
@@ -85,11 +119,57 @@ const DrinkingEntry = ({amount, id}) => (
         <a href="#" className="text-md text-white bg-pink-200 w-48 md:52 rounded-xl py-2 px-3 self-center focus:ring-2 focus:outline-none focus:ring-pink-800 focus:ring-offset-1">
             <div className="flex flex-row justify-between">
                 <h6 className="text-xs font-semibold text-pink-900 text-opacity-80 tracking-wider uppercase">Trinken</h6>
-                <button className="text-pink-900 -mr-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
-                    </svg>
-                </button>
+                <Menu className="relative h-5" as="div">
+                    <Menu.Button className="text-pink-900 -mr-1" >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
+                        </svg>
+                    </Menu.Button>
+                    <Transition
+                        as={Fragment}
+                        enter="transition ease-out duration-75"
+                        enterFrom="transform opacity-0 scale-95"
+                        enterTo="transform opacity-100 scale-100"
+                        leave="transition ease-in duration-75"
+                        leaveFrom="transform opacity-100 scale-100"
+                        leaveTo="transform opacity-0 scale-95"
+                    >
+                        <Menu.Items className="absolute -mr-3 right-0 w-56 mt-0 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <div className="px-1 py-1">
+                                <Menu.Item>
+                                    {({active}) => (
+                                        <div className={`
+                                            rounded-sm
+                                            ${ active ? "bg-pink-700 text-white" : "bg-white text-gray-900"}
+                                            `}>
+                                            <Link href={`/app/micturition/${id}`}>
+                                                <a className={`
+                                                    text-sm px-2 py-2 flex w-full items-center group
+                                                `}
+                                                >
+                                                    Bearbeiten
+                                                </a>
+                                            </Link>
+                                        </div>
+                                    )}
+                                </Menu.Item>
+                                <Menu.Item>
+                                    {({active}) => (
+                                        <button
+                                            onClick={e => deleteDrinking(id) + e.stopPropagation()} 
+                                            className={`
+                                                ${ active ? "bg-pink-700 text-white" : "bg-white text-gray-900"}
+                                                text-sm px-2 py-2 flex w-full items-center group rounded-sm
+                                            `}
+                                        >
+                                            Löschen
+                                        </button>
+                                    )}
+                                </Menu.Item>
+                            </div>
+                        </Menu.Items>
+                    </Transition>
+                </Menu>                
             </div>
             <h5 className="text-xl md:text-2xl font-semibold text-pink-900">{amount}<span className="text-base md:text-lg">ml</span></h5>
         </a>
@@ -214,6 +294,5 @@ const Dialog = ({startDate, children}) => {
 Dialog.propTypes = {
     startDate: PropTypes.any
 }
-
 
 export default Dialog

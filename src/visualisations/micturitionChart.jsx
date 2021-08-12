@@ -1,7 +1,7 @@
 import React, {useRef, useEffect} from "react"
 import * as d3 from "d3"
 
-const MicturitionChart = ({data, xlabel, ylabel}) => {
+const MicturitionChart = ({data, xlabel, ylabel, tooltip}) => {
     let element = useRef(null)
 
     const update = () => {
@@ -79,6 +79,36 @@ const MicturitionChart = ({data, xlabel, ylabel}) => {
                     .style("fill", "rgb(79, 70, 229)")
             
         }
+
+        let marker
+
+        d3.select(element.current)
+            .on("mouseover", (e, d) => {
+                if(marker) {
+                    marker
+                    .attr("x1", e.offsetX - margin.left)
+                    .attr("x2", e.offsetX - margin.left)
+                } else {
+                    marker = svg
+                        .append("line", ":first-child")
+                        .attr("x1", e.offsetX - margin.left)
+                        .attr("x2", e.offsetX - margin.left)
+                        .attr("y1", y(0) + margin.top)
+                        .attr("y2", y(100) + margin.top)
+                        .attr("stroke", "rgba(256, 0, 0, 0.4)")
+                        .attr("stroke-width", "2px")
+                }
+                
+            })
+            .on("mousemove", (e, d) => {
+                marker
+                    .attr("x1", e.offsetX - margin.left)
+                    .attr("x2", e.offsetX - margin.left)
+            })
+            .on("mouseleave", (e, d) => {
+                marker.remove()
+                marker = undefined
+            })
 
         return () => {
             if(element.current) {

@@ -1,7 +1,7 @@
 import React, {useRef, useEffect} from "react"
 import * as d3 from "d3"
 
-const DrinkingChart = ({data}) => {
+const DrinkingChart = ({data, tooltip}) => {
     let element = useRef(null)
 
     useEffect(() => {
@@ -71,6 +71,58 @@ const DrinkingChart = ({data}) => {
                 .attr("width", d => x(d3.timeHour.offset(d.x0, 1)) - x(d.x0) - 1)
                 .style("fill", "rgb(79, 70, 229)")
         }
+
+        let marker, tooltip
+
+        d3.select(element.current)
+            .on("mouseover", (e, d) => {
+                if(marker) {
+                    marker
+                        .attr("x1", e.offsetX - margin.left)
+                        .attr("x2", e.offsetX - margin.left)
+                    tooltip
+                        .attr("x", e.offsetX - margin.left)
+                        .attr("y", 80)
+                        .attr("text-anchor", "middle")
+
+                } else {
+                    d = chart.find(p => d3.timeHour.floor(x.invert(e.offsetX - margin.left)).valueOf() === d3.timeHour.floor(p.x0).valueOf())                
+                    marker = svg
+                        .append("line", ":first-child")
+                        .attr("x1", e.offsetX - margin.left)
+                        .attr("x2", e.offsetX - margin.left)
+                        .attr("y1", y(0) + margin.top)
+                        .attr("y2", y(100) + margin.top)
+                        .attr("stroke", "rgba(256, 0, 0, 0.4)")
+                        .attr("stroke-width", "2px")
+                    tooltip = svg
+                        .append("text")
+                        .html(d?.reduce((a, d) => a + d.amount, 0) || 0)
+                        .attr("x", e.offsetX - margin.left)
+                        .attr("y", 80)
+                        .attr("text-anchor", "middle")
+                }
+            })
+            .on("mousemove", (e, d) => {
+                marker
+                    .attr("x1", e.offsetX - margin.left)
+                    .attr("x2", e.offsetX - margin.left)
+                d = chart.find(p => d3.timeHour.floor(x.invert(e.offsetX - margin.left)).valueOf() === d3.timeHour.floor(p.x0).valueOf())
+                
+
+                tooltip
+                    .html(d?.reduce((a, d) => a + d.amount, 0) || 0)
+                tooltip
+                    .attr("x", e.offsetX - margin.left)
+                    .attr("y", 80)
+
+                
+            })
+            .on("mouseleave", (e, d) => {
+                marker.remove()
+                tooltip.remove()
+                marker = undefined
+            })
         
         return () => {
             if(element.current) {

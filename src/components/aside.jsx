@@ -88,7 +88,7 @@ const Aside = ({ showMenu }) => {
             <div className="p-2 md:p-3 grid grid-cols-2 gap-2 md:gap-3 mb-8">
                 <Link href="/app">
                     <a className="col-span-2 p-3 bg-white rounded-xl">
-                        <h3 className="text-md font-semibold">Chat &bull; <span className="text-gray-500">Gestern</span></h3>
+                        <h3 className="text-sm font-semibold">Chat &bull; <span className="text-gray-500">Gestern</span></h3>
                         <p className="text-gray-500">{shorten(messages[0]?.text, 40) || "..."}</p>
                     </a>
                 </Link>
@@ -98,7 +98,7 @@ const Aside = ({ showMenu }) => {
                         ${Math.round(prediction.find(p => p.date.getHours() === currDate.getHours())?.prediction * 100) < 50 ? "from-green-500 to-green-600" : "from-red-400 to-red-500"} 
                         flex flex-col p-3
                     `}>
-                        <h3 className="text-md font-semibold">Miktion</h3>
+                        <h3 className="text-sm font-semibold">Miktion</h3>
                         <div className="mt-auto">
                             <h5 className="text-xs font-semibold -mb-1 tracking-wide opacity-90">{currDate.getHours()}:{currDate.getMinutes()}</h5>
                             <h4 className="text-2xl md:text-3xl font-bold">{
@@ -111,7 +111,7 @@ const Aside = ({ showMenu }) => {
                 </Link>
                 <Link href="/app/overview">
                     <a className="col-span-1 h-32 rounded-xl bg-white flex flex-col p-3">
-                        <h3 className="text-md font-semibold">Nächste Miktion</h3>
+                        <h3 className="text-sm font-semibold">Nächste Miktion</h3>
                         <div className="mt-auto">
                             <h5 className="text-gray-600 text-xs font-semibold -mb-1 tracking-wide">Morgen</h5>
                             <h4 className="text-2xl md:text-3xl font-bold">
@@ -128,7 +128,7 @@ const Aside = ({ showMenu }) => {
                 </div>
                 <Link href="/app/overview">
                     <a className="col-span-2 h-64 rounded-xl bg-white p-3 flex flex-col">
-                        <h3 className="text-md font-semibold flex-grow-0">Miktion</h3>
+                        <h3 className="text-sm font-semibold flex-grow-0">Miktion</h3>
                         <div className="w-full h-full mt-3 flex-grow">
                             <MicturitionChart data={micturition || []} />
                         </div>
@@ -136,7 +136,7 @@ const Aside = ({ showMenu }) => {
                 </Link>
                 <Link href="/app/overview">
                     <a className="col-span-2 h-64 rounded-xl bg-white p-3 flex flex-col">
-                        <h3 className="text-md font-semibold">Trinken</h3>
+                        <h3 className="text-sm font-semibold">Trinken</h3>
                         <div className="w-full h-full mt-3 flex-grow">
                             <DrinkingChart data={drinking || []} />
                         </div>
@@ -144,7 +144,7 @@ const Aside = ({ showMenu }) => {
                 </Link>
                 <Link href="#">
                     <a className="col-span-2 h-64 rounded-xl bg-white p-3 flex flex-col">
-                        <h3 className="text-md font-semibold">Stress</h3>
+                        <h3 className="text-sm font-semibold">Stress</h3>
                         <div className="w-full h-full mt-3 flex-grow">
                             <StressChart data={stress || []} />
                         </div>
