@@ -15,18 +15,20 @@ import {
 
 import Secure from "../../components/secure"
 import Shell from "../../components/shell"
-import Dialog from "../../components/dialog"
+import Dialog, { RecognizedText } from "../../components/dialog"
 import * as Banner from "../../components/banner"
 
 import api from "../../api/http"
 import {
     useSpeechConfig, 
-    useUtterButtons 
+    useUtterButtons,
+    useUser
 } from "../../hooks"
 
 const App = () => {
     let startDate = new Date()
 
+    let user = useUser()
     let messageRef = useRef(null)
     let fileInputRef = useRef(null)
     let dispatch = useDispatch()
@@ -52,6 +54,7 @@ const App = () => {
     }
 
     let [title, setTitle] = useState("Heute")
+    let [continuousText, setRecognition] = useState("")
 
     console.log(speechsdk)
     const audioConfig = speechsdk.AudioConfig.fromDefaultMicrophoneInput();
@@ -61,17 +64,35 @@ const App = () => {
         if(typeof window !== "undefined" && speechConfig) {
             console.log(speechConfig, audioConfig)
             const recognizer = new speechsdk.SpeechRecognizer(speechConfig, audioConfig)
-            recognizer.recognizeOnceAsync(result => {
-                if(result.reason === ResultReason.RecognizedSpeech) {
-                    utter(result.text)
-                }
+
+            recognizer.startContinuousRecognitionAsync(() => {
+                setRecognition("")
             })
+
+            recognizer.recognizing = (sender, event) => {
+                setRecognition(event.result.text)
+            }
+
+            recognizer.recognized = (sender, event) => {
+                if(event.result.text) {
+                    utter(event.result.text)
+                }
+                setRecognition("")
+                recognizer.stopContinuousRecognitionAsync()
+            }
         }
     }
 
     return (
         <Shell title={title} className="bg-white">
-            <Dialog startDate={startDate}></Dialog>
+            <Dialog startDate={startDate}>
+                {
+                    continuousText.length > 0 &&
+                    <RecognizedText>
+                        {continuousText}
+                    </RecognizedText>
+                }
+            </Dialog>
             {
                 buttons.length ?
                     <div className="sticky bottom-3 lg:w-2/3 flex flex-row mt-auto pt-8 w-full mx-auto text-white justify-center">
@@ -84,11 +105,15 @@ const App = () => {
                     :
                     <div className="sticky bottom-0 lg:w-2/3 flex flex-row mt-auto pt-3 w-full mx-auto">
                     
-                        <button onClick={() => stt()} className="flex-grow-0 w-12 h-12 flex flex-col justify-center items-center text-white bg-indigo-800">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                            </svg>
-                        </button>
+                        {
+                            user.settings.voiceInput &&
+                            <button onClick={() => stt()} className="flex-grow-0 w-12 h-12 flex flex-col justify-center items-center text-white bg-indigo-800">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                                </svg>
+                            </button>
+
+                        }
                         <input
                             className="h-12 flex-grow px-3 md:px-4 bg-gray-300 border-0 focus:outline-none focus:ring-2 focus:ring-inset"
                             ref={messageRef}

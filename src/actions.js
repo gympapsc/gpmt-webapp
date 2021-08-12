@@ -121,10 +121,11 @@ const tts = async (text, getState) => {
 }
 
 const processEvents = async (events, dispatch, getState) => {
+    let state = getState()
     for(let event of events) {
         if(event.text) {
             dispatch(addMessage(event.text, event.sender, new Date(event.timestamp).valueOf()))
-            if(event.sender !== "user") {
+            if(event.sender !== "user" && state.user.settings.voiceOutput) {
                 await tts(event.text, getState)
             }
 

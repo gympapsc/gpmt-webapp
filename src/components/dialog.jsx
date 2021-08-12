@@ -70,7 +70,7 @@ const MicturitionEntry = ({date, id}) => (
                     </svg>
                 </button>
             </div>
-            <h5 className="text-xl md:text-2xl font-semibold text-indigo-900">{date.getHours() < 10 ? '0' + date.getHours(): date.getHours()}:{date.getMinutes() < 10 ? '0' + date.getMinutes(): date.getMinutes()}</h5>
+            <h5 className="text-xl md:text-2xl font-semibold text-indigo-900">{date.getHours() < 10 ? "0" + date.getHours(): date.getHours()}:{date.getMinutes() < 10 ? "0" + date.getMinutes(): date.getMinutes()}</h5>
         </a>
     </Link>
 )
@@ -114,6 +114,12 @@ BotMessage.propTypes = {
 const UserMessage = ({text}) => (
     <div className="text-lg lg:text-xl font-semibold text-gray-800 max-w-xs md:max-w-md rounded-xl py-1 px-2 md:px-3 text-right self-end">
         {text}
+    </div>
+)
+
+export const RecognizedText = ({children}) => (
+    <div className="text-lg lg:text-xl font-semibold text-gray-500 max-w-xs md:max-w-md rounded-xl py-1 px-2 md:px-3 text-right self-end">
+        {children}
     </div>
 )
 
@@ -171,7 +177,7 @@ const addDateLabels = entries => {
     return dialog
 }
 
-const Dialog = ({startDate}) => {
+const Dialog = ({startDate, children}) => {
     let micturitionEntries = useMicturition(startDate)
         .map(e => ({ ...e, type: "MICTURITION"}))
     let drinkingEntries = useDrinking(startDate)
@@ -181,7 +187,7 @@ const Dialog = ({startDate}) => {
     let stressEntries = useStress(startDate)
         .map(s => ({ ...s, type: "STRESS"}))
     let messages = useMessages(startDate)
-        .map(e => ({ ...e, type: e.sender === 'user' ? "USER_MESSAGE" : "BOT_MESSAGE"}))
+        .map(e => ({ ...e, type: e.sender === "user" ? "USER_MESSAGE" : "BOT_MESSAGE"}))
 
     let dialog = [
         ...micturitionEntries,
@@ -200,6 +206,7 @@ const Dialog = ({startDate}) => {
             {dialog.map((e, i) => 
                 <DialogEntry entry={e} key={i} /> 
             )}
+            {children}
         </div>
     )
 }
