@@ -142,7 +142,7 @@ const DrinkingEntry = ({amount, id}) => (
                                             rounded-sm
                                             ${ active ? "bg-pink-700 text-white" : "bg-white text-gray-900"}
                                             `}>
-                                            <Link href={`/app/micturition/${id}`}>
+                                            <Link href={`/app/drinking/${id}`}>
                                                 <a className={`
                                                     text-sm px-2 py-2 flex w-full items-center group
                                                 `}
@@ -279,6 +279,7 @@ const Dialog = ({startDate, children}) => {
 
     dialog = addDateLabels(dialog)
         .sort((a, b) => a.timestamp - b.timestamp)
+        .filter(a => a.timestamp > Date.now().valueOf() - 24 * 3600 * 1000)
 
 
     return (

@@ -7,7 +7,7 @@ const About = () => {
     let router = useRouter()
 
     const next = () => {
-        router.push("/app")
+        router.push("/setup/audio")
     }
 
     return (

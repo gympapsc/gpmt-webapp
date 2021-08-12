@@ -1,5 +1,4 @@
-import { redirect } from "./utils"
-import * as speechsdk from "microsoft-cognitiveservices-speech-sdk"
+import { redirect, tts, createSpeechConfig } from "./utils"
 
 
 export const signupUser = ({
@@ -98,35 +97,16 @@ export const utterMessage = (text) =>  async (dispatch, getState, { api }) => {
     dispatch(setUser({ ...user, micturitionFrequency }))
 }
 
-const tts = async (text, getState) => {
-    let speechCredentials = getState()?.speech
-    const speechConfig = speechsdk.SpeechConfig.fromAuthorizationToken(speechCredentials.token, speechCredentials.region)
-    speechConfig.speechSynthesisLanguage = "de-DE"
-    speechConfig.speechSynthesisVoiceName = "de-DE-KatjaNeural"
-    const audioConfig = speechsdk.AudioConfig.fromDefaultSpeakerOutput()
-    const speechSynthesizer = new speechsdk.SpeechSynthesizer(speechConfig, audioConfig)
-    return new Promise((res, rej) => {
-        speechSynthesizer.speakTextAsync(
-            text,
-            result => {
-                synthesizer.close()
-                res(result)
-            },
-            error => {
-                synthesizer.close()
-                rej(error)
-            }
-        )
-    })
-}
+
 
 const processEvents = async (events, dispatch, getState) => {
     let state = getState()
+    let config = createSpeechConfig(state.speech.token, state.speech.region)
     for(let event of events) {
         if(event.text) {
             dispatch(addMessage(event.text, event.sender, new Date(event.timestamp).valueOf()))
             if(event.sender !== "user" && state.user.settings.voiceOutput) {
-                await tts(event.text, getState)
+                await tts(event.text, config)
             }
 
         } else if(event.type) {

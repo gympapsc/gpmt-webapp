@@ -1,7 +1,7 @@
 import React, {useRef, useEffect} from "react"
 import * as d3 from "d3"
 
-const MicturitionChart = ({data, xlabel, ylabel, tooltip}) => {
+const MicturitionChart = ({data, xlabel, ylabel, range}) => {
     let element = useRef(null)
 
     const update = () => {
@@ -26,7 +26,7 @@ const MicturitionChart = ({data, xlabel, ylabel, tooltip}) => {
         
         let x = d3.scaleTime()
             .domain([
-                new Date(now.getFullYear(), now.getMonth(), now.getDate() - 2), 
+                range || new Date(now.getFullYear(), now.getMonth(), now.getDate() - 2), 
                 new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 1)
             ])
             .range([ 0, width ])
@@ -67,7 +67,7 @@ const MicturitionChart = ({data, xlabel, ylabel, tooltip}) => {
 
 
         if(data.length) {
-            svg.append('g')
+            svg.append("g")
                 .selectAll("rect")
                 .data(chart)
                 .enter()

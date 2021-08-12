@@ -44,7 +44,7 @@ const Aside = ({ showMenu }) => {
     let stress = useStress(startDate)
 
     const isMobile = useMediaQuery({
-        query: '(max-width: 640px)'
+        query: "(max-width: 640px)"
     })
     
     const signOut = () => {

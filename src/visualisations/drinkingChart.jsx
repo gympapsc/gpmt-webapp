@@ -1,7 +1,7 @@
 import React, {useRef, useEffect} from "react"
 import * as d3 from "d3"
 
-const DrinkingChart = ({data, tooltip}) => {
+const DrinkingChart = ({data, tooltip, range}) => {
     let element = useRef(null)
 
     useEffect(() => {
@@ -21,7 +21,7 @@ const DrinkingChart = ({data, tooltip}) => {
 
         let x = d3.scaleTime()
             .domain([
-                new Date(now.getFullYear(), now.getMonth(), now.getDate() - 2), 
+                range || new Date(now.getFullYear(), now.getMonth(), now.getDate() - 2), 
                 new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 1)
             ])
             .range([ 0, width ])
@@ -60,7 +60,7 @@ const DrinkingChart = ({data, tooltip}) => {
             .attr("stroke", "#EBEBEB")
 
         if(data.length) {
-            svg.append('g')
+            svg.append("g")
             .selectAll("rect")
             .data(chart, d => d)
             .enter()

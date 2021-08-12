@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { authenticateUser, loadDrinking, loadMessages, loadMicturition, loadPhotos, loadStress, loadMicturitionPredictions, setSpeechToken} from "./actions"
 import api from "./api/http"
 import * as speechsdk from "microsoft-cognitiveservices-speech-sdk"
+import { createSpeechConfig } from "./utils"
 
 export function useDrinking(startDate) {
     let dispatch = useDispatch()
@@ -118,7 +119,7 @@ export function useSpeechConfig() {
         if(typeof window !== "undefined" && config === null) {
             const { data: {token, region}} = await api.getSpeechToken()
             dispatch(setSpeechToken(token, region))
-            let c = speechsdk.SpeechConfig.fromAuthorizationToken(token, region)
+            let c = createSpeechConfig(token, region)
             c.speechRecognitionLanguage = "de-DE"
             setConfig(c)
         }

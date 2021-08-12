@@ -19,10 +19,10 @@ import DrinkingChart from "../../visualisations/drinkingChart"
 
 
 const timeRanges = {
-    d: { id: 0, name: "Letzten 24 Stunden" },
-    w: { id: 1, name: "Letzte Woche"},
-    m: { id: 2, name: "Letzten Monat"},
-    y: { id: 3, name: "Letztes Jahr"}
+    d: { id: 0, name: "Letzten 48 Stunden", range: Date.now().valueOf() - 2 * 24 * 3600 * 1000},
+    w: { id: 1, name: "Letzte Woche", range: Date.now().valueOf() - 7 * 24 * 3600 * 1000},
+    m: { id: 2, name: "Letzten Monat", range: Date.now().valueOf() - 30 * 24 * 3600 * 1000},
+    y: { id: 3, name: "Letztes Jahr", range: Date.now().valueOf() - 365 * 24 * 3600 * 1000}
 }
 
 function TimeSelect({value, onChange}) {
@@ -30,10 +30,10 @@ function TimeSelect({value, onChange}) {
 
     const changeRange = s => {
         setSelected(s)
-        onChange(s.name[0])
+        onChange(s.range)
     }
 
-  return (
+    return (
     <div>
       <Listbox value={selected} onChange={changeRange}>
         <div className="w-full relative">
@@ -123,6 +123,8 @@ const MicturitionOverview = () => {
         }
     }
     
+    let [timeRange, setTimeRange] = useState(Date.now().valueOf() - 2 * 24 * 3600 * 1000)
+
     return (
         <Shell title={"Übersicht"} className="bg-gray-100">
             <div className="flex flex-col w-full space-y-4 pb-12">
@@ -157,17 +159,17 @@ const MicturitionOverview = () => {
                             <div className="grid grid-cols-2 gap-2 px-3 md:px-5 xl:gap-3 mx-auto my-4">
                                 <div className="col-span-full xl:col-span-1 flex flex-col">
                                     <div>
-                                        <TimeSelect value="w" onChange={() => {}} />
+                                        <TimeSelect value="d" onChange={r => setTimeRange(r)} />
                                         <p className="text-gray-500 text-sm md:text-md">Alle Trink- und Miktionseinträge die du in den letzten 24 Stunden gemacht hast.</p>
                                     </div>
                                     <div className="grid grid-rows-2 mt-auto">
                                         <div
                                             className="w-full h-36 lg:h-48 row-span-1">
-                                            <MicturitionChart data={micturition} />
+                                            <MicturitionChart data={micturition} range={timeRange}/>
                                         </div>
                                         <div
                                             className="w-full h-36 lg:h-48 row-span-1">
-                                            <DrinkingChart data={drinking} />
+                                            <DrinkingChart data={drinking} range={timeRange}/>
                                         </div>
                                     </div>
                                 </div>
@@ -273,6 +275,32 @@ const MicturitionOverview = () => {
                                                         </td>
                                                     </tr>
                                                 ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="flex flex-col px-3 md:px-4 mx-auto max-w-screen-xl">
+                            <h3 className="mb-2 font-semibold text-lg md:text-xl">Medikamente</h3>
+                            <div className="-my-2 overflow-x-auto">
+                                <div className="py-2 align-middle inline-block min-w-full">
+                                    <div className="border overflow-hidden border-gray-200 sm:rounded-lg">
+                                        <table className="min-w-full divide-y divide-gray-200">
+                                            <thead className="bg-gray-50">
+                                                <tr>
+                                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        Wirkstoff
+                                                    </th>
+                                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        Uhrzeit
+                                                    </th>
+                                                    <th scope="col" className="relative px-6 py-3">
+                                                        <span className="sr-only">Löschen</span>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="bg-white divide-y divide-gray-200">
                                             </tbody>
                                         </table>
                                     </div>
