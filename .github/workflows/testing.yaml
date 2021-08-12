@@ -105,3 +105,10 @@ jobs:
           
           - name: Shutdown api and rasa services
             run: bash net/uninstall.sh && bash api/uninstall.sh && bash rasa/uninstall.sh
+          
+          - name: Export screenshots
+            uses: actions/upload-artifact@v2
+            with:
+              name: screenshots
+              path: screenshots
+            
