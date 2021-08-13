@@ -205,6 +205,13 @@ export const setMicturition = entries => ({
     }
 })
 
+export const setNutrition = entries => ({
+    type: "SET_NUTRITION",
+    payload: {
+        entries
+    }
+})
+
 export const setDrinking = entries => ({
     type: "SET_DRINKING",
     payload: {
@@ -283,6 +290,20 @@ export const loadMessages = (startDate) => async (dispatch, getState, { api }) =
         }))
         api._pending["messages"] = false
         dispatch(setMessages(messages))
+    }
+}
+
+export const loadNutrition = startDate => async (dispatch, getState, { api }) => {
+    if(!api._pending["nutrition"]) {
+        api._pending["nutrition"] = true
+        let { data: { entries }} = await api.getNutrition(startDate)
+        entries = entries.map(e => ({
+            ...e,
+            date: new Date(e.date),
+            timestamp: new Date(e.timestamp).valueOf()
+        }))
+        dispatch(setNutrition(entries))
+        api._pending["nutrition"] = false
     }
 }
 
@@ -388,6 +409,28 @@ export const updateMicturition = m => async (dispatch, getState, { api }) => {
     }
 }
 
+export const updateNutrition = m => async (dispatch, getState, { api }) => {
+    let { data: { ok }} = await api.updateNutrition(m)
+
+    if(ok) {
+        dispatch({
+            type: "UPDATE_NUTRITION",
+            payload: m
+        })
+    }
+}
+
+export const updateMedication = m => async (dispatch, getState, { api }) => {
+    let { data: { ok }} = await api.updateMedication(m)
+
+    if(ok) {
+        dispatch({
+            type: "UPDATE_MEDICATION",
+            payload: m
+        })
+    }
+}
+
 export const updateStress = s => async (dispatch, getState, { api }) => {
     let { data: { ok }} = await api.updateStress(s)
 
@@ -435,6 +478,29 @@ export const deleteMicturition = (_id) => async (dispatch, getState, { api }) =>
         }
     })
 }
+
+export const deleteNutrition = (_id) => async (dispatch, getState, { api }) => {
+    await api.deleteNutrition(_id)
+
+    dispatch({
+        type: "DELETE_NUTRITION",
+        payload: {
+            _id
+        }
+    })
+}
+
+export const deleteMedication = (_id) => async (dispatch, getState, { api }) => {
+    await api.deleteMedication(_id)
+
+    dispatch({
+        type: "DELETE_MEDICATION",
+        payload: {
+            _id
+        }
+    })
+}
+
 
 export const deleteStress = (_id) =>  async (dispatch, getState, { api }) => {
     await api.deleteStress(_id)

@@ -5,6 +5,32 @@ import api from "./api/http"
 import * as speechsdk from "microsoft-cognitiveservices-speech-sdk"
 import { createSpeechConfig } from "./utils"
 
+export function useNutrition(startDate) {
+    let dispatch = useDispatch()
+    let nutrition = useSelector(s => s.nutrition)
+
+    useEffect(() => {
+        if(typeof window !== "undefined" && nutrition === null) {
+            dispatch(loadNutrition(startDate))
+        }
+    })
+
+    return nutrition || []
+}
+
+export function useMedication(startDate) {
+    let dispatch = useDispatch()
+    let medication = useSelector(s => s.medication)
+
+    useEffect(() => {
+        if(typeof window !== "undefined" && medication === null) {
+            dispatch(loadMedication(startDate))
+        }
+    })
+
+    return medication || []
+}
+
 export function useDrinking(startDate) {
     let dispatch = useDispatch()
     let drinking = useSelector(s => s.drinking)

@@ -4,9 +4,11 @@ const initialState = {
     user: null,
     messages: null,
     micturition: null,
+    nutrition: null,
     stress: null,
     drinking: null,
     photos: null,
+    medication: null,
     micturitionPredictions: null
 }
 
@@ -27,6 +29,22 @@ const reducer = (state=initialState, action) => {
                 ...state,
                 micturition: [
                     ...(state.micturition || []),
+                    action.payload
+                ]
+            }
+        case "ADD_NUTRITION":
+            return {
+                ...state,
+                nutrition: [
+                    ...(state.nutrition || []),
+                    action.payload
+                ]
+            }
+        case "ADD_MEDICATION":
+            return {
+                ...state,
+                medication: [
+                    ...(state.medication || []),
                     action.payload
                 ]
             }
@@ -151,6 +169,28 @@ const reducer = (state=initialState, action) => {
                     }
                 ]
             }
+        case "UPDATE_NUTRITION":
+            return {
+                ...state,
+                nutrition: [
+                    ...state.nutrition.filter(m => m._id !== action.payload._id),
+                    {
+                        ...state.nutrition.find(m => m._id === action.payload._id),
+                        ...action.payload
+                    }
+                ]
+            }
+        case "UPDATE_MEDICATION":
+            return {
+                ...state,
+                medication: [
+                    ...state.medication.filter(m => m._id !== action.payload._id),
+                    {
+                        ...state.medication.find(m => m._id === action.payload._id),
+                        ...action.payload
+                    }
+                ]
+            }
         case "DELETE_DRINKING":
             return {
                 ...state,
@@ -165,6 +205,16 @@ const reducer = (state=initialState, action) => {
             return {
                 ...state,
                 stress: state.stress.filter(s => s._id !== action.payload._id)
+            }
+        case "DELETE_NUTRITION":
+            return {
+                ...state,
+                nutrition: state.nutrition.filter(m => m._id !== action.payload._id)
+            }
+        case "DELETE_MEDICATION":
+            return {
+                ...state,
+                medication: state.medication.filter(m => m._id !== action.payload._id)
             }
         case "USER_CONNECTION":
             return {
@@ -186,6 +236,16 @@ const reducer = (state=initialState, action) => {
                     ...state.user,
                     micturitionFrequency: action.payload.micturitionFrequency
                 }
+            }
+        case "SET_NUTRITION":
+            return {
+                ...state,
+                nutrition: action.payload.entries
+            }
+        case "SET_MEDICATION":
+            return {
+                ...state,
+                medication: action.payload.entries
             }
         default:
             return state
