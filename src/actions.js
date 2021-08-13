@@ -1,4 +1,5 @@
-import { redirect } from "./utils"
+import { redirect, tts, createSpeechConfig } from "./utils"
+import * as d3 from "d3"
 
 export const signupUser = ({
     firstname, 
@@ -84,7 +85,7 @@ export const authenticateUser = () => async (dispatch, getState, { api }) => {
 
 export const utterMessage = (text) =>  async (dispatch, getState, { api }) => {
     let { data: { buttons, events, micturitionPrediction, micturitionFrequency }} = await api.utterMessage(text)
-    processEvents(events, dispatch, getState)
+    await processEvents(events, dispatch, getState)
     dispatch(setUtterButtons(buttons))
     micturitionPrediction = micturitionPrediction.map(e => ({
         ...e,
@@ -96,20 +97,33 @@ export const utterMessage = (text) =>  async (dispatch, getState, { api }) => {
     dispatch(setUser({ ...user, micturitionFrequency }))
 }
 
-const processEvents = (events, dispatch) => {
+
+
+const processEvents = async (events, dispatch, getState) => {
+    let state = getState()
+    let config = createSpeechConfig(state.speech.token, state.speech.region)
+    let entries
     for(let event of events) {
         if(event.text) {
             dispatch(addMessage(event.text, event.sender, new Date(event.timestamp).valueOf()))
+            if(event.sender !== "user" && state.user.settings.voiceOutput) {
+                await tts(event.text, config)
+            }
+
         } else if(event.type) {
             switch(event.type) {
                 case "ADD_MICTURITION":
                     dispatch(addMicturition(new Date(event.date), new Date(event.timestamp).valueOf(), event._id))
+                    entries = getState().micturition
+                    dispatch(setMicturitionFrequency(avgMicturitionFrequency(entries)))
                     break
                 case "ADD_STRESS":
                     dispatch(addStress(new Date(event.date), new Date(event.timestamp).valueOf(), event.level, event._id))
                     break
                 case "ADD_DRINKING":
                     dispatch(addDrinking(new Date(event.date), new Date(event.timestamp).valueOf(), event.amount, event._id))
+                    entries = getState().drinking
+                    dispatch(setAvgDrinkingAmount(avgDrinkingAmount(entries)))
                     break
                 case "SIGNOUT_USER":
                     setTimeout(() => {
@@ -191,6 +205,13 @@ export const setMicturition = entries => ({
     }
 })
 
+export const setNutrition = entries => ({
+    type: "SET_NUTRITION",
+    payload: {
+        entries
+    }
+})
+
 export const setDrinking = entries => ({
     type: "SET_DRINKING",
     payload: {
@@ -233,6 +254,28 @@ export const setUtterButtons = buttons => ({
     }
 })
 
+export const setSpeechToken = (token, region) => ({
+    type: "SET_SPEECH_TOKEN",
+    payload: {
+        token,
+        region
+    }
+})
+
+export const setAvgDrinkingAmount = (amount) => ({
+    type: "SET_AVG_DRINKING_AMOUNT",
+    payload: {
+        avgDrinkingAmount: amount
+    }
+})
+
+export const setMicturitionFrequency = (frequency) => ({
+    type: "SET_MICTURITION_FREQUENCY",
+    payload: {
+        micturitionFrequency: frequency
+    }
+})
+
 /*
     Load Data
 */
@@ -250,6 +293,20 @@ export const loadMessages = (startDate) => async (dispatch, getState, { api }) =
     }
 }
 
+export const loadNutrition = startDate => async (dispatch, getState, { api }) => {
+    if(!api._pending["nutrition"]) {
+        api._pending["nutrition"] = true
+        let { data: { entries }} = await api.getNutrition(startDate)
+        entries = entries.map(e => ({
+            ...e,
+            date: new Date(e.date),
+            timestamp: new Date(e.timestamp).valueOf()
+        }))
+        dispatch(setNutrition(entries))
+        api._pending["nutrition"] = false
+    }
+}
+
 export const loadMicturition = startDate => async (dispatch, getState, { api }) => {
     if(!api._pending["micturition"]) {
         api._pending["micturition"] = true
@@ -260,6 +317,7 @@ export const loadMicturition = startDate => async (dispatch, getState, { api }) 
             timestamp: new Date(e.timestamp).valueOf()
         }))
         dispatch(setMicturition(entries))
+        dispatch(setMicturitionFrequency(avgMicturitionFrequency(entries)))
         api._pending["micturition"] = false
     }
 }
@@ -288,6 +346,7 @@ export const loadDrinking = startDate => async (dispatch, getState, { api }) => 
             timestamp: new Date(e.timestamp).valueOf()
         }))
         dispatch(setDrinking(entries))
+        dispatch(setAvgDrinkingAmount(avgDrinkingAmount(entries)))
         api._pending["drinking"] = false
     }
 }
@@ -350,6 +409,28 @@ export const updateMicturition = m => async (dispatch, getState, { api }) => {
     }
 }
 
+export const updateNutrition = m => async (dispatch, getState, { api }) => {
+    let { data: { ok }} = await api.updateNutrition(m)
+
+    if(ok) {
+        dispatch({
+            type: "UPDATE_NUTRITION",
+            payload: m
+        })
+    }
+}
+
+export const updateMedication = m => async (dispatch, getState, { api }) => {
+    let { data: { ok }} = await api.updateMedication(m)
+
+    if(ok) {
+        dispatch({
+            type: "UPDATE_MEDICATION",
+            payload: m
+        })
+    }
+}
+
 export const updateStress = s => async (dispatch, getState, { api }) => {
     let { data: { ok }} = await api.updateStress(s)
 
@@ -398,6 +479,29 @@ export const deleteMicturition = (_id) => async (dispatch, getState, { api }) =>
     })
 }
 
+export const deleteNutrition = (_id) => async (dispatch, getState, { api }) => {
+    await api.deleteNutrition(_id)
+
+    dispatch({
+        type: "DELETE_NUTRITION",
+        payload: {
+            _id
+        }
+    })
+}
+
+export const deleteMedication = (_id) => async (dispatch, getState, { api }) => {
+    await api.deleteMedication(_id)
+
+    dispatch({
+        type: "DELETE_MEDICATION",
+        payload: {
+            _id
+        }
+    })
+}
+
+
 export const deleteStress = (_id) =>  async (dispatch, getState, { api }) => {
     await api.deleteStress(_id)
 
@@ -407,4 +511,24 @@ export const deleteStress = (_id) =>  async (dispatch, getState, { api }) => {
             _id
         }
     })
+}
+
+/*
+    Utilities
+*/
+
+const avgDrinkingAmount = (entries) => {
+    let now = d3.timeDay.ceil(new Date().valueOf())
+    let endDate = d3.timeDay.floor(Math.min(...entries.map(e => e.date.valueOf())))
+
+    return entries
+        .reduce((a, b) => a + b.amount, 0) / ((now - endDate) / 24 / 3600 / 1000) / 1000
+}
+
+const avgMicturitionFrequency = (entries) => {
+    let now = d3.timeDay.ceil(new Date())
+    let endDate = d3.timeDay.floor(Math.min(...entries.map(e => e.date.valueOf())))
+
+    return entries
+        .reduce((a, b) => 1 + a, 0) / ((now - endDate) / 24 / 3600 / 1000)
 }

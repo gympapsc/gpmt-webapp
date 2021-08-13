@@ -19,7 +19,7 @@ beforeAll(() => {
 })
 
 describe('user sign in', () => {
-    it('should sign in and redirect to app', async () => {
+    it.skip('should sign in and redirect to app', async () => {
         await page.goto("http://localhost:5000/signin")
         let document = await getDocument(page)
         

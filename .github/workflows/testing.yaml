@@ -2,7 +2,7 @@ name: Testing
 
 on:
     push:
-        branches: [ master ]
+        branches: [ master, dev ]
     pull_request:
        types: [opened, edited]
 
@@ -40,30 +40,75 @@ jobs:
           run: npm run lint
 
 
-    unittest:
-        name: Unittest
-        needs: lint
+    e2e:
+        name: End-to-End Test
         runs-on: ubuntu-latest
+        env:
+          NEXT_PUBLIC_API_URL: "http://localhost:8089/"
+          NEXT_PUBLIC_APP_VERION: "0.0.0"
         steps:
-        - uses: actions/checkout@v2
+          - uses: actions/checkout@v2
 
-        - name: Use Node.js ${{ env.NODE_VERSION }}
-          uses: actions/setup-node@v1
-          with:
-            node-version: ${{ env.NODE_VERSION }}
-        
-        - name: Cache node modules
-          id: cache-node
-          uses: actions/cache@v2
-          with:
-            path: node_modules
-            key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-            restore-keys: ${{ runner.os }}-node-modules-
+          - name: Use Node.js ${{ env.NODE_VERSION }}
+            uses: actions/setup-node@v1
+            with:
+              node-version: ${{ env.NODE_VERSION }}
+
+          - name: Cache node modules
+            id: cache-node
+            uses: actions/cache@v2
+            with:
+              path: node_modules
+              key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+              restore-keys: ${{ runner.os }}-node-modules-
           
-        - name: npm install
-          if: steps.cache-node.outputs.cache-hit != 'true'
-          run: npm install
-        
-        - name: Run jest unittest
-          run: npm run test:unit
-        
+          - name: npm install
+            if: steps.cache-node.outputs.cache-hit != 'true'
+            run: npm install
+
+          - name: ACR login
+            uses: azure/docker-login@v1
+            with:
+              login-server: ${{ secrets.REGISTRY_USERNAME }}.azurecr.io
+              username: ${{ secrets.REGISTRY_USERNAME }}
+              password: ${{ secrets.REGISTRY_PASSWORD }}
+
+          - name: Checkout rasa repo
+            uses: actions/checkout@v2
+            with:
+              repository: gympapsc/gpmt-rasa
+              path: rasa
+          
+          - name: Start rasa services in background
+            run: cd ./rasa && bash ./install.sh && cd ..
+
+          - name: Checkout api repo
+            uses: actions/checkout@v2
+            with:
+              repository: gympapsc/gpmt-api
+              path: api
+
+          - name: Start api services in background
+            run: cd ./api && bash ./install.sh && cd ..
+
+          - name: Checkout net repo
+            uses: actions/checkout@v2
+            with:
+              repository: gympapsc/gpmt-net
+              path: net
+          
+          - name: Start analysis service
+            run: cd ./net && bash ./install.sh && cd ..
+
+          - name: Run tests
+            run: npm run test:e2e
+          
+          - name: Shutdown api and rasa services
+            run: cd ./net && bash ./uninstall.sh && cd ../api && bash ./uninstall.sh && cd ../rasa && bash ./uninstall.sh
+          
+          - name: Export screenshots
+            uses: actions/upload-artifact@v2
+            with:
+              name: screenshots
+              path: screenshots
+            

@@ -20,7 +20,6 @@ import { useApiVersion, useUser } from "../../hooks"
 
 const Settings = () => {
     let dispatch = useDispatch()
-    let [enabled, setEnabled] = useState(false)
 
     let user = useUser()
     let apiVersion = useApiVersion()

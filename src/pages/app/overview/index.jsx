@@ -1,3 +1,4 @@
+import * as d3 from "d3"
 import React, { useState, Fragment } from "react"
 import Link from "next/link"
 import { useDispatch } from "react-redux"
@@ -8,21 +9,21 @@ import {
     deleteMicturition,
     deleteDrinking,
     deleteStress
-} from "../../actions"
+} from "../../../actions"
 
-import Secure from "../../components/secure"
-import Shell from "../../components/shell"
-import LineChart from "../../visualisations/lineChart"
-import { useDrinking, useMicturition, useUser, useMicturitionPredictions, usePhotos, useStress} from "../../hooks"
-import MicturitionChart from "../../visualisations/micturitionChart"
-import DrinkingChart from "../../visualisations/drinkingChart"
+import Secure from "../../../components/secure"
+import Shell from "../../../components/shell"
+import LineChart from "../../../visualisations/lineChart"
+import { useDrinking, useMicturition, useUser, useMicturitionPredictions, usePhotos, useStress} from "../../../hooks"
+import MicturitionChart from "../../../visualisations/micturitionChart"
+import DrinkingChart from "../../../visualisations/drinkingChart"
 
 
 const timeRanges = {
-    d: { id: 0, name: "Letzten 24 Stunden" },
-    w: { id: 1, name: "Letzte Woche"},
-    m: { id: 2, name: "Letzten Monat"},
-    y: { id: 3, name: "Letztes Jahr"}
+    d: { id: 0, name: "Letzten 48 Stunden", range: Date.now().valueOf() - 2 * 24 * 3600 * 1000},
+    w: { id: 1, name: "Letzte Woche", range: Date.now().valueOf() - 7 * 24 * 3600 * 1000},
+    m: { id: 2, name: "Letzten Monat", range: Date.now().valueOf() - 30 * 24 * 3600 * 1000},
+    y: { id: 3, name: "Letztes Jahr", range: Date.now().valueOf() - 365 * 24 * 3600 * 1000}
 }
 
 function TimeSelect({value, onChange}) {
@@ -30,10 +31,10 @@ function TimeSelect({value, onChange}) {
 
     const changeRange = s => {
         setSelected(s)
-        onChange(s.name[0])
+        onChange(s.range)
     }
 
-  return (
+    return (
     <div>
       <Listbox value={selected} onChange={changeRange}>
         <div className="w-full relative">
@@ -99,6 +100,7 @@ const WEEKDAY = [
 ]
 
 const MicturitionOverview = () => {
+    let [day, setDay] = useState(d3.timeDay.floor(new Date()))
     let dispatch = useDispatch()
     let predictions = useMicturitionPredictions()
 
@@ -111,7 +113,8 @@ const MicturitionOverview = () => {
     let stress = useStress(new Date())
         .map(s => ({type: "stress", ...s}))
     let photos = usePhotos(new Date())
-    let entries = [...micturition, ...drinking, ...stress].sort((a, b) => b.timestamp - a.timestamp)
+    let entries = [...micturition, ...drinking, ...stress]
+        .sort((a, b) => b.timestamp - a.timestamp)
 
     const deleteEntry = (type, _id) => () => {
         if(type === "micturition") {
@@ -123,8 +126,11 @@ const MicturitionOverview = () => {
         }
     }
     
+    let [timeRange, setTimeRange] = useState(Date.now().valueOf() - 2 * 24 * 3600 * 1000)
+
+
     return (
-        <Shell title={"Übersicht"} className="bg-gray-100">
+        <Shell title={"Miktion"} className="bg-gray-100">
             <div className="flex flex-col w-full space-y-4 pb-12">
                 {
                     entries.length !== 0 ? 
@@ -141,7 +147,7 @@ const MicturitionOverview = () => {
                                 <div className="mx-auto">
                                     <h6 className="uppercase text-xs lg:text-sm font-semibold tracking-wide text-gray-600 md:mb-2">Trinkmenge</h6>
                                     <h2 className="text-lg md:text-2xl font-bold">
-                                        &#8960; {Math.round(user?.micturitionFrequency * 1000) / 1000} L 
+                                        &#8960; {Math.round(user?.avgDrinkingAmount * 1000) / 1000} L 
                                         {" "}<span className="text-sm md:text-base text-gray-600 font-semibold"> pro Tag</span>
                                     </h2>
                                 </div>
@@ -157,17 +163,17 @@ const MicturitionOverview = () => {
                             <div className="grid grid-cols-2 gap-2 px-3 md:px-5 xl:gap-3 mx-auto my-4">
                                 <div className="col-span-full xl:col-span-1 flex flex-col">
                                     <div>
-                                        <TimeSelect value="w" onChange={() => {}} />
+                                        <TimeSelect value="d" onChange={r => setTimeRange(r)} />
                                         <p className="text-gray-500 text-sm md:text-md">Alle Trink- und Miktionseinträge die du in den letzten 24 Stunden gemacht hast.</p>
                                     </div>
                                     <div className="grid grid-rows-2 mt-auto">
                                         <div
                                             className="w-full h-36 lg:h-48 row-span-1">
-                                            <MicturitionChart data={micturition} />
+                                            <MicturitionChart data={micturition} range={timeRange}/>
                                         </div>
                                         <div
                                             className="w-full h-36 lg:h-48 row-span-1">
-                                            <DrinkingChart data={drinking} />
+                                            <DrinkingChart data={drinking} range={timeRange}/>
                                         </div>
                                     </div>
                                 </div>
@@ -181,6 +187,23 @@ const MicturitionOverview = () => {
                                             <LineChart data={predictions}></LineChart>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div className="flex flex-row justify-around">
+                            <div>
+                                <button onClick={() => setDay(new Date(day.valueOf() - 24 * 3600 * 1000))} className="p-1 align-middle rounded-lg hover:bg-blue-200 text-blue-600 transition-colors duration-150">
+                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                                    </svg>                                    
+                                </button>
+                                <div className="xl:text-lg text-gray-800 rounded-lg mx-3 bg-white px-2 py-1 inline">
+                                    <span>{WEEKDAY[day.getDay()]}, {day.toLocaleDateString()}</span>
+                                </div>
+                                <button disabled={new Date(day.valueOf() + 24 * 3600 * 1000).valueOf() > new Date().valueOf()} onClick={() => setDay(new Date(day.valueOf() + 24 * 3600 * 1000))} className="p-1 align-middle rounded-md hover:bg-blue-200 text-blue-600 transition-colors duration-150">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                    </svg>
+                                </button>
                             </div>
                         </div>
                         <div className="flex flex-col md:px-4 mx-auto max-w-screen-xl">
@@ -207,7 +230,10 @@ const MicturitionOverview = () => {
                                             </thead>
                                             <tbody className="bg-white divide-y divide-gray-200">
 
-                                                {entries.map((e, i) => (
+        
+                                                {entries
+                                                    .filter(a => d3.timeDay.floor(a.date).valueOf() == d3.timeDay.floor(day).valueOf())
+                                                    .map((e, i) => (
                                                     <tr key={i}>
                                                         <td className="px-6 py-4 whitespace-nowrap">
                                                             {WEEKDAY[e?.date.getDay()]}
@@ -247,7 +273,7 @@ const MicturitionOverview = () => {
                                                         Foto
                                                     </th>
                                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                        Name
+                                                        Uhrzeit
                                                     </th>
                                                     <th scope="col" className="relative px-6 py-3">
                                                         <span className="sr-only">Löschen</span>
@@ -256,7 +282,9 @@ const MicturitionOverview = () => {
                                             </thead>
                                             <tbody className="bg-white divide-y divide-gray-200">
 
-                                                {photos.map((e, i) => (
+                                                {photos
+                                                    .filter(a => d3.timeDay.floor(a.date).valueOf() == d3.timeDay.floor(day).valueOf())
+                                                    .map((e, i) => (
                                                     <tr key={i}>
                                                         <td className="px-6 py-4 whitespace-nowrap">
                                                             <img src={e.url} className="rounded-md max-h-14"/>
@@ -273,6 +301,35 @@ const MicturitionOverview = () => {
                                                         </td>
                                                     </tr>
                                                 ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="flex flex-col px-3 md:px-4 mx-auto max-w-screen-xl">
+                            <h3 className="mb-2 font-semibold text-lg md:text-xl">Medikamente</h3>
+                            <div className="-my-2 overflow-x-auto">
+                                <div className="py-2 align-middle inline-block min-w-full">
+                                    <div className="border overflow-hidden border-gray-200 sm:rounded-lg">
+                                        <table className="min-w-full divide-y divide-gray-200">
+                                            <thead className="bg-gray-50">
+                                                <tr>
+                                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        Wirkstoff
+                                                    </th>
+                                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        Uhrzeit
+                                                    </th>
+                                                    <th scope="col" className="relative px-6 py-3">
+                                                        <span className="sr-only">Bearbeiten</span>
+                                                    </th>
+                                                    <th scope="col" className="relative px-6 py-3">
+                                                        <span className="sr-only">Löschen</span>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="bg-white divide-y divide-gray-200">
                                             </tbody>
                                         </table>
                                     </div>

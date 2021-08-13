@@ -1,7 +1,35 @@
 import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { authenticateUser, loadDrinking, loadMessages, loadMicturition, loadPhotos, loadStress, loadMicturitionPredictions} from "./actions"
+import { authenticateUser, loadDrinking, loadMessages, loadMicturition, loadPhotos, loadStress, loadMicturitionPredictions, setSpeechToken} from "./actions"
 import api from "./api/http"
+import * as speechsdk from "microsoft-cognitiveservices-speech-sdk"
+import { createSpeechConfig } from "./utils"
+
+export function useNutrition(startDate) {
+    let dispatch = useDispatch()
+    let nutrition = useSelector(s => s.nutrition)
+
+    useEffect(() => {
+        if(typeof window !== "undefined" && nutrition === null) {
+            dispatch(loadNutrition(startDate))
+        }
+    })
+
+    return nutrition || []
+}
+
+export function useMedication(startDate) {
+    let dispatch = useDispatch()
+    let medication = useSelector(s => s.medication)
+
+    useEffect(() => {
+        if(typeof window !== "undefined" && medication === null) {
+            dispatch(loadMedication(startDate))
+        }
+    })
+
+    return medication || []
+}
 
 export function useDrinking(startDate) {
     let dispatch = useDispatch()
@@ -110,35 +138,28 @@ export function useApiVersion() {
     return version
 }
 
-export function useDictation(onresult) {
-    if(typeof window === "typeof") {
-        let SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition
-
-        if(!SpeechRecognition) {
-            return {
-                supported: false
-            }
+export function useSpeechConfig() {
+    let [config, setConfig] = useState(null)
+    let dispatch = useDispatch()
+    useEffect(async () => {
+        if(typeof window !== "undefined" && config === null) {
+            const { data: {token, region}} = await api.getSpeechToken()
+            dispatch(setSpeechToken(token, region))
+            let c = createSpeechConfig(token, region)
+            c.speechRecognitionLanguage = "de-DE"
+            setConfig(c)
         }
-        
+    })
+    return config
+}
 
-        let recognition = new SpeechRecognition()
-        recognition.onresult = event => {
-            onresult(event.results[0][0].transcript)
+export function useMicrophoneConfig() {
+    let [config, setConfig] = useState(null)
+    useEffect(async () => {
+        if(typeof window !== "undefined" && config === null) {
+            const c = speechsdk.AudioConfig.fromDefaultMicrophoneInput();
+            setConfig(c)
         }
-
-        recognition.onspeechend = function() {
-            recognition.stop();
-        }
-
-        return {
-            supported: true,
-            start: () => {
-                recognition.start()
-            }
-        }
-    }
-
-    return {
-        supported: false
-    }
+    })
+    return config
 }
