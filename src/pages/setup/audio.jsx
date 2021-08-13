@@ -1,14 +1,15 @@
-import React from "react"
+import React, {useState} from "react"
 import { useRouter } from "next/router"
 import { useDispatch } from "react-redux"
 
 import Toggle from "../../components/toggle"
 import Secure from "../../components/secure"
-import { tts } from "../../utils"
+import { stt, tts } from "../../utils"
 
 import {
     useUser,
-    useSpeechConfig
+    useSpeechConfig,
+    useMicrophoneConfig
 } from "../../hooks"
 
 import {
@@ -25,6 +26,7 @@ const Audio = () => {
     }
 
     const speechConfig = useSpeechConfig()
+    const audioConfig = useMicrophoneConfig()
 
     let changeUser = update => {
         dispatch(updateUser({
@@ -32,6 +34,11 @@ const Audio = () => {
             ...update
         }))
     }
+
+    let [recognition, setRecognition] = useState("")
+    let [recognized, setRecognized] = useState("")
+
+    let recognitionWorking = () => !user?.settings.voiceInput || (user?.settings.voiceInput && Boolean(recognized.match(/Hallo/)))
 
     return (
             <div className="bg-gray-100 absolute top-0 bottom-0 right-0 left-0">
@@ -53,7 +60,23 @@ const Audio = () => {
                             </div>
                         </div> */}
 
-
+                        <div className={`${recognitionWorking() ? "bg-green-200" : "bg-red-100"} w-full rounded-lg p-3`}>
+                            <div className="h-96 rounded-xl text-2xl font-semibold flex flex-row justify-center items-center">
+                                {
+                                    recognition ? 
+                                    <span className="text-gray-600">{recognition}</span> :
+                                    <span className="text-gray-900">{recognized}</span>
+                                }
+                            </div>
+                            {
+                                recognitionWorking() ||
+                                <div className="flex flex-row justify-around w-full">
+                                    <button onClick={() => stt(audioConfig, speechConfig, setRecognition, setRecognized)} className="py-2 px-3 bg-blue-600 text-white rounded-lg">
+                                        Versuche, <span className="italic">Hallo</span> zu sagen
+                                    </button>
+                                </div>
+                            }
+                        </div>
                         <div className="space-y-4 py-5 bg-white px-6 rounded-xl">
                             <Toggle 
                                 title="Spracheingabe" 
@@ -61,6 +84,9 @@ const Audio = () => {
                                 value={user?.settings.voiceInput} 
                                 onChange={voiceInput => {
                                     changeUser({settings: { ...user.settings, voiceInput }})
+                                    if(voiceInput) {
+                                        stt(audioConfig, speechConfig, setRecognition, setRecognized)
+                                    }
                                 }} />
                             <hr/>
                             <Toggle 
@@ -76,7 +102,7 @@ const Audio = () => {
                         </div>
                     </div>
                     <div className="mt-auto">
-                        <button onClick={next} className="w-full md:w-64 mx-auto bg-blue-600 hover:bg-blue-500 text-white p-2 rounded-lg focus:ring-2 focus:ring-offset-1 focus:ring-blue-600 focus:outline-none flex flex-row justify-center">
+                        <button onClick={next} disabled={!recognitionWorking()} className={`w-full md:w-64 mx-auto ${recognitionWorking() ? "bg-blue-600 hover:bg-blue-500" : "bg-gray-400"} text-white p-2 rounded-lg focus:ring-2 focus:ring-offset-1 focus:ring-blue-600 focus:outline-none flex flex-row justify-center`}>
                             Weiter
                         </button>
                     </div>

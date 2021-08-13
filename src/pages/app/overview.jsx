@@ -1,3 +1,4 @@
+import * as d3 from "d3"
 import React, { useState, Fragment } from "react"
 import Link from "next/link"
 import { useDispatch } from "react-redux"
@@ -99,6 +100,7 @@ const WEEKDAY = [
 ]
 
 const MicturitionOverview = () => {
+    let [day, setDay] = useState(d3.timeDay.floor(new Date()))
     let dispatch = useDispatch()
     let predictions = useMicturitionPredictions()
 
@@ -111,7 +113,8 @@ const MicturitionOverview = () => {
     let stress = useStress(new Date())
         .map(s => ({type: "stress", ...s}))
     let photos = usePhotos(new Date())
-    let entries = [...micturition, ...drinking, ...stress].sort((a, b) => b.timestamp - a.timestamp)
+    let entries = [...micturition, ...drinking, ...stress]
+        .sort((a, b) => b.timestamp - a.timestamp)
 
     const deleteEntry = (type, _id) => () => {
         if(type === "micturition") {
@@ -124,6 +127,7 @@ const MicturitionOverview = () => {
     }
     
     let [timeRange, setTimeRange] = useState(Date.now().valueOf() - 2 * 24 * 3600 * 1000)
+
 
     return (
         <Shell title={"Übersicht"} className="bg-gray-100">
@@ -185,6 +189,23 @@ const MicturitionOverview = () => {
                                 </div>
                             </div>
                         </div>
+                        <div className="flex flex-row justify-around">
+                            <div>
+                                <button onClick={() => setDay(new Date(day.valueOf() - 24 * 3600 * 1000))} className="p-1 align-middle rounded-lg hover:bg-blue-200 text-blue-600 transition-colors duration-150">
+                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                                    </svg>                                    
+                                </button>
+                                <div className="xl:text-lg text-gray-800 rounded-lg mx-3 bg-white px-2 py-1 inline">
+                                    <span>{WEEKDAY[day.getDay()]}, {day.toLocaleDateString()}</span>
+                                </div>
+                                <button disabled={new Date(day.valueOf() + 24 * 3600 * 1000).valueOf() > new Date().valueOf()} onClick={() => setDay(new Date(day.valueOf() + 24 * 3600 * 1000))} className="p-1 align-middle rounded-md hover:bg-blue-200 text-blue-600 transition-colors duration-150">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
                         <div className="flex flex-col md:px-4 mx-auto max-w-screen-xl">
                             <h3 className="mb-2 font-semibold text-lg md:text-xl">Einträge</h3>
                             <div className="-my-2 overflow-x-hidden">
@@ -209,7 +230,10 @@ const MicturitionOverview = () => {
                                             </thead>
                                             <tbody className="bg-white divide-y divide-gray-200">
 
-                                                {entries.map((e, i) => (
+        
+                                                {entries
+                                                    .filter(a => d3.timeDay.floor(a.date).valueOf() == d3.timeDay.floor(day).valueOf())
+                                                    .map((e, i) => (
                                                     <tr key={i}>
                                                         <td className="px-6 py-4 whitespace-nowrap">
                                                             {WEEKDAY[e?.date.getDay()]}
@@ -249,7 +273,7 @@ const MicturitionOverview = () => {
                                                         Foto
                                                     </th>
                                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                        Name
+                                                        Uhrzeit
                                                     </th>
                                                     <th scope="col" className="relative px-6 py-3">
                                                         <span className="sr-only">Löschen</span>
@@ -258,7 +282,9 @@ const MicturitionOverview = () => {
                                             </thead>
                                             <tbody className="bg-white divide-y divide-gray-200">
 
-                                                {photos.map((e, i) => (
+                                                {photos
+                                                    .filter(a => d3.timeDay.floor(a.date).valueOf() == d3.timeDay.floor(day).valueOf())
+                                                    .map((e, i) => (
                                                     <tr key={i}>
                                                         <td className="px-6 py-4 whitespace-nowrap">
                                                             <img src={e.url} className="rounded-md max-h-14"/>
@@ -294,6 +320,9 @@ const MicturitionOverview = () => {
                                                     </th>
                                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                         Uhrzeit
+                                                    </th>
+                                                    <th scope="col" className="relative px-6 py-3">
+                                                        <span className="sr-only">Bearbeiten</span>
                                                     </th>
                                                     <th scope="col" className="relative px-6 py-3">
                                                         <span className="sr-only">Löschen</span>

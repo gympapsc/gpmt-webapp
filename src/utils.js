@@ -32,6 +32,30 @@ export const tts = async (text, config) => {
     })
 }
 
+export const stt = (audioConfig, speechConfig, recog, res) => {
+    if(typeof window !== "undefined" && speechConfig) {
+        console.log(speechConfig, audioConfig)
+        const recognizer = new speechsdk.SpeechRecognizer(speechConfig, audioConfig)
+
+        recognizer.startContinuousRecognitionAsync(() => {
+            recog("")
+        })
+
+        recognizer.recognizing = (sender, event) => {
+            recog(event.result.text)
+        }
+
+        recognizer.recognized = (sender, event) => {
+            if(event.result.text) {
+                res(event.result.text)
+            }
+            recog("")
+            recognizer.stopContinuousRecognitionAsync()
+        }
+    }
+}
+
+
 export const createSpeechConfig = (token, region) => {
     return speechsdk.SpeechConfig.fromAuthorizationToken(token, region)
 }

@@ -1,9 +1,5 @@
 import React, { useState, useRef } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { useSpring, animated } from "@react-spring/web"
-import { useMediaQuery } from "react-responsive"
-import * as speechsdk from "microsoft-cognitiveservices-speech-sdk";
-import { ResultReason } from "microsoft-cognitiveservices-speech-sdk";
 
 import {
     utterMessage,
@@ -12,18 +8,21 @@ import {
     uploadPhoto,
     addPhoto
 } from "../../actions"
-
 import Secure from "../../components/secure"
 import Shell from "../../components/shell"
 import Dialog, { RecognizedText } from "../../components/dialog"
 import * as Banner from "../../components/banner"
-
 import api from "../../api/http"
 import {
     useSpeechConfig, 
     useUtterButtons,
-    useUser
+    useUser,
+    useMicrophoneConfig
 } from "../../hooks"
+
+import {
+    stt
+} from "../../utils"
 
 const App = () => {
     let startDate = new Date()
@@ -55,33 +54,8 @@ const App = () => {
 
     let [title, setTitle] = useState("Heute")
     let [continuousText, setRecognition] = useState("")
-
-    console.log(speechsdk)
-    const audioConfig = speechsdk.AudioConfig.fromDefaultMicrophoneInput();
+    const audioConfig = useMicrophoneConfig()
     const speechConfig = useSpeechConfig()
-
-    const stt = () => {
-        if(typeof window !== "undefined" && speechConfig) {
-            console.log(speechConfig, audioConfig)
-            const recognizer = new speechsdk.SpeechRecognizer(speechConfig, audioConfig)
-
-            recognizer.startContinuousRecognitionAsync(() => {
-                setRecognition("")
-            })
-
-            recognizer.recognizing = (sender, event) => {
-                setRecognition(event.result.text)
-            }
-
-            recognizer.recognized = (sender, event) => {
-                if(event.result.text) {
-                    utter(event.result.text)
-                }
-                setRecognition("")
-                recognizer.stopContinuousRecognitionAsync()
-            }
-        }
-    }
 
     return (
         <Shell title={title} className="bg-white">
@@ -107,7 +81,7 @@ const App = () => {
                     
                         {
                             user.settings.voiceInput &&
-                            <button onClick={() => stt()} className="flex-grow-0 w-12 h-12 flex flex-col justify-center items-center text-white bg-indigo-800">
+                            <button onClick={() => stt(audioConfig, speechConfig, setRecognition, utter)} className="flex-grow-0 w-12 h-12 flex flex-col justify-center items-center text-white bg-indigo-800">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
                                 </svg>

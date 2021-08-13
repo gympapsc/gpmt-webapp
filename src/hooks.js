@@ -126,3 +126,14 @@ export function useSpeechConfig() {
     })
     return config
 }
+
+export function useMicrophoneConfig() {
+    let [config, setConfig] = useState(null)
+    useEffect(async () => {
+        if(typeof window !== "undefined" && config === null) {
+            const c = speechsdk.AudioConfig.fromDefaultMicrophoneInput();
+            setConfig(c)
+        }
+    })
+    return config
+}
