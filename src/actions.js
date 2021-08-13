@@ -1,5 +1,5 @@
 import { redirect, tts, createSpeechConfig } from "./utils"
-
+import * as d3 from "d3"
 
 export const signupUser = ({
     firstname, 
@@ -102,6 +102,7 @@ export const utterMessage = (text) =>  async (dispatch, getState, { api }) => {
 const processEvents = async (events, dispatch, getState) => {
     let state = getState()
     let config = createSpeechConfig(state.speech.token, state.speech.region)
+    let entries
     for(let event of events) {
         if(event.text) {
             dispatch(addMessage(event.text, event.sender, new Date(event.timestamp).valueOf()))
@@ -113,12 +114,16 @@ const processEvents = async (events, dispatch, getState) => {
             switch(event.type) {
                 case "ADD_MICTURITION":
                     dispatch(addMicturition(new Date(event.date), new Date(event.timestamp).valueOf(), event._id))
+                    entries = getState().micturition
+                    dispatch(setMicturitionFrequency(avgMicturitionFrequency(entries)))
                     break
                 case "ADD_STRESS":
                     dispatch(addStress(new Date(event.date), new Date(event.timestamp).valueOf(), event.level, event._id))
                     break
                 case "ADD_DRINKING":
                     dispatch(addDrinking(new Date(event.date), new Date(event.timestamp).valueOf(), event.amount, event._id))
+                    entries = getState().drinking
+                    dispatch(setAvgDrinkingAmount(avgDrinkingAmount(entries)))
                     break
                 case "SIGNOUT_USER":
                     setTimeout(() => {
@@ -250,6 +255,20 @@ export const setSpeechToken = (token, region) => ({
     }
 })
 
+export const setAvgDrinkingAmount = (amount) => ({
+    type: "SET_AVG_DRINKING_AMOUNT",
+    payload: {
+        avgDrinkingAmount: amount
+    }
+})
+
+export const setMicturitionFrequency = (frequency) => ({
+    type: "SET_MICTURITION_FREQUENCY",
+    payload: {
+        micturitionFrequency: frequency
+    }
+})
+
 /*
     Load Data
 */
@@ -277,6 +296,7 @@ export const loadMicturition = startDate => async (dispatch, getState, { api }) 
             timestamp: new Date(e.timestamp).valueOf()
         }))
         dispatch(setMicturition(entries))
+        dispatch(setMicturitionFrequency(avgMicturitionFrequency(entries)))
         api._pending["micturition"] = false
     }
 }
@@ -305,6 +325,7 @@ export const loadDrinking = startDate => async (dispatch, getState, { api }) => 
             timestamp: new Date(e.timestamp).valueOf()
         }))
         dispatch(setDrinking(entries))
+        dispatch(setAvgDrinkingAmount(avgDrinkingAmount(entries)))
         api._pending["drinking"] = false
     }
 }
@@ -424,4 +445,24 @@ export const deleteStress = (_id) =>  async (dispatch, getState, { api }) => {
             _id
         }
     })
+}
+
+/*
+    Utilities
+*/
+
+const avgDrinkingAmount = (entries) => {
+    let now = d3.timeDay.ceil(new Date().valueOf())
+    let endDate = d3.timeDay.floor(Math.min(...entries.map(e => e.date.valueOf())))
+
+    return entries
+        .reduce((a, b) => a + b.amount, 0) / ((now - endDate) / 24 / 3600 / 1000) / 1000
+}
+
+const avgMicturitionFrequency = (entries) => {
+    let now = d3.timeDay.ceil(new Date())
+    let endDate = d3.timeDay.floor(Math.min(...entries.map(e => e.date.valueOf())))
+
+    return entries
+        .reduce((a, b) => 1 + a, 0) / ((now - endDate) / 24 / 3600 / 1000)
 }

@@ -171,6 +171,22 @@ const reducer = (state=initialState, action) => {
                 ...state,
                 connected: action.payload.status
             }
+        case "SET_AVG_DRINKING_AMOUNT":
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    avgDrinkingAmount: action.payload.avgDrinkingAmount
+                }
+            }
+        case "SET_MICTURITION_FREQUENCY":
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    micturitionFrequency: action.payload.micturitionFrequency
+                }
+            }
         default:
             return state
     }

@@ -9,14 +9,14 @@ import {
     deleteMicturition,
     deleteDrinking,
     deleteStress
-} from "../../actions"
+} from "../../../actions"
 
-import Secure from "../../components/secure"
-import Shell from "../../components/shell"
-import LineChart from "../../visualisations/lineChart"
-import { useDrinking, useMicturition, useUser, useMicturitionPredictions, usePhotos, useStress} from "../../hooks"
-import MicturitionChart from "../../visualisations/micturitionChart"
-import DrinkingChart from "../../visualisations/drinkingChart"
+import Secure from "../../../components/secure"
+import Shell from "../../../components/shell"
+import LineChart from "../../../visualisations/lineChart"
+import { useDrinking, useMicturition, useUser, useMicturitionPredictions, usePhotos, useStress} from "../../../hooks"
+import MicturitionChart from "../../../visualisations/micturitionChart"
+import DrinkingChart from "../../../visualisations/drinkingChart"
 
 
 const timeRanges = {
@@ -130,7 +130,7 @@ const MicturitionOverview = () => {
 
 
     return (
-        <Shell title={"Übersicht"} className="bg-gray-100">
+        <Shell title={"Miktion"} className="bg-gray-100">
             <div className="flex flex-col w-full space-y-4 pb-12">
                 {
                     entries.length !== 0 ? 
@@ -147,7 +147,7 @@ const MicturitionOverview = () => {
                                 <div className="mx-auto">
                                     <h6 className="uppercase text-xs lg:text-sm font-semibold tracking-wide text-gray-600 md:mb-2">Trinkmenge</h6>
                                     <h2 className="text-lg md:text-2xl font-bold">
-                                        &#8960; {Math.round(user?.micturitionFrequency * 1000) / 1000} L 
+                                        &#8960; {Math.round(user?.avgDrinkingAmount * 1000) / 1000} L 
                                         {" "}<span className="text-sm md:text-base text-gray-600 font-semibold"> pro Tag</span>
                                     </h2>
                                 </div>
