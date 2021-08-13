@@ -93,7 +93,7 @@ const LineChart = ({data, xlabel, ylabel}) => {
                 .curve(d3.curveMonotoneX)
             )
 
-        let marker, tooltip
+        let marker, tooltip, timetip, tooltipBox
 
         Svg.append("g")
             .selectAll("circle")
@@ -113,40 +113,84 @@ const LineChart = ({data, xlabel, ylabel}) => {
                         .attr("x2", e.offsetX - margin.left)
                     tooltip
                         .attr("x", e.offsetX - margin.left)
-                        .attr("y", 100)
+                        .attr("y", 35)
                         .attr("text-anchor", "middle")
+                    timetip
+                        .append("text")
+                        .html(d3.timeFormat("%H:%M")(d3.timeHour.floor(x.invert(e.offsetX - margin.left))))
+                        .attr("color", "#fff")
+                        .attr("y", 10)
+
+                    tooltipBox
+                        .attr("x", e.offsetX - margin.left - 40)
+                        .attr("y", -5)
 
                 } else {
-                    let prediction = data.find(p => d3.timeHour.floor(x.invert(e.offsetX - margin.left)).valueOf() === p.date.valueOf())                
+                    let prediction = data.find(p => d3.timeHour.floor(x.invert(e.offsetX - margin.left)).valueOf() === p.date.valueOf())       
+
                     marker = Svg
                         .append("line", ":first-child")
                         .attr("x1", e.offsetX - margin.left)
                         .attr("x2", e.offsetX - margin.left)
                         .attr("y1", y(0) + margin.top)
                         .attr("y2", y(100) + margin.top)
-                        .attr("stroke", "rgba(256, 0, 0, 0.4)")
+                        .attr("stroke", "rgba(256, 0, 0, 0.6)")
                         .attr("stroke-width", "3px")
+                        .attr("stroke", d => prediction.prediction < 0.5 ? "green" : "red" )
+                    
+                    tooltipBox = Svg
+                        .append("rect")
+                        .attr("x", e.offsetX - margin.left - 40)
+                        .attr("y", -5)
+                        .attr("width", 80)
+                        .attr("height", 50)
+                        .attr("rx", 8)
+                        .attr("ry", 8)
+                        .attr("fill", d => prediction.prediction < 0.5 ? "green" : "red" )
+                    
                     tooltip = Svg
                         .append("text")
                         .html(prediction.prediction)
                         .attr("x", e.offsetX - margin.left)
-                        .attr("y", 100)
+                        .attr("y", 35)
+                        .attr("fill", "#fff")
                         .attr("text-anchor", "middle")
+
+                    timetip = Svg
+                        .append("text")
+                        .html(d3.timeFormat("%H:%M")(d3.timeHour.floor(x.invert(e.offsetX - margin.left))))
+                        .attr("x", e.offsetX - margin.left)
+                        .attr("y", 15)
+                        .attr("fill", "#fff")
+                        .attr("text-anchor", "middle")
+                        .attr("font-size", 12)
+                    
+                    
 
                 }
             })
             .on("mousemove", (e, d) => {
+                let prediction = data.find(p => d3.timeHour.floor(x.invert(e.offsetX - margin.left)).valueOf() === p.date.valueOf())
+                
                 marker
                     .attr("x1", e.offsetX - margin.left)
                     .attr("x2", e.offsetX - margin.left)
-                let prediction = data.find(p => d3.timeHour.floor(x.invert(e.offsetX - margin.left)).valueOf() === p.date.valueOf())
-                
+                    .attr("stroke", d => prediction.prediction < 0.5 ? "green" : "red" )
+
+
                 if(prediction) {
                     tooltip
                         .html(`${Math.round(prediction?.prediction * 1000)/10}%`)
                     tooltip
                         .attr("x", e.offsetX - margin.left)
-                        .attr("y", 100)
+                        .attr("y", 35)
+                    timetip
+                        .html(d3.timeFormat("%H:%M")(d3.timeHour.floor(x.invert(e.offsetX - margin.left))))
+                        .attr("x", e.offsetX - margin.left)
+                    tooltipBox
+                        .attr("x", e.offsetX - margin.left - 40)
+                        .attr("y", -5)
+                        .attr("fill", d => prediction.prediction < 0.5 ? "green" : "red" )
                 }
 
                 
@@ -154,6 +198,8 @@ const LineChart = ({data, xlabel, ylabel}) => {
             .on("mouseleave", (e, d) => {
                 marker.remove()
                 tooltip.remove()
+                timetip.remove()
+                tooltipBox.remove()
                 marker = undefined
             })
 

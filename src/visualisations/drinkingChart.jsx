@@ -72,7 +72,7 @@ const DrinkingChart = ({data, tooltip, range}) => {
                 .style("fill", "rgb(79, 70, 229)")
         }
 
-        let marker, tooltip
+        let marker, tooltip, tooltipBox
 
         d3.select(element.current)
             .on("mouseover", (e, d) => {
@@ -82,8 +82,11 @@ const DrinkingChart = ({data, tooltip, range}) => {
                         .attr("x2", e.offsetX - margin.left)
                     tooltip
                         .attr("x", e.offsetX - margin.left)
-                        .attr("y", 80)
+                        .attr("y", 15)
                         .attr("text-anchor", "middle")
+                    tooltipBox
+                        .attr("x", e.offsetX - margin.left - 35)
+                        .attr("y", -5)
 
                 } else {
                     d = chart.find(p => d3.timeHour.floor(x.invert(e.offsetX - margin.left)).valueOf() === d3.timeHour.floor(p.x0).valueOf())                
@@ -95,12 +98,25 @@ const DrinkingChart = ({data, tooltip, range}) => {
                         .attr("y2", y(100) + margin.top)
                         .attr("stroke", "rgba(256, 0, 0, 0.4)")
                         .attr("stroke-width", "2px")
+                   
+                    tooltipBox = svg
+                        .append("rect")
+                        .attr("x", e.offsetX - margin.left - 35)
+                        .attr("y", -5)
+                        .attr("width", 70)
+                        .attr("height", 30)
+                        .attr("rx", 8)
+                        .attr("ry", 8)
+                        .attr("fill", "rgba(256, 0, 0, 1)")
+
                     tooltip = svg
                         .append("text")
                         .html(d?.reduce((a, d) => a + d.amount, 0) || 0)
                         .attr("x", e.offsetX - margin.left)
-                        .attr("y", 80)
+                        .attr("y", 15)
+                        .attr("fill", "#fff")
                         .attr("text-anchor", "middle")
+
                 }
             })
             .on("mousemove", (e, d) => {
@@ -110,17 +126,24 @@ const DrinkingChart = ({data, tooltip, range}) => {
                 d = chart.find(p => d3.timeHour.floor(x.invert(e.offsetX - margin.left)).valueOf() === d3.timeHour.floor(p.x0).valueOf())
                 
 
+                tooltipBox
+                    .attr("x", e.offsetX - margin.left - 35)
+                    .attr("y", -5)
+
                 tooltip
-                    .html(d?.reduce((a, d) => a + d.amount, 0) || 0)
+                    .html(`${d?.reduce((a, d) => a + d.amount, 0) || 0} ml`)
+
                 tooltip
                     .attr("x", e.offsetX - margin.left)
-                    .attr("y", 80)
+                    .attr("y", 15)
+                
 
                 
             })
             .on("mouseleave", (e, d) => {
                 marker.remove()
                 tooltip.remove()
+                tooltipBox.remove()
                 marker = undefined
             })
         
