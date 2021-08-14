@@ -1,4 +1,5 @@
 import 'expect-puppeteer'
+import fs from "fs"
 import path from 'path'
 import { 
     getDocument, 
@@ -31,9 +32,9 @@ describe("user sign up", () => {
         let birthMonthField = await getByPlaceholderText(document, /Monat/)
         let birthYearField = await getByPlaceholderText(document, /Jahr/)
         
-        await firstnameField.type('hakim')
-        await surnameField.type('rachidi')
-        await emailField.type('hakim@example.com')
+        await firstnameField.type('testing')
+        await surnameField.type('bob')
+        await emailField.type('testing@bob.com')
         await passwordField.type('Password')
         await passwordRepeatField.type('Password')
         await weightField.type("80")
@@ -42,13 +43,17 @@ describe("user sign up", () => {
         await birthMonthField.type("9")
         await birthYearField.type("2002")
 
-        await page.screenshot({path: path.resolve(__dirname, '../screenshots/signup.filled_form.png')})
+        if(!fs.existsSync(path.resolve(__dirname, '../screenshots/signup')))  {
+            fs.mkdirSync(path.resolve(__dirname, '../screenshots/signup'))
+        }
+
+        await page.screenshot({path: path.resolve(__dirname, '../screenshots/signup/signup.png')})
         let button = await getByText(document, /Registrieren/i)
 
         await button.click()
 
         await delay(async () => {
-            await page.screenshot({path: path.resolve(__dirname, '../screenshots/messaging.type.png')})
-        }, 1000)
+            await page.screenshot({path: path.resolve(__dirname, '../screenshots/signup/app.png')})
+        }, 1200)
     })
 })
