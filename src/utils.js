@@ -21,11 +21,11 @@ export const tts = async (text, config) => {
         speechSynthesizer.speakTextAsync(
             text,
             result => {
-                synthesizer.close()
+                speechSynthesizer.close()
                 res(result)
             },
             error => {
-                synthesizer.close()
+                speechSynthesizer.close()
                 rej(error)
             }
         )
@@ -59,3 +59,6 @@ export const stt = (audioConfig, speechConfig, recog, res) => {
 export const createSpeechConfig = (token, region) => {
     return speechsdk.SpeechConfig.fromAuthorizationToken(token, region)
 }
+
+export const delay = (ms) => new Promise((res, rej) => setTimeout(() => res(), ms))
+ 

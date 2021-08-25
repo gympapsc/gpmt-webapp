@@ -147,7 +147,7 @@ const MicturitionOverview = () => {
                                 <div className="mx-auto">
                                     <h6 className="uppercase text-xs lg:text-sm font-semibold tracking-wide text-gray-600 md:mb-2">Trinkmenge</h6>
                                     <h2 className="text-lg md:text-2xl font-bold">
-                                        &#8960; {Math.round(user?.avgDrinkingAmount * 1000) / 1000} L 
+                                        &#8960; {Math.round(user?.avgDrinkingAmount * 1000) / 1000 || "--"} L 
                                         {" "}<span className="text-sm md:text-base text-gray-600 font-semibold"> pro Tag</span>
                                     </h2>
                                 </div>

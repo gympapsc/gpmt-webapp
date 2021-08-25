@@ -1,6 +1,6 @@
-import 'expect-puppeteer'
+import "expect-puppeteer"
 import fs from "fs"
-import path from 'path'
+import path from "path"
 import { 
     getDocument, 
     queries, 
