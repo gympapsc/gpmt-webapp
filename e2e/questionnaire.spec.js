@@ -23,7 +23,9 @@ const delay = (fn, ms) => new Promise((res, rej) => setTimeout(async () => res(a
 
 describe('user questionnaire dialog', () => {
     it('should signin and answer questions', async () => {
-        await page.goto("http://localhost:5000/signin")
+        await page.goto("http://localhost:5000/signin", {
+            timeout: 60000
+        })
 
         let document = await getDocument(page)
         

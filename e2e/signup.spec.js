@@ -17,7 +17,9 @@ const delay = (fn, ms) => new Promise((res, rej) => setTimeout(async () => res(a
 
 describe("user sign up", () => {
     it("should sign up and redirect to setup", async () => {
-        await page.goto("http://localhost:5000/signup")
+        await page.goto("http://localhost:5000/signup", {
+            timeout: 60000
+        })
 
         let document = await getDocument(page)
         

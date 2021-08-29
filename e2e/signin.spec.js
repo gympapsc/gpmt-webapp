@@ -20,7 +20,9 @@ const delay = (fn, ms) => new Promise((res, rej) => setTimeout(async () => res(a
 
 describe('user sign in', () => {
     it('should sign in and redirect to `/app`', async () => {
-        await page.goto("http://localhost:5000/signin")
+        await page.goto("http://localhost:5000/signin", {
+            timeout: 60000
+        })
 
         let document = await getDocument(page)
         
@@ -50,7 +52,9 @@ describe('user sign in', () => {
     })
 
     it('should sign in and sign out', async () => {
-        await page.goto("http://localhost:5000/signin")
+        await page.goto("http://localhost:5000/signin", {
+            timeout: 60000
+        })
 
         let document = await getDocument(page)
         
