@@ -66,7 +66,7 @@ describe("user sign up", () => {
             timeout: 10000
         })
 
-        await page.screenshot({ path: path.resolve(__dirname, "../screenshots/signin/setup.audio.png")})
+        await page.screenshot({ path: path.resolve(__dirname, "../screenshots/signup/setup.audio.png")})
         document = await getDocument(page)
         submit = await getByText(document, /Weiter/i)
         await submit.click()
@@ -75,7 +75,7 @@ describe("user sign up", () => {
             timeout: 10000
         })
 
-        await page.screenshot({ path: path.resolve(__dirname, "../screenshots/signin/app.png")})
+        await page.screenshot({ path: path.resolve(__dirname, "../screenshots/signup/app.png")})
 
 
     })

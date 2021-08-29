@@ -13,6 +13,7 @@ const {
     getByLabelText,
     getByText,
     findAllByText,
+    getByTitle
 } = queries
 
 const delay = (fn, ms) => new Promise((res, rej) => setTimeout(async () => res(await fn()), ms))
