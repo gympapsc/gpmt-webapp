@@ -16,7 +16,7 @@ const {
 const delay = (fn, ms) => new Promise((res, rej) => setTimeout(async () => res(await fn()), ms))
 
 describe("user sign up", () => {
-    it("should sign up and redirect to `/app`", async () => {
+    it("should sign up and redirect to setup", async () => {
         await page.goto("http://localhost:5000/signup")
 
         let document = await getDocument(page)
@@ -34,7 +34,7 @@ describe("user sign up", () => {
         
         await firstnameField.type('testing')
         await surnameField.type('bob')
-        await emailField.type('testing@bob.com')
+        await emailField.type(`test@${Math.round(Math.random() * 100)}.org`)
         await passwordField.type('Password')
         await passwordRepeatField.type('Password')
         await weightField.type("80")
@@ -48,12 +48,35 @@ describe("user sign up", () => {
         }
 
         await page.screenshot({path: path.resolve(__dirname, '../screenshots/signup/signup.png')})
-        let button = await getByText(document, /Registrieren/i)
+        let submit = await getByText(document, /Registrieren/i)
 
-        await button.click()
+        await submit.click()
 
-        await delay(async () => {
-            await page.screenshot({path: path.resolve(__dirname, '../screenshots/signup/app.png')})
-        }, 1200)
+        await page.waitForNavigation({
+            timeout: 5000
+        })
+
+        await page.screenshot({ path: path.resolve(__dirname, "../screenshots/signup/setup.about.png")})
+
+        document = await getDocument(page)
+        submit = await getByText(document, /Weiter/i)
+        await submit.click()
+
+        await page.waitForNavigation({
+            timeout: 5000
+        })
+
+        await page.screenshot({ path: path.resolve(__dirname, "../screenshots/signin/setup.audio.png")})
+        document = await getDocument(page)
+        submit = await getByText(document, /Weiter/i)
+        await submit.click()
+
+        await page.waitForNavigation({
+            timeout: 5000
+        })
+
+        await page.screenshot({ path: path.resolve(__dirname, "../screenshots/signin/app.png")})
+
+        
     })
 })

@@ -100,11 +100,11 @@ const Aside = ({ showMenu }) => {
                     `}>
                         <h3 className="text-sm font-semibold">Miktion</h3>
                         <div className="mt-auto">
-                            <h5 className="text-xs font-semibold -mb-1 tracking-wide opacity-90">{currDate.getHours()}:{currDate.getMinutes()}</h5>
+                            <h5 className="text-xs font-semibold -mb-1 tracking-wide opacity-90">{formatTime(currDate)}</h5>
                             <h4 className="text-2xl md:text-3xl font-bold">{
                                 prediction.length ?
                                 Math.round(prediction.find(p => p.date.getHours() === currDate.getHours())?.prediction * 100)
-                                : "00"
+                                : "--"
                             }<span className="text-xl">%</span></h4>
                         </div>
                     </a>

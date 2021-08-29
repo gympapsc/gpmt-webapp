@@ -1,6 +1,6 @@
 import React from "react"
 import { Provider } from "react-redux"
-import { render, fireEvent, waitFor, screen } from '@testing-library/react'
+import { render, fireEvent, waitFor, screen } from "@testing-library/react"
 
 import App from "../../src/pages/app/index"
 import store from "../../src/store"
