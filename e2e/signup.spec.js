@@ -53,7 +53,7 @@ describe("user sign up", () => {
         await submit.click()
 
         await page.waitForNavigation({
-            timeout: 5000
+            timeout: 10000
         })
 
         await page.screenshot({ path: path.resolve(__dirname, "../screenshots/signup/setup.about.png")})
@@ -63,7 +63,7 @@ describe("user sign up", () => {
         await submit.click()
 
         await page.waitForNavigation({
-            timeout: 5000
+            timeout: 10000
         })
 
         await page.screenshot({ path: path.resolve(__dirname, "../screenshots/signin/setup.audio.png")})
@@ -72,11 +72,11 @@ describe("user sign up", () => {
         await submit.click()
 
         await page.waitForNavigation({
-            timeout: 5000
+            timeout: 10000
         })
 
         await page.screenshot({ path: path.resolve(__dirname, "../screenshots/signin/app.png")})
 
-        
+
     })
 })

@@ -45,10 +45,10 @@ describe('user questionnaire dialog', () => {
         await submit.click()
 
         await page.waitForNavigation({
-            timeout: 5000
+            timeout: 10000
         })
 
-        await delay(() => {}, 2000)
+        await delay(() => {}, 5000)
         
         await page.screenshot({path: path.resolve(__dirname, '../screenshots/questionnaire/app.png')})
         document = await getDocument(page)
@@ -58,7 +58,7 @@ describe('user questionnaire dialog', () => {
         let answerButton = await queryByText(document, /Ja/gi)
         answerButton.click()
 
-        await delay(() => {}, 2000)
+        await delay(() => {}, 5000)
 
         expect(await getAllByText(document, /Seit wie vielen Jahren/gi)).toBeDefined()
         let messageField = await getByPlaceholderText(document, /Nachricht/i)
@@ -66,7 +66,7 @@ describe('user questionnaire dialog', () => {
         submit = await getByTitle(document, /senden/i)
         await submit.click()
 
-        await delay(() => {}, 2000)
+        await delay(() => {}, 5000)
 
         expect(await getAllByText(document, /(Das war's|Alles klar)/gi)).toBeDefined()
     })

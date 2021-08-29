@@ -41,7 +41,7 @@ describe('user sign in', () => {
         await submit.click()
 
         await page.waitForNavigation({
-            timeout: 5000
+            timeout: 10000
         })
         
         await page.screenshot({path: path.resolve(__dirname, '../screenshots/signin/app.png')})
@@ -50,7 +50,6 @@ describe('user sign in', () => {
 
     it('should sign in and sign out', async () => {
         await page.goto("http://localhost:5000/signin")
-        await page.setViewport({ width: 1200, height: 800});
 
         let document = await getDocument(page)
         
@@ -65,16 +64,22 @@ describe('user sign in', () => {
             fs.mkdirSync(path.resolve(__dirname, '../screenshots/signin'))
         }
 
-        await page.screenshot({path: path.resolve(__dirname, '../screenshots/signin/signin.png')})
-        
         let submit = await getByText(document, /Anmelden/i)
 
         await submit.click()
 
         await page.waitForNavigation({
-            timeout: 5000
+            timeout: 10000
         })
         
-        await page.screenshot({path: path.resolve(__dirname, '../screenshots/signin/app.png')})
+        document = await getDocument(page)
+        let signoutLink = await getByTitle(document, /Abmelden/i)
+        await signoutLink.click()
+
+        await page.waitForNavigation({
+            timeout: 10000
+        })
+
+        await page.screenshot({path: path.resolve(__dirname, '../screenshots/signin/signout.png')})
     })
 })
