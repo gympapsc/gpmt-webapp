@@ -15,13 +15,14 @@ const api = {
     info: () => client.get("/"),
     signinUser: (email, password) => client.post("/signin", { email, password }),
     signupUser: (user) => client.post("/signup", { user }),
-    
+
+    startConversation: () => client.post("/conversation/bonjour"),
     utterMessage: text => client.post("/conversation/utter", { text }),
 
     getNutrition: () => client.get("/nutrition"),
     getMessages: () => client.get("/conversation"),
     getMicturition: () => client.get("/micturition"),
-    getMicturitionPrediction: () => client.get("/micturition/predictions"),
+    getMicturitionPrediction: () => client.get("/micturition/forecast"),
     getDrinking: () => client.get("/drinking"),
     getStress: () => client.get("/stress"),
     getPhotos: () => client.get("/photo"),

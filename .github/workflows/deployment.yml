@@ -7,123 +7,151 @@ env:
   NEXT_PUBLIC_API_URL: "https://api.gympapmt.de"
 
 jobs:
-  test:
-    name: Testing
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
+    lint:
+        name: Linting
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v2
 
-      - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ env.NODE_VERSION }}
+        - name: Use Node.js ${{ env.NODE_VERSION }}
+          uses: actions/setup-node@v1
+          with:
+            node-version: ${{ env.NODE_VERSION }}
 
-      - name: Cache node modules
-        id: cache-node
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: ${{ runner.os }}-node-modules-
+        - name: Cache node modules
+          id: cache-node
+          uses: actions/cache@v2
+          with:
+            path: node_modules
+            key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+            restore-keys: ${{ runner.os }}-node-modules-
 
-      - name: npm install
-        if: steps.cache-node.outputs.cache-hit != 'true'
-        run: npm install
-      
-      - name: Run jest unittest
-        run: npm run test:unit
-  
-  e2e:
-    name: End-to-End Test
-    runs-on: ubuntu-latest
-    env:
-      NEXT_PUBLIC_API_URL: "http://localhost:8089/"
-      NEXT_PUBLIC_APP_VERION: "0.0.0"
-    steps:
-      - uses: actions/checkout@v2
-      
-      - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-    
-      - name: Cache node modules
-        id: cache-node
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: ${{ runner.os }}-node-modules-
-      
-      - name: ACR login
-        uses: azure/docker-login@v1
-        with:
-          login-server: ${{ secrets.REGISTRY_USERNAME }}.azurecr.io
-          username: ${{ secrets.REGISTRY_USERNAME }}
-          password: ${{ secrets.REGISTRY_PASSWORD }}
-      
-      - name: Checkout rasa repo
-        uses: actions/checkout@v2
-        with:
-          repository: gympapsc/gpmt-rasa
-          path: rasa
-      
-      - name: Start rasa services in background
-        run: bash rasa/install.sh
-
-      - name: Checkout api repo
-        uses: actions/checkout@v2
-        with:
-          repository: gympapsc/gpmt-api
-          path: api
-
-      - name: Start api services in background
-        run: bash api/install.sh
-
-      - name: Checkout net repo
-        uses: actions/checkout@v2
-        with:
-          repository: gympapsc/gpmt-net
-          path: net
-      
-      - name: Start analysis service
-        run: bash net/install.sh
-
-      - name: Run tests
-        run: npm run test:e2e
-      
-      - name: Shutdown api and rasa services
-        run: bash net/uninstall.sh && bash api/uninstall.sh && bash rasa/uninstall.sh
-
-  deployment:
-    runs-on: ubuntu-latest
-    name: Deployment to Azure
-
-    steps:
-      - uses: actions/checkout@v2
-      
-      - uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - uses: azure/docker-login@v1
-        with:
-          login-server: ${{ secrets.REGISTRY_USERNAME }}.azurecr.io
-          username: ${{ secrets.REGISTRY_USERNAME }}
-          password: ${{ secrets.REGISTRY_PASSWORD }}
-      
-      - run: |
-          docker build ./ \
-          -t ${{ secrets.REGISTRY_USERNAME }}.azurecr.io/gpmt-webapp:${{ github.event.release.tag_name }} \
-          --build-arg APP_VERSION=${{ github.event.release.tag_name }}
+        - name: npm install
+          if: steps.cache-node.outputs.cache-hit != 'true'
+          run: npm install
         
-      - run: |
-          docker push ${{ secrets.REGISTRY_USERNAME }}.azurecr.io/gpmt-webapp:${{ github.event.release.tag_name }}
+        - name: Run eslint
+          run: npm run lint
 
-      - uses: azure/webapps-deploy@v2
-        with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          images: ${{ secrets.REGISTRY_USERNAME }}.azurecr.io/gpmt-webapp:${{ github.event.release.tag_name }}
-      
-      - name: logout
-        run: az logout
+    unit_test:
+        name: Testing
+        runs-on: ubuntu-latest
+        needs: lint
+        steps:
+        - uses: actions/checkout@v2
+
+        - name: Use Node.js ${{ env.NODE_VERSION }}
+          uses: actions/setup-node@v1
+          with:
+            node-version: ${{ env.NODE_VERSION }}
+
+        - name: Cache node modules
+          id: cache-node
+          uses: actions/cache@v2
+          with:
+            path: node_modules
+            key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+            restore-keys: ${{ runner.os }}-node-modules-
+
+        - name: npm install
+          if: steps.cache-node.outputs.cache-hit != 'true'
+          run: npm install
+        
+        - name: Run jest unittest
+          run: npm run test:unit
+  
+    e2e_test:
+        name: End-to-End Testing
+        runs-on: ubuntu-latest
+        env:
+            NEXT_PUBLIC_API_URL: "http://localhost:8089/"
+            NEXT_PUBLIC_APP_VERION: "0.0.0"
+        steps:
+        - uses: actions/checkout@v2
+        
+        - name: Use Node.js ${{ env.NODE_VERSION }}
+          uses: actions/setup-node@v1
+          with:
+            node-version: ${{ env.NODE_VERSION }}
+        
+        - name: Cache node modules
+          id: cache-node
+          uses: actions/cache@v2
+          with:
+            path: node_modules
+            key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+            restore-keys: ${{ runner.os }}-node-modules-
+        
+        - name: ACR login
+          uses: azure/docker-login@v1
+          with:
+            login-server: ${{ secrets.REGISTRY_USERNAME }}.azurecr.io
+            username: ${{ secrets.REGISTRY_USERNAME }}
+            password: ${{ secrets.REGISTRY_PASSWORD }}
+        
+        - name: Checkout rasa repo
+          uses: actions/checkout@v2
+          with:
+            repository: gympapsc/gpmt-rasa
+            path: rasa
+        
+        - name: Start rasa services in background
+          run: cd rasa && bash ./install.sh && cd ..
+
+        - name: Checkout api repo
+          uses: actions/checkout@v2
+          with:
+            repository: gympapsc/gpmt-api
+            path: api
+
+        - name: Start api services in background
+          run: cd api && bash ./install.sh && cd ..
+
+        - name: Checkout net repo
+          uses: actions/checkout@v2
+          with:
+            repository: gympapsc/gpmt-net
+            path: net
+        
+        - name: Start analysis service
+          run: cd net && bash ./install.sh && cd ..
+
+        - name: Run tests
+          run: npm run test:e2e
+        
+        - name: Shutdown api and rasa services
+          run: cd net && bash ./uninstall.sh && cd ../api && bash ./uninstall.sh && cd ../rasa && bash ./uninstall.sh
+
+    deployment:
+        runs-on: ubuntu-latest
+        name: Deployment to Azure
+        needs: e2e_test
+
+        steps:
+        - uses: actions/checkout@v2
+        
+        - uses: azure/login@v1
+          with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+        - uses: azure/docker-login@v1
+          with:
+            login-server: ${{ secrets.REGISTRY_USERNAME }}.azurecr.io
+            username: ${{ secrets.REGISTRY_USERNAME }}
+            password: ${{ secrets.REGISTRY_PASSWORD }}
+        
+        - run: |
+            docker build ./ \
+            -t ${{ secrets.REGISTRY_USERNAME }}.azurecr.io/gpmt-webapp:${{ github.event.release.tag_name }} \
+            --build-arg APP_VERSION=${{ github.event.release.tag_name }}
+            
+        - run: |
+            docker push ${{ secrets.REGISTRY_USERNAME }}.azurecr.io/gpmt-webapp:${{ github.event.release.tag_name }}
+
+        - uses: azure/webapps-deploy@v2
+          with:
+            app-name: ${{ env.AZURE_WEBAPP_NAME }}
+            images: ${{ secrets.REGISTRY_USERNAME }}.azurecr.io/gpmt-webapp:${{ github.event.release.tag_name }}
+            
+        - name: logout
+          run: az logout

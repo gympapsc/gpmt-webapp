@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint ./src",
-    "test:e2e": "jest --config e2e.config.js",
+    "test:e2e": "jest --config e2e.config.js -i",
     "test:unit": "jest --config unit.config.js",
     "build": "next build",
     "start": "next start",

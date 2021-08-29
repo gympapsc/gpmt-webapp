@@ -1,5 +1,6 @@
-import { redirect, tts, createSpeechConfig } from "./utils"
+import { redirect, tts, createSpeechConfig, delay } from "./utils"
 import * as d3 from "d3"
+import api from "./api/http"
 
 export const signupUser = ({
     firstname, 
@@ -83,10 +84,26 @@ export const authenticateUser = () => async (dispatch, getState, { api }) => {
     }
 }
 
+export const startConversation = () => async  (dispatch, getState, { api }) => {
+    if(typeof window !== undefined) {
+        try {
+            let { data: {messages, buttons}} = await api.startConversation()
+            await processMessages(messages, dispatch, getState)
+            dispatch(setUtterButtons(buttons))
+        } catch {}
+    }
+}
+
+
 export const utterMessage = (text) =>  async (dispatch, getState, { api }) => {
-    let { data: { buttons, events, micturitionPrediction, micturitionFrequency }} = await api.utterMessage(text)
+    let { data: { buttons, events, micturitionPrediction, entries, messages }} = await api.utterMessage(text)
+    await processEntries(entries, dispatch, getState)
+    await processMessages(messages, dispatch, getState),
     await processEvents(events, dispatch, getState)
     dispatch(setUtterButtons(buttons))
+    debugger;
+    console.log(micturitionPrediction)
+
     micturitionPrediction = micturitionPrediction.map(e => ({
         ...e,
         date: new Date(e.date),
@@ -94,43 +111,56 @@ export const utterMessage = (text) =>  async (dispatch, getState, { api }) => {
     }))
     dispatch(setMicturitionPredictions(micturitionPrediction))
     let user = getState().user
-    dispatch(setUser({ ...user, micturitionFrequency }))
 }
 
-
-
 const processEvents = async (events, dispatch, getState) => {
+    for(let event of events) {
+        switch(event.type) {
+            case "SIGNOUT_USER":
+                setTimeout(() => {
+                    dispatch(signoutUser())
+                }, 300)
+                break
+        }
+    }
+}
+
+const processEntries = async (entries, dispatch, getState) => {
+    let state = getState()
+    let e
+    for(let entry of entries) {
+        switch(entry.type) {
+            case "ADD_MICTURITION":
+                dispatch(addMicturition(new Date(entry.date), new Date(entry.timestamp).valueOf(), entry._id))
+                e = getState().micturition
+                dispatch(setMicturitionFrequency(avgMicturitionFrequency(e)))
+                break
+            case "ADD_STRESS":
+                dispatch(addStress(new Date(entry.date), new Date(entry.timestamp).valueOf(), entry.level, entry._id))
+                break
+            case "ADD_DRINKING":
+                dispatch(addDrinking(new Date(entry.date), new Date(entry.timestamp).valueOf(), entry.amount, entry._id))
+                e = getState().drinking
+                dispatch(setAvgDrinkingAmount(avgDrinkingAmount(e)))
+                break
+            case "ADD_NUTRITION":
+                dispatch(addNutrition(new Date(entry.date), new Date(entry.timestamp).valueOf(), entry.mass, entry.type, entry._id))
+                break
+        }
+    }
+}
+
+const processMessages = async (messages, dispatch, getState) => {
     let state = getState()
     let config = createSpeechConfig(state.speech.token, state.speech.region)
-    let entries
-    for(let event of events) {
-        if(event.text) {
-            dispatch(addMessage(event.text, event.sender, new Date(event.timestamp).valueOf()))
-            if(event.sender !== "user" && state.user.settings.voiceOutput) {
-                await tts(event.text, config)
-            }
-
-        } else if(event.type) {
-            switch(event.type) {
-                case "ADD_MICTURITION":
-                    dispatch(addMicturition(new Date(event.date), new Date(event.timestamp).valueOf(), event._id))
-                    entries = getState().micturition
-                    dispatch(setMicturitionFrequency(avgMicturitionFrequency(entries)))
-                    break
-                case "ADD_STRESS":
-                    dispatch(addStress(new Date(event.date), new Date(event.timestamp).valueOf(), event.level, event._id))
-                    break
-                case "ADD_DRINKING":
-                    dispatch(addDrinking(new Date(event.date), new Date(event.timestamp).valueOf(), event.amount, event._id))
-                    entries = getState().drinking
-                    dispatch(setAvgDrinkingAmount(avgDrinkingAmount(entries)))
-                    break
-                case "SIGNOUT_USER":
-                    setTimeout(() => {
-                        dispatch(signoutUser())
-                    }, 500)
-                    break
-            }
+    console.log(messages)
+    for(let message of messages) {
+        dispatch(addMessage(message.text, message.sender, new Date(message.timestamp).valueOf()))
+    }
+    for(let message of messages) {
+        if(message.sender !== "user" && state.user.settings.voiceOutput) {
+            await tts(message.text, config)
+            await delay(2000)
         }
     }
 }
@@ -288,8 +318,13 @@ export const loadMessages = (startDate) => async (dispatch, getState, { api }) =
             ...e,
             timestamp: new Date(e.timestamp).valueOf()
         }))
-        api._pending["messages"] = false
         dispatch(setMessages(messages))
+
+        if(messages.length === 0) {
+            dispatch(startConversation())
+        }
+
+        api._pending["messages"] = false
     }
 }
 
@@ -325,14 +360,14 @@ export const loadMicturition = startDate => async (dispatch, getState, { api }) 
 export const loadMicturitionPredictions = startDate => async (dispatch, getState, { api }) => {
     if(!api._pending["micturitionPrediction"]) {
         api._pending["micturitionPrediction"] = true
-        let { data: { predictions }} = await api.getMicturitionPrediction(startDate)
-        predictions = predictions.map(e => ({
+        let { data: { forecast }} = await api.getMicturitionPrediction(startDate)
+        forecast = forecast.map(e => ({
             ...e,
             date: new Date(e.date),
             timestamp: new Date(e.timestamp).valueOf()
         }))
         api._pending["micturitionPrediction"] = false
-        dispatch(setMicturitionPredictions(predictions))
+        dispatch(setMicturitionPredictions(forecast))
     }
 }
 
