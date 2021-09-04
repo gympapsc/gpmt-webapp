@@ -38,7 +38,7 @@ function TimeSelect({value, onChange}) {
     <div>
       <Listbox value={selected} onChange={changeRange}>
         <div className="w-full relative">
-          <Listbox.Button className="text-lg md:text-xl font-semibold text-gray-800">
+          <Listbox.Button className="text-base md:text-xl font-semibold text-gray-800">
             <span className="truncate">{selected.name}</span>
           </Listbox.Button>
           <Transition
@@ -136,24 +136,24 @@ const MicturitionOverview = () => {
                     entries.length !== 0 ? 
                     <div className="space-y-5">
                         <div className="space-y-4 py-6 md:py-8 bg-white w-full">
-                            <div className="grid grid-cols-3 px-3 md:px-5 my-2 md:my-4 max-w-screen-xl mx-auto" style={{maxWidth: "700"}}>
-                                <div className="mr-auto">
-                                    <h6 className="uppercase text-xs lg:text-sm font-semibold tracking-wide text-gray-600 md:mb-2">Miktionsfrequenz</h6>
-                                    <h2 className="text-lg md:text-2xl font-bold ">
+                            <div className="grid sm:grid-cols-3 px-3 sm:px-5 my-2 sm:my-4 max-w-screen-xl mx-auto space-y-3 sm:space-y-0" style={{maxWidth: "700"}}>
+                                <div className="sm:mr-auto">
+                                    <h6 className="uppercase text-xs md:text-sm font-semibold tracking-wide text-gray-600 sm:mb-2">Miktionsfrequenz</h6>
+                                    <h2 className="text-xl font-bold ">
                                         &#8960; {Math.round(user?.micturitionFrequency * 1000) / 1000}
                                         {" "}<span className="text-sm md:text-base text-gray-600 font-semibold">pro Tag</span>
                                     </h2>
                                 </div>
-                                <div className="mx-auto">
-                                    <h6 className="uppercase text-xs lg:text-sm font-semibold tracking-wide text-gray-600 md:mb-2">Trinkmenge</h6>
-                                    <h2 className="text-lg md:text-2xl font-bold">
+                                <div className="sm:mx-auto">
+                                    <h6 className="uppercase text-xs md:text-sm font-semibold tracking-wide text-gray-600 sm:mb-2">Trinkmenge</h6>
+                                    <h2 className="text-xl font-bold">
                                         &#8960; {Math.round(user?.avgDrinkingAmount * 1000) / 1000 || "--"} L 
                                         {" "}<span className="text-sm md:text-base text-gray-600 font-semibold"> pro Tag</span>
                                     </h2>
                                 </div>
-                                <div className="ml-auto">
-                                    <h6 className="uppercase text-xs lg:text-sm font-semibold tracking-wide text-gray-600 md:mb-2">Miktionsfrequenz</h6>
-                                    <h2 className="text-lg md:text-2xl font-bold ">
+                                <div className="sm:ml-auto">
+                                    <h6 className="uppercase text-xs md:text-sm font-semibold tracking-wide text-gray-600 sm:mb-2">Miktionsfrequenz</h6>
+                                    <h2 className="text-xl font-bold ">
                                         &#8960; {Math.round(user?.micturitionFrequency * 1000) / 1000} 
                                         {" "}<span className="text-sm md:text-base text-gray-600 font-semibold">pro Tag</span>
                                     </h2>
@@ -164,7 +164,7 @@ const MicturitionOverview = () => {
                                 <div className="col-span-full xl:col-span-1 flex flex-col">
                                     <div>
                                         <TimeSelect value="d" onChange={r => setTimeRange(r)} />
-                                        <p className="text-gray-500 text-sm md:text-md">Alle Trink- und Miktionseinträge die du in den letzten 24 Stunden gemacht hast.</p>
+                                        <p className="text-gray-500 text-xs tracking-wide md:tracking-normal md:text-md">Alle Trink- und Miktionseinträge die du in den letzten 24 Stunden gemacht hast.</p>
                                     </div>
                                     <div className="grid grid-rows-2 mt-auto">
                                         <div
@@ -180,7 +180,7 @@ const MicturitionOverview = () => {
                                 <div className="col-span-full xl:col-span-1 flex flex-col">
                                     <div>
                                         <h2 className="text-lg md:text-xl font-semibold text-gray-800">Morgen</h2>
-                                        <p className="text-gray-500 text-sm md:text-md">Basierend auf deiner getrunkenmenge Flüssigkeit und den letzten Miktionen, wird diese Miktionsvorhersage für dich errechnet.</p>
+                                        <p className="text-gray-500 text-xs tracking-wide md:tracking-normal md:text-md">Basierend auf deiner getrunkenmenge Flüssigkeit und den letzten Miktionen, wird diese Miktionsvorhersage für dich errechnet.</p>
                                     </div>
                                     <div
                                         className="w-full h-36 lg:h-96 mt-auto" >
@@ -189,68 +189,86 @@ const MicturitionOverview = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex flex-row justify-around">
-                            <div>
-                                <button onClick={() => setDay(new Date(day.valueOf() - 24 * 3600 * 1000))} className="p-1 align-middle rounded-lg hover:bg-blue-200 text-blue-600 transition-colors duration-150">
-                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                                    </svg>                                    
+                        <div className="flex flex-row justify-around overflow-x-scroll">
+                            <div className="flex flex-row space-x-1 md:space-x-4 lg:space-x-6">
+                                {[3, 2, 1]
+                                    .map(d => new Date(day.valueOf() - d * 24 * 3600 * 1000))
+                                    .map(d => (
+                                        <button className="h-11 w-11 xl:w-28 rounded-full xl:rounded-3xl bg-white border border-gray-200" onClick={() => setDay(d)}>
+                                            <span className="text-xs text-gray-800">{d.getDate()}.{d.getMonth() + 1}</span>
+                                            <h6 className="text-sm font-regular text-blue-800 -mt-1 mb-1 block xl:hidden">{WEEKDAY[d.getDay()].slice(0, 2)}</h6>
+                                            <h6 className="text-sm font-regular text-blue-800 -mt-1 mb-1 hidden xl:block">{WEEKDAY[d.getDay()]}</h6>
+                                        </button>
+                                ))}
+                                <button className="h-11 w-11 xl:w-28 rounded-full xl:rounded-3xl bg-blue-700 border border-gray-200">
+                                    <span className="text-xs text-white">{day.getDate()}.{day.getMonth() + 1}</span>
+                                    <h6 className="text-sm font-regular text-white -mt-1 mb-1 block xl:hidden">{WEEKDAY[day.getDay()].slice(0, 2)}</h6>
+                                    <h6 className="text-sm font-regular text-white -mt-1 mb-1 hidden xl:block">{WEEKDAY[day.getDay()]}</h6>
                                 </button>
-                                <div className="xl:text-lg text-gray-800 rounded-lg mx-3 bg-white px-2 py-1 inline">
-                                    <span>{WEEKDAY[day.getDay()]}, {day.toLocaleDateString()}</span>
-                                </div>
-                                <button disabled={new Date(day.valueOf() + 24 * 3600 * 1000).valueOf() > new Date().valueOf()} onClick={() => setDay(new Date(day.valueOf() + 24 * 3600 * 1000))} className="p-1 align-middle rounded-md hover:bg-blue-200 text-blue-600 transition-colors duration-150">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                    </svg>
-                                </button>
+                                {[1, 2, 3]
+                                    .map(d => new Date(day.valueOf() + d * 24 * 3600 * 1000))
+                                    .map(d => (
+                                        <button className={`${d.valueOf() > new Date().valueOf() ? "opacity-60" : "" } h-11 w-11 xl:w-28 rounded-full xl:rounded-3xl bg-white border border-gray-200`} disabled={d.valueOf() > new Date().valueOf()} onClick={() => setDay(d)}>
+                                            <span className="text-xs text-gray-800">{d.getDate()}.{d.getMonth() + 1}</span>
+                                            <h6 className="text-sm font-regular text-blue-800 -mt-1 mb-1 block xl:hidden">{WEEKDAY[d.getDay()].slice(0, 2)}</h6>
+                                            <h6 className="text-sm font-regular text-blue-800 -mt-1 mb-1 hidden xl:block">{WEEKDAY[d.getDay()]}</h6>
+                                        </button>
+                                ))}
                             </div>
                         </div>
-                        <div className="flex flex-col md:px-4 mx-auto max-w-screen-xl">
-                            <h3 className="mb-2 font-semibold text-lg md:text-xl">Einträge</h3>
+                        <div className="flex flex-col md:px-4 mx-auto max-w-screen-xl px-3">
+                            <h3 className="mb-2 font-semibold text-lg md:text-xl">Miktionen</h3>
                             <div className="-my-2 overflow-x-hidden">
                                 <div className="py-2 align-middle inline-block min-w-full">
-                                    <div className="border overflow-hidden border-gray-200 sm:rounded-lg">
+                                    <div className="border overflow-hidden border-gray-200 rounded-lg">
                                         <table className="min-w-full divide-y divide-gray-200">
                                             <thead className="bg-gray-50">
                                                 <tr>
-                                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    <th scope="col" className="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                         Datum
                                                     </th>
-                                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    <th scope="col" className="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                         Uhrzeit
                                                     </th>
-                                                    <th scope="col" className="relative px-6 py-3">
+                                                    <th scope="col" className="relative px-3 py-2 md:px-6 md:py-3">
                                                         <span className="sr-only">Bearbeiten</span>
                                                     </th>
-                                                    <th scope="col" className="relative px-6 py-3">
+                                                    <th scope="col" className="relative px-3 py-2 md:px-6 md:py-3">
                                                         <span className="sr-only">Löschen</span>
                                                     </th>
                                                 </tr>
                                             </thead>
                                             <tbody className="bg-white divide-y divide-gray-200">
-
-        
-                                                {entries
+                                                {micturition
                                                     .filter(a => d3.timeDay.floor(a.date).valueOf() == d3.timeDay.floor(day).valueOf())
                                                     .map((e, i) => (
                                                     <tr key={i}>
-                                                        <td className="px-6 py-4 whitespace-nowrap">
+                                                        <td className="px-3 py-2 md:px-6 md:py-3 whitespace-nowrap">
                                                             {WEEKDAY[e?.date.getDay()]}
                                                         </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap">
+                                                        <td className="px-3 py-2 md:px-6 md:py-3 whitespace-nowrap">
                                                             {e?.date.getHours()}:{e?.date.getMinutes()}
                                                         </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
+                                                        <td className="px-3 py-2 md:px-6 md:py-3 whitespace-nowrap text-right text-sm">
                                                             <Link href={`/app/${e.type}/${e._id}`}>
-                                                                <a className="font-medium text-indigo-600 p-2 hover:bg-indigo-100 rounded-lg transition-colors ease-in-out duration-100">
-                                                                    Bearbeiten
+                                                                <a className="font-medium text-blue-600 p-2 hover:bg-indigo-100 rounded-lg transition-colors ease-in-out duration-100">
+                                                                    <span className="lg:inline-block hidden">Bearbeiten</span>
+                                                                    <div className="inline-block lg:hidden">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                                            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                                                        </svg>
+                                                                    </div>
                                                                 </a>
                                                             </Link>
                                                         </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
-                                                            <button onClick={deleteEntry(e.type, e._id)} className="font-medium text-indigo-600 p-2 hover:bg-indigo-100 rounded-lg transition-colors ease-in-out duration-100">
-                                                                Löschen
+                                                        <td className="px-3 py-2 md:px-6 md:py-3 whitespace-nowrap text-right text-sm">
+                                                            <button onClick={deleteEntry(e.type, e._id)} className="font-medium text-blue-600 p-2 hover:bg-indigo-100 rounded-lg transition-colors ease-in-out duration-100">
+                                                                <span className="lg:inline-block hidden">Löschen</span>
+                                                                <div className="block lg:hidden">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                                        <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                                                                    </svg>
+                                                                </div>
                                                             </button>
                                                         </td>
                                                     </tr>
@@ -265,17 +283,17 @@ const MicturitionOverview = () => {
                             <h3 className="mb-2 font-semibold text-lg md:text-xl">Fotos</h3>
                             <div className="-my-2 overflow-x-auto">
                                 <div className="py-2 align-middle inline-block min-w-full">
-                                    <div className="border overflow-hidden border-gray-200 sm:rounded-lg">
+                                    <div className="border overflow-hidden border-gray-200 rounded-lg">
                                         <table className="min-w-full divide-y divide-gray-200">
                                             <thead className="bg-gray-50">
                                                 <tr>
-                                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    <th scope="col" className="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                         Foto
                                                     </th>
-                                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    <th scope="col" className="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                         Uhrzeit
                                                     </th>
-                                                    <th scope="col" className="relative px-6 py-3">
+                                                    <th scope="col" className="px-3 py-2 md:px-6 md:py-3">
                                                         <span className="sr-only">Löschen</span>
                                                     </th>
                                                 </tr>
@@ -286,13 +304,13 @@ const MicturitionOverview = () => {
                                                     .filter(a => d3.timeDay.floor(a.date).valueOf() == d3.timeDay.floor(day).valueOf())
                                                     .map((e, i) => (
                                                     <tr key={i}>
-                                                        <td className="px-6 py-4 whitespace-nowrap">
+                                                        <td className="px-3 py-2 md:px-6 md:py-3whitespace-nowrap">
                                                             <img src={e.url} className="rounded-md max-h-14"/>
                                                         </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap">
+                                                        <td className="px-3 py-2 md:px-6 md:py-3 whitespace-nowrap">
                                                             {e?.name}
                                                         </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                        <td className="px-3 py-2 md:px-6 md:py-3 whitespace-nowrap text-right text-sm font-medium">
                                                             <Link href={`/app/${e.type}/${e._id}`}>
                                                                 <a className="text-indigo-600 p-2 hover:bg-indigo-100 rounded-lg transition-colors ease-in-out duration-100">
                                                                     Löschen
@@ -311,20 +329,20 @@ const MicturitionOverview = () => {
                             <h3 className="mb-2 font-semibold text-lg md:text-xl">Medikamente</h3>
                             <div className="-my-2 overflow-x-auto">
                                 <div className="py-2 align-middle inline-block min-w-full">
-                                    <div className="border overflow-hidden border-gray-200 sm:rounded-lg">
+                                    <div className="border overflow-hidden border-gray-200 rounded-lg">
                                         <table className="min-w-full divide-y divide-gray-200">
                                             <thead className="bg-gray-50">
                                                 <tr>
-                                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    <th scope="col" className="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                         Wirkstoff
                                                     </th>
-                                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    <th scope="col" className="px-3 py-2 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                         Uhrzeit
                                                     </th>
-                                                    <th scope="col" className="relative px-6 py-3">
+                                                    <th scope="col" className="px-3 py-2 md:px-6 md:py-3">
                                                         <span className="sr-only">Bearbeiten</span>
                                                     </th>
-                                                    <th scope="col" className="relative px-6 py-3">
+                                                    <th scope="col" className="px-3 py-2 md:px-6 md:py-3">
                                                         <span className="sr-only">Löschen</span>
                                                     </th>
                                                 </tr>

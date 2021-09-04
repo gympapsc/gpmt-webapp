@@ -440,7 +440,7 @@ const Dialog = ({startDate, children}) => {
 
     dialog = addDateLabels(dialog)
         .sort((a, b) => a.timestamp - b.timestamp)
-        .filter(a => a.timestamp > Date.now().valueOf() - 24 * 3600 * 1000)
+        .filter(a => (a.timestamp > Date.now().valueOf() - 60 * 1000 || a.type === "DATE_TITLE"))
 
 
     return (
