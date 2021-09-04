@@ -118,7 +118,7 @@ const Clock = ({ data }) => {
             .attr("r", "115")
             .attr("cx", width / 2)
             .attr("cy", height / 2)
-            .attr("fill", "#e5e7eb")
+            .attr("fill", "#f3f4f6")
         
         clock = root.append("g")
 

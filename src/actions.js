@@ -101,7 +101,6 @@ export const utterMessage = (text) =>  async (dispatch, getState, { api }) => {
     await processMessages(messages, dispatch, getState),
     await processEvents(events, dispatch, getState)
     dispatch(setUtterButtons(buttons))
-    debugger;
     console.log(micturitionPrediction)
 
     micturitionPrediction = micturitionPrediction.map(e => ({
