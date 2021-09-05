@@ -22,8 +22,7 @@ import DrinkingChart from "../../../visualisations/drinkingChart"
 const timeRanges = {
     d: { id: 0, name: "Letzten 48 Stunden", range: Date.now().valueOf() - 2 * 24 * 3600 * 1000},
     w: { id: 1, name: "Letzte Woche", range: Date.now().valueOf() - 7 * 24 * 3600 * 1000},
-    m: { id: 2, name: "Letzten Monat", range: Date.now().valueOf() - 30 * 24 * 3600 * 1000},
-    y: { id: 3, name: "Letztes Jahr", range: Date.now().valueOf() - 365 * 24 * 3600 * 1000}
+    m: { id: 2, name: "Letzten Monat", range: Date.now().valueOf() - 30 * 24 * 3600 * 1000}
 }
 
 function TimeSelect({value, onChange}) {
@@ -168,11 +167,11 @@ const MicturitionOverview = () => {
                                     </div>
                                     <div className="grid grid-rows-2 mt-auto">
                                         <div
-                                            className="w-full h-36 lg:h-48 row-span-1">
+                                            className="w-full h-40 lg:h-48 row-span-1">
                                             <MicturitionChart data={micturition} range={timeRange}/>
                                         </div>
                                         <div
-                                            className="w-full h-36 lg:h-48 row-span-1">
+                                            className="w-full h-40 lg:h-48 row-span-1">
                                             <DrinkingChart data={drinking} range={timeRange}/>
                                         </div>
                                     </div>
@@ -183,7 +182,7 @@ const MicturitionOverview = () => {
                                         <p className="text-gray-500 text-xs tracking-wide md:tracking-normal md:text-md">Basierend auf deiner getrunkenmenge Flüssigkeit und den letzten Miktionen, wird diese Miktionsvorhersage für dich errechnet.</p>
                                     </div>
                                     <div
-                                        className="w-full h-36 lg:h-96 mt-auto" >
+                                        className="w-full h-40 lg:h-96 mt-auto" >
                                             <LineChart data={predictions}></LineChart>
                                     </div>
                                 </div>
@@ -312,7 +311,7 @@ const MicturitionOverview = () => {
                                                         </td>
                                                         <td className="px-3 py-2 md:px-6 md:py-3 whitespace-nowrap text-right text-sm font-medium">
                                                             <Link href={`/app/${e.type}/${e._id}`}>
-                                                                <a className="text-indigo-600 p-2 hover:bg-indigo-100 rounded-lg transition-colors ease-in-out duration-100">
+                                                                <a className="text-blue-600 p-2 hover:bg-indigo-100 rounded-lg transition-colors ease-in-out duration-100">
                                                                     Löschen
                                                                 </a>
                                                             </Link>
@@ -364,7 +363,6 @@ const MicturitionOverview = () => {
         </Shell>
     )
 }
-
 
 export default function SecureMicturitionOverview() {
     return (
