@@ -32,7 +32,7 @@ const Shell = ({children, title, className, onScroll}) => {
                         <button onClick={e => toggleMenu(e, !showMenu)} className="text-blue-500 md:invisible self-center flex flex-row">
                             <span>Übersicht</span>
                         </button>
-                        <h3 className="text-lg md:text-xl font-semibold self-center">
+                        <h3 className="text-lg md:text-lg font-semibold self-center">
                             {title}
                         </h3>
                         <button className="text-blue-500 md:invisible self-center flex flex-row">

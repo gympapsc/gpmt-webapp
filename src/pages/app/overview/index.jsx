@@ -37,7 +37,7 @@ function TimeSelect({value, onChange}) {
     <div>
       <Listbox value={selected} onChange={changeRange}>
         <div className="w-full relative">
-          <Listbox.Button className="text-base md:text-xl font-semibold text-gray-800">
+          <Listbox.Button className="text-base md:text-lg font-semibold text-gray-800">
             <span className="truncate">{selected.name}</span>
           </Listbox.Button>
           <Transition
@@ -216,7 +216,7 @@ const MicturitionOverview = () => {
                             </div>
                         </div>
                         <div className="flex flex-col md:px-4 mx-auto max-w-screen-xl px-3">
-                            <h3 className="mb-2 font-semibold text-lg md:text-xl">Miktionen</h3>
+                            <h3 className="mb-2 font-semibold text-base md:text-lg">Miktionen</h3>
                             <div className="-my-2 overflow-x-hidden">
                                 <div className="py-2 align-middle inline-block min-w-full">
                                     <div className="border overflow-hidden border-gray-200 rounded-lg">

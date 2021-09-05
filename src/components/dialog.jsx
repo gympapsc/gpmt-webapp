@@ -370,7 +370,7 @@ UserMessage.propTypes = {
 }
 
 const DateTitle  = ({text}) => (
-    <h4 className="text-lg md:text-xl text-gray-700 self-center my-2 font-semibold">
+    <h4 className="md:text-lg text-gray-700 self-center my-2 font-semibold">
         {text}
     </h4>
 )
