@@ -1,21 +1,16 @@
-import React, {useState, useRef, useEffect} from 'react'
-import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
+import React, {useState, useRef, useEffect} from "react"
+import PropTypes from "prop-types"
 import { useSpring, animated } from "@react-spring/web" 
 import { useMediaQuery } from "react-responsive"
 import Aside from "../components/aside"
 
-import {
-    utterMessage
-} from '../actions'
-
 
 const Shell = ({children, title, className, onScroll}) => {
 
-    let [showMenu, displayMenu] = useState(false)
+    let [showMenu, setShowMenu] = useState(false)
 
     const isMobile = useMediaQuery({
-        query: '(max-width: 640px)'
+        query: "(max-width: 640px)"
     })
 
     const props = useSpring({
@@ -24,12 +19,12 @@ const Shell = ({children, title, className, onScroll}) => {
 
     const toggleMenu = (e, state) => {
         e.stopPropagation()
-        displayMenu(state)
+        setShowMenu(state)
     }
 
     return (
         <>
-            <Aside showMenu={showMenu}/>
+            <Aside showMenu={showMenu} setShowMenu={setShowMenu}/>
             <animated.div
                 style={props}>
                 <main onClick={e => toggleMenu(e, false)} className={`absolute z-0 top-0 left-0 md:left-96 right-0 bottom-0 flex flex-col overflow-y-scroll ${className}`}>
