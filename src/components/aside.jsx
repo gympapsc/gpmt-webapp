@@ -33,6 +33,7 @@ const cumulativeData = (d, selector) => {
 
 const Aside = ({ showMenu, setShowMenu }) => {
     let formatTime = d3.timeFormat("%H:%M")
+    let formatDay = d3.timeFormat("%A")
 
     let startDate = new Date()
     let dispatch = useDispatch()
@@ -62,16 +63,16 @@ const Aside = ({ showMenu, setShowMenu }) => {
         <animated.aside
             style={props}
             className={`${showMenu && isMobile ? "shadow-2xl md:shadow-none" : ""} max-w-full z-30 absolute bottom-0 md:right-auto w-96 h-full overflow-x-hidden bg-gray-100 overflow-y-scroll border-r border-gray-300 `}>
-            <header className="px-3 md:px-4 pb-2 md:pb-0 md:h-14 w-full flex flex-row justify-between bg-gray-100 mt-4">
+            <header className="px-3 md:px-4 pb-2 md:pb-0 md:h-10 w-full flex flex-row justify-between bg-gray-100 mt-4">
                 {
                     isMobile &&
                     <button onClick={() => setShowMenu(false)} className="w-8 h-8 flex flex-row justify-center items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                         </svg>
                     </button>
                 }
-                <h1 className="text-xl md:text-3xl font-bold self-center">
+                <h1 className="text-xl md:text-2xl font-bold self-center">
                     Übersicht
                 </h1>
                 {
@@ -151,7 +152,7 @@ const Aside = ({ showMenu, setShowMenu }) => {
             <div className="p-2 md:p-3 grid grid-cols-2 gap-2 md:gap-3 mb-8">
                 <Link href="/app">
                     <a className="col-span-2 p-3 bg-white rounded-xl border border-gray-200">
-                        <h3 className="text-sm font-semibold">Chat &bull; <span className="text-gray-500">Gestern</span></h3>
+                        <h3 className="text-sm font-semibold">Chat &bull; <span className="text-gray-500">{formatDay(new Date(messages[0]?.timestamp))}</span></h3>
                         <p className="text-gray-500">{shorten(messages[0]?.text, 40) || "..."}</p>
                     </a>
                 </Link>
@@ -164,7 +165,7 @@ const Aside = ({ showMenu, setShowMenu }) => {
                         <h3 className="text-sm font-semibold">Miktion</h3>
                         <div className="mt-auto">
                             <h5 className="text-xs font-semibold -mb-1 tracking-wide opacity-90">{formatTime(currDate)}</h5>
-                            <h4 className="text-2xl md:text-3xl font-bold">{
+                            <h4 className="text-2xl md:text-2xl font-bold">{
                                 prediction.length ?
                                 Math.round(prediction.find(p => p.date.getHours() === currDate.getHours())?.prediction * 100)
                                 : "--"
@@ -176,8 +177,8 @@ const Aside = ({ showMenu, setShowMenu }) => {
                     <a className="col-span-1 h-32 rounded-xl bg-white flex flex-col p-3 border border-gray-200">
                         <h3 className="text-sm font-semibold">Nächste Miktion</h3>
                         <div className="mt-auto">
-                            <h5 className="text-gray-600 text-xs font-semibold -mb-1 tracking-wide">Morgen</h5>
-                            <h4 className="text-2xl md:text-3xl font-bold">
+                            <h5 className="text-gray-600 text-xs font-semibold -mb-1 tracking-wide">{formatDay(cumulativeData(prediction, "prediction").find(p => p?.prediction > 1)?.date || new Date())}</h5>
+                            <h4 className="text-2xl md:text-2xl font-bold">
                                 {formatTime(cumulativeData(prediction, "prediction").find(p => p?.prediction > 1)?.date || new Date())}
                             </h4>
                         </div>

@@ -37,7 +37,7 @@ function TimeSelect({value, onChange}) {
     <div>
       <Listbox value={selected} onChange={changeRange}>
         <div className="w-full relative">
-          <Listbox.Button className="text-base md:text-xl font-semibold text-gray-800">
+          <Listbox.Button className="text-base md:text-lg font-semibold text-gray-800">
             <span className="truncate">{selected.name}</span>
           </Listbox.Button>
           <Transition
@@ -52,8 +52,8 @@ function TimeSelect({value, onChange}) {
                 <Listbox.Option
                   key={r.id}
                   className={({ active }) =>
-                    `${active ? "text-blue-900 bg-blue-100" : "text-gray-900"}
-                          cursor-default select-none relative py-2 pl-10 pr-4`
+                    `${active ? "text-blue-900 bg-blue-100 cursor-pointer" : "text-gray-900"}
+                    select-none relative py-2 pl-10 pr-4`
                   }
                   value={r}
                 >
@@ -62,7 +62,7 @@ function TimeSelect({value, onChange}) {
                       <span
                         className={`${
                           selected ? "font-medium" : "font-normal"
-                        } block truncate`}
+                        } block truncate text-sm`}
                       >
                         {r.name}
                       </span>
@@ -129,7 +129,7 @@ const MicturitionOverview = () => {
 
 
     return (
-        <Shell title={"Miktion"} className="bg-gray-100">
+        <Shell title={"Tagebuch"} className="bg-gray-100">
             <div className="flex flex-col w-full space-y-4 pb-12">
                 {
                     entries.length !== 0 ? 
@@ -216,7 +216,7 @@ const MicturitionOverview = () => {
                             </div>
                         </div>
                         <div className="flex flex-col md:px-4 mx-auto max-w-screen-xl px-3">
-                            <h3 className="mb-2 font-semibold text-lg md:text-xl">Miktionen</h3>
+                            <h3 className="mb-2 font-semibold text-base md:text-lg">Miktionen</h3>
                             <div className="-my-2 overflow-x-hidden">
                                 <div className="py-2 align-middle inline-block min-w-full">
                                     <div className="border overflow-hidden border-gray-200 rounded-lg">
@@ -242,10 +242,10 @@ const MicturitionOverview = () => {
                                                     .filter(a => d3.timeDay.floor(a.date).valueOf() == d3.timeDay.floor(day).valueOf())
                                                     .map((e, i) => (
                                                     <tr key={i}>
-                                                        <td className="px-3 py-2 md:px-6 md:py-3 whitespace-nowrap">
+                                                        <td className="px-3 py-2 md:px-6 md:py-3 whitespace-nowrap text-sm md:text-base">
                                                             {WEEKDAY[e?.date.getDay()]}
                                                         </td>
-                                                        <td className="px-3 py-2 md:px-6 md:py-3 whitespace-nowrap">
+                                                        <td className="px-3 py-2 md:px-6 md:py-3 whitespace-nowrap text-sm md:text-base">
                                                             {e?.date.getHours()}:{e?.date.getMinutes()}
                                                         </td>
                                                         <td className="px-3 py-2 md:px-6 md:py-3 whitespace-nowrap text-right text-sm">
@@ -306,7 +306,7 @@ const MicturitionOverview = () => {
                                                         <td className="px-3 py-2 md:px-6 md:py-3whitespace-nowrap">
                                                             <img src={e.url} className="rounded-md max-h-14"/>
                                                         </td>
-                                                        <td className="px-3 py-2 md:px-6 md:py-3 whitespace-nowrap">
+                                                        <td className="px-3 py-2 md:px-6 md:py-3 whitespace-nowrap text-sm md:text-base">
                                                             {e?.name}
                                                         </td>
                                                         <td className="px-3 py-2 md:px-6 md:py-3 whitespace-nowrap text-right text-sm font-medium">
