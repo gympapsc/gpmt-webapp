@@ -438,10 +438,12 @@ const Dialog = ({startDate, children}) => {
         ...photos
     ]
 
-    dialog = addDateLabels(dialog)
+    dialog = addDateLabels(
+            dialog
+                .sort((a, b) => a.timestamp - b.timestamp)
+                .filter((a, i, arr) => i > (arr.length - 8))
+        )
         .sort((a, b) => a.timestamp - b.timestamp)
-        .filter(a => (a.timestamp > Date.now().valueOf() - 60 * 1000 || a.type === "DATE_TITLE"))
-
 
     return (
         <div className="flex flex-col px-3 w-full lg:w-3/4 xl:w-2/3 mx-auto space-y-3 pt-8">

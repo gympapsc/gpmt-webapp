@@ -52,8 +52,8 @@ function TimeSelect({value, onChange}) {
                 <Listbox.Option
                   key={r.id}
                   className={({ active }) =>
-                    `${active ? "text-blue-900 bg-blue-100" : "text-gray-900"}
-                          cursor-default select-none relative py-2 pl-10 pr-4`
+                    `${active ? "text-blue-900 bg-blue-100 cursor-pointer" : "text-gray-900"}
+                    select-none relative py-2 pl-10 pr-4`
                   }
                   value={r}
                 >
@@ -62,7 +62,7 @@ function TimeSelect({value, onChange}) {
                       <span
                         className={`${
                           selected ? "font-medium" : "font-normal"
-                        } block truncate`}
+                        } block truncate text-sm`}
                       >
                         {r.name}
                       </span>
@@ -129,7 +129,7 @@ const MicturitionOverview = () => {
 
 
     return (
-        <Shell title={"Miktion"} className="bg-gray-100">
+        <Shell title={"Tagebuch"} className="bg-gray-100">
             <div className="flex flex-col w-full space-y-4 pb-12">
                 {
                     entries.length !== 0 ? 
@@ -242,10 +242,10 @@ const MicturitionOverview = () => {
                                                     .filter(a => d3.timeDay.floor(a.date).valueOf() == d3.timeDay.floor(day).valueOf())
                                                     .map((e, i) => (
                                                     <tr key={i}>
-                                                        <td className="px-3 py-2 md:px-6 md:py-3 whitespace-nowrap">
+                                                        <td className="px-3 py-2 md:px-6 md:py-3 whitespace-nowrap text-sm md:text-base">
                                                             {WEEKDAY[e?.date.getDay()]}
                                                         </td>
-                                                        <td className="px-3 py-2 md:px-6 md:py-3 whitespace-nowrap">
+                                                        <td className="px-3 py-2 md:px-6 md:py-3 whitespace-nowrap text-sm md:text-base">
                                                             {e?.date.getHours()}:{e?.date.getMinutes()}
                                                         </td>
                                                         <td className="px-3 py-2 md:px-6 md:py-3 whitespace-nowrap text-right text-sm">
@@ -306,7 +306,7 @@ const MicturitionOverview = () => {
                                                         <td className="px-3 py-2 md:px-6 md:py-3whitespace-nowrap">
                                                             <img src={e.url} className="rounded-md max-h-14"/>
                                                         </td>
-                                                        <td className="px-3 py-2 md:px-6 md:py-3 whitespace-nowrap">
+                                                        <td className="px-3 py-2 md:px-6 md:py-3 whitespace-nowrap text-sm md:text-base">
                                                             {e?.name}
                                                         </td>
                                                         <td className="px-3 py-2 md:px-6 md:py-3 whitespace-nowrap text-right text-sm font-medium">

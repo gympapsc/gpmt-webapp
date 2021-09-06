@@ -14,8 +14,8 @@ const Toggle = ({value, title, description, onChange}) => {
                     checked={value}
                     onChange={onChange}
                     className={`color transition ease-in-out duration-200 ${
-                        value ? `bg-blue-600`: `bg-gray-200`
-                    } relative inline-flex items-center h-8 rounded-full w-14 self-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600`}
+                        value ? "bg-blue-600": "bg-gray-200"
+                    } relative inline-flex items-center h-8 rounded-full  w-14 self-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600`}
                 >
                     <span className="sr-only">{title}</span>
                     <span

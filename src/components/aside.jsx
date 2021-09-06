@@ -33,6 +33,7 @@ const cumulativeData = (d, selector) => {
 
 const Aside = ({ showMenu, setShowMenu }) => {
     let formatTime = d3.timeFormat("%H:%M")
+    let formatDay = d3.timeFormat("%A")
 
     let startDate = new Date()
     let dispatch = useDispatch()
@@ -151,7 +152,7 @@ const Aside = ({ showMenu, setShowMenu }) => {
             <div className="p-2 md:p-3 grid grid-cols-2 gap-2 md:gap-3 mb-8">
                 <Link href="/app">
                     <a className="col-span-2 p-3 bg-white rounded-xl border border-gray-200">
-                        <h3 className="text-sm font-semibold">Chat &bull; <span className="text-gray-500">Gestern</span></h3>
+                        <h3 className="text-sm font-semibold">Chat &bull; <span className="text-gray-500">{formatDay(new Date(messages[0]?.timestamp))}</span></h3>
                         <p className="text-gray-500">{shorten(messages[0]?.text, 40) || "..."}</p>
                     </a>
                 </Link>
@@ -176,7 +177,7 @@ const Aside = ({ showMenu, setShowMenu }) => {
                     <a className="col-span-1 h-32 rounded-xl bg-white flex flex-col p-3 border border-gray-200">
                         <h3 className="text-sm font-semibold">Nächste Miktion</h3>
                         <div className="mt-auto">
-                            <h5 className="text-gray-600 text-xs font-semibold -mb-1 tracking-wide">Morgen</h5>
+                            <h5 className="text-gray-600 text-xs font-semibold -mb-1 tracking-wide">{formatDay(cumulativeData(prediction, "prediction").find(p => p?.prediction > 1)?.date || new Date())}</h5>
                             <h4 className="text-2xl md:text-2xl font-bold">
                                 {formatTime(cumulativeData(prediction, "prediction").find(p => p?.prediction > 1)?.date || new Date())}
                             </h4>
