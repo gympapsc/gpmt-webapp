@@ -49,7 +49,7 @@ const SexSelect = ({value, onChange, onBlur}) => {
                         <Listbox.Option
                             key={gender[k].id}
                             className={({ active }) =>
-                                `${active ? 'text-blue-900 bg-blue-100' : 'text-gray-900'}
+                                `${active ? "text-blue-900 bg-blue-100" : "text-gray-900"}
                                     cursor-default select-none relative py-2 pl-10 pr-4`
                             }
                             value={gender[k]}
@@ -58,7 +58,7 @@ const SexSelect = ({value, onChange, onBlur}) => {
                                 <>
                                     <span
                                         className={`${
-                                        selected ? 'font-medium' : 'font-normal'
+                                        selected ? "font-medium" : "font-normal"
                                         } block truncate`}
                                     >
                                         {gender[k].name}
@@ -66,7 +66,7 @@ const SexSelect = ({value, onChange, onBlur}) => {
                                     {selected ? (
                                     <span
                                         className={`${
-                                            active ? 'text-blue-600' : 'text-blue-600'
+                                            active ? "text-blue-600" : "text-blue-600"
                                         }
                                             absolute inset-y-0 left-0 flex items-center pl-3`}
                                     >
@@ -134,7 +134,7 @@ const Signup = () => {
                 email,
                 password,
                 weight,
-                height,
+                height: (height / 100),
                 birthDate,
                 password,
                 sex

@@ -58,7 +58,7 @@ const NutritionEdit = () => {
                                     max="2000"
                                     value={mass * 1000}
                                     onChange={e => setMass(e.target.value / 1000)}
-                                    onBlur={e => changeMass(e.target.value)}
+                                    onBlur={e => changeMass(e.target.value / 1000)}
                                     title="Gegessene Menge"
                                     />
                             </div>

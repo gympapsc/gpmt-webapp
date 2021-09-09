@@ -53,7 +53,7 @@ const Settings = () => {
                             <NumberInput label="Gewicht in Kg" value={user?.weight} onChange={weight => changeUser({weight})} />
                         </div>
                         <div className="col-span-full md:col-span-3">
-                            <NumberInput label="Größe in cm" value={user?.height} onChange={height => changeUser({height})} />
+                            <NumberInput label="Größe in cm" value={user?.height * 100} onChange={height => changeUser({height: (height / 100)})} />
                         </div>
                         <div className="col-span-full">
                             <DateInput label="Geburtstag" value={user?.birthDate} onChange={birthDate => changeUser({birthDate})} />
