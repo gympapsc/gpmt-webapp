@@ -49,16 +49,16 @@ const DrinkingEdit = () => {
                         <div className="space-y-5">
                             <div className="col-span-full">
                                 <label className="text-xs text-gray-600 uppercase" htmlFor="amount">Menge</label>
-                                <h4 className="text-2xl font-semibold">{amount}<span className="text-sm">ml</span></h4>
+                                <h4 className="text-2xl font-semibold">{amount * 1000}<span className="text-sm">ml</span></h4>
                                 <input
                                     type="range"
                                     className="block w-full"
                                     id="amount"
                                     min="0"
                                     max="1000"
-                                    value={amount}
-                                    onChange={e => setAmount(e.target.value)}
-                                    onBlur={e => changeAmount(e.target.value)}
+                                    value={amount * 1000}
+                                    onChange={e => setAmount(e.target.value / 1000)}
+                                    onBlur={e => changeAmount(e.target.value / 1000)}
                                     title="Trinkmenge"
                                     />
                             </div>
