@@ -30,7 +30,7 @@ const MedicationEntry = ({date, mass, substance, id}) => (
     <Link href={`/app/medication/${id}`}>
         <a className="text-md text-black bg-purple-300 w-48 md:52 rounded-xl py-2 px-3 self-center focus:ring-2 focus:outline-none focus:ring-yellow-800 focus:ring-offset-1">
             <div className="flex flex-row justify-between">
-                <h6 className="text-xs font-semibold text-purple-800 text-opacity-90 tracking-wider uppercase">{substance}</h6>
+                <h6 className="text-xs font-semibold text-purple-800 text-opacity-90 tracking-wider uppercase">{substance || "Medikament"}</h6>
                 <Menu className="relative h-5" as="div">
                     <Menu.Button className="text-purple-800 -mr-1" >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -126,7 +126,7 @@ const NutritionEntry = ({date, mass, type, id}) => (
     <Link href={`/app/nutrition/${id}`}>
         <a className="text-md text-white bg-yellow-400 w-48 md:52 rounded-xl py-2 px-3 self-center focus:ring-2 focus:outline-none focus:ring-yellow-800 focus:ring-offset-1">
             <div className="flex flex-row justify-between">
-                <h6 className="text-xs font-semibold text-yellow-900 text-opacity-80 tracking-wider uppercase">{type}</h6>
+                <h6 className="text-xs font-semibold text-yellow-900 text-opacity-80 tracking-wider uppercase">{type || "Essen"}</h6>
                 <Menu className="relative h-5" as="div">
                     <Menu.Button className="text-yellow-900 -mr-1" >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -274,7 +274,7 @@ const DrinkingEntry = ({amount, id, type}) => (
     <Link href={`/app/drinking/${id}`}>
         <a href="#" className="text-md text-white bg-pink-200 w-48 md:52 rounded-xl py-2 px-3 self-center focus:ring-2 focus:outline-none focus:ring-pink-800 focus:ring-offset-1">
             <div className="flex flex-row justify-between">
-                <h6 className="text-xs font-semibold text-pink-900 text-opacity-80 high-contrast:text-opacity-100 tracking-wider uppercase">{type}</h6>
+                <h6 className="text-xs font-semibold text-pink-900 text-opacity-80 high-contrast:text-opacity-100 tracking-wider uppercase">{type || "Trinken"}</h6>
                 <Menu className="relative h-5" as="div">
                     <Menu.Button className="text-pink-900 -mr-1" >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
