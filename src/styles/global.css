@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+@variants high-contrast {
+    .divide-y, .divide-x {
+        @apply divide-gray-400
+    }
+}
 
 body {
     @apply bg-gray-50;

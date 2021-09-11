@@ -201,7 +201,7 @@ const MicturitionEntry = ({date, id}) => (
     <Link href={`/app/micturition/${id}`}>
         <a className="text-md text-white bg-indigo-200 w-48 md:52 rounded-xl py-2 px-3 self-center focus:ring-2 focus:outline-none focus:ring-indigo-800 focus:ring-offset-1">
             <div className="flex flex-row justify-between">
-                <h6 className="text-xs font-semibold text-indigo-900 text-opacity-80 tracking-wider uppercase">Miktion</h6>
+                <h6 className="text-xs font-semibold text-indigo-900 text-opacity-80 high-contrast:text-opacity-100 tracking-wider uppercase">Miktion</h6>
                 <Menu className="relative h-5" as="div">
                     <Menu.Button className="text-indigo-900 -mr-1" >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -270,11 +270,11 @@ MicturitionEntry.propTypes = {
     id: PropTypes.string
 }
 
-const DrinkingEntry = ({amount, id}) => (
+const DrinkingEntry = ({amount, id, type}) => (
     <Link href={`/app/drinking/${id}`}>
         <a href="#" className="text-md text-white bg-pink-200 w-48 md:52 rounded-xl py-2 px-3 self-center focus:ring-2 focus:outline-none focus:ring-pink-800 focus:ring-offset-1">
             <div className="flex flex-row justify-between">
-                <h6 className="text-xs font-semibold text-pink-900 text-opacity-80 tracking-wider uppercase">Trinken</h6>
+                <h6 className="text-xs font-semibold text-pink-900 text-opacity-80 high-contrast:text-opacity-100 tracking-wider uppercase">{type}</h6>
                 <Menu className="relative h-5" as="div">
                     <Menu.Button className="text-pink-900 -mr-1" >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -370,7 +370,7 @@ UserMessage.propTypes = {
 }
 
 const DateTitle  = ({text}) => (
-    <h4 className="md:text-lg text-gray-700 self-center my-2 font-semibold">
+    <h4 className="md:text-lg text-gray-700 self-center my-2 font-semibold high-contrast:text-gray-800">
         {text}
     </h4>
 )
@@ -380,24 +380,24 @@ DateTitle.propTypes = {
 }
 
 
-const DialogEntry = ({entry}) => {
-    switch(entry.type) {
+const DialogEntry = ({entry: { type, payload}}) => {
+    switch(type) {
         case "MICTURITION":
-            return <MicturitionEntry date={entry.date} id={entry._id} />
+            return <MicturitionEntry date={payload.date} id={payload._id} />
         case "DRINKING":
-            return <DrinkingEntry amount={entry.amount} id={entry._id}/>
+            return <DrinkingEntry amount={payload.amount} id={payload._id} type={payload.type}/>
         case "BOT_MESSAGE":
-            return <BotMessage text={entry.text} />
+            return <BotMessage text={payload.text} />
         case "USER_MESSAGE":
-            return <UserMessage text={entry.text} />
+            return <UserMessage text={payload.text} />
         case "DATE_TITLE":
-            return <DateTitle text={entry.text} />
+            return <DateTitle text={payload.text} />
         case "PHOTO":
-            return <PhotoEntry name={entry.name} url={entry.url} />
+            return <PhotoEntry name={payload.name} url={payload.url} />
         case "STRESS":
-            return <StressEntry level={entry.level} id={entry._id} />
+            return <StressEntry level={payload.level} id={payload._id} />
         default:
-            return <span>{entry}</span>
+            return <span>{payload}</span>
     }
 }
 
@@ -411,8 +411,10 @@ const addDateLabels = entries => {
     for(let day of days) {
         dialog.push({
             type: "DATE_TITLE",
-            text: WEEKDAY[new Date(day).getDay()],
-            timestamp: new Date(day)
+            payload: {
+                text: WEEKDAY[new Date(day).getDay()],
+                timestamp: new Date(day)
+            }
         })
     }
     return dialog
@@ -420,15 +422,15 @@ const addDateLabels = entries => {
 
 const Dialog = ({startDate, children}) => {
     let micturitionEntries = useMicturition(startDate)
-        .map(e => ({ ...e, type: "MICTURITION"}))
+        .map(e => ({ payload: e, type: "MICTURITION"}))
     let drinkingEntries = useDrinking(startDate)
-        .map(e => ({ ...e, type: "DRINKING"}))
+        .map(e => ({ payload: e, type: "DRINKING"}))
     let photos = usePhotos(startDate)
-        .map(p => ({ ...p, type: "PHOTO" }))
+        .map(p => ({ payload: p, type: "PHOTO" }))
     let stressEntries = useStress(startDate)
-        .map(s => ({ ...s, type: "STRESS"}))
+        .map(s => ({ payload: s, type: "STRESS"}))
     let messages = useMessages(startDate)
-        .map(e => ({ ...e, type: e.sender === "user" ? "USER_MESSAGE" : "BOT_MESSAGE"}))
+        .map(e => ({ payload: e, type: e.sender === "user" ? "USER_MESSAGE" : "BOT_MESSAGE"}))
 
     let dialog = [
         ...micturitionEntries,
@@ -440,10 +442,10 @@ const Dialog = ({startDate, children}) => {
 
     dialog = addDateLabels(
             dialog
-                .sort((a, b) => a.timestamp - b.timestamp)
-                // .filter((a, i, arr) => i > (arr.length - 8))
+                .sort((a, b) => a.payload.timestamp - b.payload.timestamp)
+                .filter((a, i, arr) => i > (arr.length - 12))
         )
-        .sort((a, b) => a.timestamp - b.timestamp)
+        .sort((a, b) => a.payload.timestamp - b.payload.timestamp)
 
     return (
         <div className="flex flex-col px-3 w-full lg:w-3/4 xl:w-2/3 mx-auto space-y-3 pt-8">

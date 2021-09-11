@@ -32,8 +32,8 @@ const Settings = () => {
     }
 
     return (
-        <Shell title="Einstellungen" className="bg-gray-50 high-contrast:bg-red-600">
-            <div className="px-3 w-full lg:w-5/6 xl:w-2/3 mx-auto my-5 divide-y divide-gray-500">
+        <Shell title="Einstellungen" className="bg-gray-50 high-contrast:bg-gray-100">
+            <div className="px-3 w-full lg:w-5/6 xl:w-2/3 mx-auto my-5">
                 <form className="divide-y divide-gray-300" action="#" method="GET">
                     <div className="grid grid-cols-6 gap-4 py-5">
                         <div className="col-span-6 md:col-span-3 highContrast:text-green-800">
@@ -46,7 +46,7 @@ const Settings = () => {
                             <TextInput label="Email" value={user?.email} onChange={email => changeUser({email})} />
                         </div>
                         <div className="col-span-full">
-                            <label className="text-sm text-gray-600" htmlFor="sex">Geschlecht</label>
+                            <label className="text-sm text-gray-600 high-contrast:text-gray-800" htmlFor="sex">Geschlecht</label>
                             <SexSelect value={user?.sex} onChange={sex => changeUser({sex})}/>
                         </div>
                         <div className="col-span-full md:col-span-3">
@@ -82,8 +82,6 @@ const Settings = () => {
                             value={user?.settings.highContrast} 
                             onChange={highContrast => changeUser({settings: { ...user.settings, highContrast }})} />
                     </div>
-
-                    <hr />
 
                     <div className="bg-white rounded-lg flex flex-col items-stretch my-5 border-none">
                         <div className="text-md flex justify-between px-2 py-2 md:px-4 md:py-3">
