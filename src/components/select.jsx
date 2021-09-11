@@ -25,7 +25,7 @@ export function SexSelect({value, onChange}) {
     <div>
       <Listbox value={selected} onChange={changeSex}>
         <div className="w-full relative">
-          <Listbox.Button className="relative color transition ease-in-out duration-200 border border-gray-200  w-full py-2 md:py-3 pl-3 pr-10 text-left bg-white rounded-lg  cursor-default focus:outline-none focus:ring-2 focus:ring-blue-500 focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500 text-sm md:text-base">
+          <Listbox.Button className="relative color transition ease-in-out duration-200 border border-gray-200 high-contrast:border-gray-400 w-full py-2 md:py-3 pl-3 pr-10 text-left bg-white rounded-lg  cursor-default focus:outline-none focus:ring-2 focus:ring-blue-500 focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500 text-sm md:text-base">
             <span className="block truncate">{selected.name}</span>
             <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
               <SelectorIcon

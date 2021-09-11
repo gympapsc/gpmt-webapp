@@ -112,7 +112,7 @@ const LineChart = ({data, xlabel, ylabel}) => {
                         .attr("x1", e.offsetX - margin.left)
                         .attr("x2", e.offsetX - margin.left)
                     tooltip
-                        .attr("x", e.offsetX - margin.left)
+                        .attr("x", width - e.offsetX < 0 ? width - margin.left : ( e.offsetX < 40 ? margin.left: e.offsetX - margin.left))
                         .attr("y", 35)
                         .attr("text-anchor", "middle")
                     timetip
@@ -122,7 +122,7 @@ const LineChart = ({data, xlabel, ylabel}) => {
                         .attr("y", 10)
 
                     tooltipBox
-                        .attr("x", e.offsetX - margin.left - 40)
+                        .attr("x", width - e.offsetX < 0 ? width - margin.left - 40 : ( e.offsetX < 40 ? margin.left - 40: e.offsetX - margin.left - 40))
                         .attr("y", -5)
 
                 } else {
@@ -135,23 +135,23 @@ const LineChart = ({data, xlabel, ylabel}) => {
                         .attr("y1", y(0) + margin.top)
                         .attr("y2", y(100) + margin.top)
                         .attr("stroke", "rgba(256, 0, 0, 0.6)")
-                        .attr("stroke-width", "3px")
-                        .attr("stroke", d => prediction.prediction < 0.5 ? "green" : "red" )
+                        .attr("stroke-width", "2px")
+                        .attr("stroke", d => prediction?.prediction < 0.5 ? "green" : "red" )
                     
                     tooltipBox = Svg
                         .append("rect")
-                        .attr("x", e.offsetX - margin.left - 40)
+                        .attr("x", width - e.offsetX < 0 ? width - margin.left - 40 : ( e.offsetX < 40 ? margin.left - 40: e.offsetX - margin.left - 40))
                         .attr("y", -5)
                         .attr("width", 80)
                         .attr("height", 50)
                         .attr("rx", 8)
                         .attr("ry", 8)
-                        .attr("fill", d => prediction.prediction < 0.5 ? "green" : "red" )
+                        .attr("fill", d => prediction?.prediction < 0.5 ? "green" : "red" )
                     
                     tooltip = Svg
                         .append("text")
-                        .html(prediction.prediction)
-                        .attr("x", e.offsetX - margin.left)
+                        .html(prediction?.prediction || 0 )
+                        .attr("x", width - e.offsetX < 0 ? width - margin.left : ( e.offsetX < 40 ? margin.left: e.offsetX - margin.left))
                         .attr("y", 35)
                         .attr("fill", "#fff")
                         .attr("text-anchor", "middle")
@@ -159,7 +159,7 @@ const LineChart = ({data, xlabel, ylabel}) => {
                     timetip = Svg
                         .append("text")
                         .html(d3.timeFormat("%H:%M")(d3.timeHour.floor(x.invert(e.offsetX - margin.left))))
-                        .attr("x", e.offsetX - margin.left)
+                        .attr("x", width - e.offsetX < 0 ? width - margin.left : ( e.offsetX < 40 ? margin.left: e.offsetX - margin.left))
                         .attr("y", 15)
                         .attr("fill", "#fff")
                         .attr("text-anchor", "middle")
@@ -175,20 +175,20 @@ const LineChart = ({data, xlabel, ylabel}) => {
                 marker
                     .attr("x1", e.offsetX - margin.left)
                     .attr("x2", e.offsetX - margin.left)
-                    .attr("stroke", d => prediction.prediction < 0.5 ? "green" : "red" )
+                    .attr("stroke", d => prediction?.prediction < 0.5 ? "green" : "red" )
 
 
                 if(prediction) {
                     tooltip
                         .html(`${Math.round(prediction?.prediction * 1000)/10}%`)
                     tooltip
-                        .attr("x", e.offsetX - margin.left)
+                        .attr("x", width - e.offsetX < 0 ? width - margin.left : ( e.offsetX < 40 ? margin.left: e.offsetX - margin.left))
                         .attr("y", 35)
                     timetip
                         .html(d3.timeFormat("%H:%M")(d3.timeHour.floor(x.invert(e.offsetX - margin.left))))
-                        .attr("x", e.offsetX - margin.left)
+                        .attr("x", width - e.offsetX < 0 ? width - margin.left : ( e.offsetX < 40 ? margin.left: e.offsetX - margin.left))
                     tooltipBox
-                        .attr("x", e.offsetX - margin.left - 40)
+                        .attr("x", width - e.offsetX < 0 ? width - margin.left - 40 : ( e.offsetX < 40 ? margin.left - 40: e.offsetX - margin.left - 40))
                         .attr("y", -5)
                         .attr("fill", d => prediction.prediction < 0.5 ? "green" : "red" )
                 }

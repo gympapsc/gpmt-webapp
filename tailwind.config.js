@@ -1,4 +1,21 @@
 const colors = require('tailwindcss/colors')
+const plugin = require('tailwindcss/plugin')
+
+const highContrastVariant = plugin(
+  function({ addVariant, e }) {
+    addVariant('high-contrast', ({ modifySelectors, separator }) => {
+      modifySelectors(({ className }) => `.high-contrast .${e(`high-contrast${separator}${className}`)}`)
+    })
+  }
+)
+
+const placeholderVariant = plugin(
+  function({ addVariant, e }) {
+    addVariant('placeholder', ({ modifySelectors, separator }) => {
+      modifySelectors(({ className }) => `.${e(`placeholder${separator}${className}`)}::placeholder`)
+    })
+  }
+)
 
 module.exports = {
   purge: [
@@ -10,11 +27,21 @@ module.exports = {
     fontFamily: {
       'sans': ['-apple-system', 'Inter', 'sans-serif']
     },
-    extend: {
-    },
   },
   variants: {
-    extend: {},
+    extend: {
+      backgroundColor: ["high-contrast"],
+      textColor: ["high-contrast", "placeholder"],
+      stroke: ["high-contrast"],
+      borderColor: ["high-contrast"],
+      ringColor: ["high-contrast"],
+      divideColor: ["high-contrast"],
+      opacity: ["high-contrast", "placeholder"],
+      textOpacity: ["high-contrast", "placeholder"]
+    }
   },
-  plugins: [],
+  plugins: [
+    highContrastVariant,
+    placeholderVariant
+  ],
 }

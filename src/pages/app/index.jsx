@@ -100,7 +100,7 @@ const App = () => {
 
                         }
                         <input
-                            className="h-12 flex-grow px-3 md:px-4 bg-gray-300 border-0 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+                            className="h-12 flex-grow px-3 md:px-4 bg-gray-300 border-0 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 placeholder:text-gray-700"
                             ref={messageRef}
                             type="text"
                             placeholder="Nachricht"
