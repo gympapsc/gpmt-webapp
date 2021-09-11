@@ -23,7 +23,7 @@ const DrinkingEdit = () => {
     const changeAmount = amount => {
         dispatch(updateDrinking({
             ...entry,
-            amount: parseInt(amount)
+            amount
         }))
     }
 
@@ -49,7 +49,17 @@ const DrinkingEdit = () => {
                         <div className="space-y-5">
                             <div className="col-span-full">
                                 <label className="text-xs text-gray-600 uppercase" htmlFor="amount">Menge</label>
-                                <h4 className="text-2xl font-semibold">{amount * 1000}<span className="text-sm">ml</span></h4>
+                                <div>
+                                    <input
+                                        type="number" 
+                                        className="text-2xl font-semibold inline w-20 bg-transparent text-left"
+                                        value={amount * 1000}
+                                        min="0"
+                                        max="1000"
+                                        onChange={e => {setAmount(e.target.value / 1000); changeAmount(e.target.value / 1000)}}
+                                    />
+                                    <span className="text-sm">ml</span>
+                                </div>
                                 <input
                                     type="range"
                                     className="block w-full"

@@ -3,11 +3,13 @@ import PropTypes from "prop-types"
 import { useSpring, animated } from "@react-spring/web" 
 import { useMediaQuery } from "react-responsive"
 import Aside from "../components/aside"
+import { useUser } from "../hooks"
 
 
 const Shell = ({children, title, className, onScroll}) => {
 
     let [showMenu, setShowMenu] = useState(false)
+    let user = useUser()
 
     const isMobile = useMediaQuery({
         query: "(max-width: 640px)"
@@ -23,7 +25,7 @@ const Shell = ({children, title, className, onScroll}) => {
     }
 
     return (
-        <>
+        <div className={user?.settings.highContrast ? "high-contrast": ""}>
             <Aside showMenu={showMenu} setShowMenu={setShowMenu}/>
             <animated.div
                 style={props}>
@@ -51,7 +53,7 @@ const Shell = ({children, title, className, onScroll}) => {
                     {children}
                 </main>
             </animated.div>
-        </>
+        </div>
     )
 }
 

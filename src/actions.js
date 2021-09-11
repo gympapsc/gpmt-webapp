@@ -556,7 +556,7 @@ const avgDrinkingAmount = (entries) => {
     let endDate = d3.timeDay.floor(Math.min(...entries.map(e => e.date.valueOf())))
 
     return entries
-        .reduce((a, b) => a + b.amount, 0) / ((now - endDate) / 24 / 3600 / 1000) / 1000
+        .reduce((a, b) => a + b.amount, 0) / ((now - endDate) / 24 / 3600 / 1000)
 }
 
 const avgMicturitionFrequency = (entries) => {

@@ -66,8 +66,8 @@ const DrinkingChart = ({data, tooltip, range}) => {
             .enter()
                 .append("rect")
                 .attr("x", d => x(d3.timeHour.floor(d.x0)))
-                .attr("y", d => y(d.reduce((a, d) => a + d.amount, 0) / 1000))
-                .attr("height", d => height - y(d.reduce((a, d) => a + d.amount, 0) / 1000))
+                .attr("y", d => y(d.reduce((a, d) => a + d.amount, 0)))
+                .attr("height", d => height - y(d.reduce((a, d) => a + d.amount, 0)))
                 .attr("width", d => x(d3.timeHour.offset(d.x0, 1)) - x(d.x0) - 1)
                 .style("fill", "rgb(79, 70, 229)")
         }
@@ -81,11 +81,11 @@ const DrinkingChart = ({data, tooltip, range}) => {
                         .attr("x1", e.offsetX - margin.left)
                         .attr("x2", e.offsetX - margin.left)
                     tooltip
-                        .attr("x", e.offsetX - margin.left)
+                        .attr("x", width - e.offsetX < 0 ? width - margin.left : ( e.offsetX < 35 ? margin.left: e.offsetX - margin.left))
                         .attr("y", 15)
                         .attr("text-anchor", "middle")
                     tooltipBox
-                        .attr("x", e.offsetX - margin.left - 35)
+                        .attr("x", width - e.offsetX < 0 ? width - margin.left - 35 : ( e.offsetX < 35 ? margin.left - 35: e.offsetX - margin.left - 35))
                         .attr("y", -5)
 
                 } else {
@@ -101,7 +101,7 @@ const DrinkingChart = ({data, tooltip, range}) => {
                    
                     tooltipBox = svg
                         .append("rect")
-                        .attr("x", e.offsetX - margin.left - 35)
+                        .attr("x", width - e.offsetX < 0 ? width - margin.left - 35 : ( e.offsetX < 35 ? margin.left - 35: e.offsetX - margin.left - 35))
                         .attr("y", -5)
                         .attr("width", 70)
                         .attr("height", 30)
@@ -111,12 +111,11 @@ const DrinkingChart = ({data, tooltip, range}) => {
 
                     tooltip = svg
                         .append("text")
-                        .html(d?.reduce((a, d) => a + d.amount, 0) || 0)
-                        .attr("x", e.offsetX - margin.left)
+                        .html(`${Math.round(d?.reduce((a, d) => a + d.amount, 0) * 1000) || 0} ml`)
+                        .attr("x", width - e.offsetX < 0 ? width - margin.left : ( e.offsetX < 35 ? margin.left: e.offsetX - margin.left))
                         .attr("y", 15)
                         .attr("fill", "#fff")
                         .attr("text-anchor", "middle")
-
                 }
             })
             .on("mousemove", (e, d) => {
@@ -127,14 +126,14 @@ const DrinkingChart = ({data, tooltip, range}) => {
                 
 
                 tooltipBox
-                    .attr("x", e.offsetX - margin.left - 35)
+                    .attr("x", width - e.offsetX < 0 ? width - margin.left - 35 : ( e.offsetX < 35 ? margin.left - 35: e.offsetX - margin.left - 35))
                     .attr("y", -5)
 
                 tooltip
-                    .html(`${d?.reduce((a, d) => a + d.amount, 0) || 0} ml`)
+                    .html(`${Math.round(d?.reduce((a, d) => a + d.amount, 0) * 1000) || 0} ml`)
 
                 tooltip
-                    .attr("x", e.offsetX - margin.left)
+                    .attr("x", width - e.offsetX < 0 ? width - margin.left : ( e.offsetX < 35 ? margin.left: e.offsetX - margin.left))
                     .attr("y", 15)
                 
 

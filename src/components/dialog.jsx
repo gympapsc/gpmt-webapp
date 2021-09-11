@@ -333,7 +333,7 @@ const DrinkingEntry = ({amount, id}) => (
                     </Transition>
                 </Menu>                
             </div>
-            <h5 className="text-xl md:text-2xl font-semibold text-pink-900">{amount}<span className="text-base md:text-lg">ml</span></h5>
+            <h5 className="text-xl md:text-2xl font-semibold text-pink-900">{Math.round(amount * 1000)}<span className="text-base md:text-lg">ml</span></h5>
         </a>
     </Link>
 )
@@ -441,7 +441,7 @@ const Dialog = ({startDate, children}) => {
     dialog = addDateLabels(
             dialog
                 .sort((a, b) => a.timestamp - b.timestamp)
-                .filter((a, i, arr) => i > (arr.length - 8))
+                // .filter((a, i, arr) => i > (arr.length - 8))
         )
         .sort((a, b) => a.timestamp - b.timestamp)
 

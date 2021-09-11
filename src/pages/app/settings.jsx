@@ -32,11 +32,11 @@ const Settings = () => {
     }
 
     return (
-        <Shell title="Einstellungen" className="bg-gray-50">
+        <Shell title="Einstellungen" className="bg-gray-50 high-contrast:bg-red-600">
             <div className="px-3 w-full lg:w-5/6 xl:w-2/3 mx-auto my-5 divide-y divide-gray-500">
                 <form className="divide-y divide-gray-300" action="#" method="GET">
                     <div className="grid grid-cols-6 gap-4 py-5">
-                        <div className="col-span-6 md:col-span-3">
+                        <div className="col-span-6 md:col-span-3 highContrast:text-green-800">
                             <TextInput label="Vorname" value={user?.firstname} onChange={firstname => changeUser({firstname})} />
                         </div>
                         <div className="col-span-6 md:col-span-3">
@@ -60,7 +60,6 @@ const Settings = () => {
                         </div>
                     </div>
 
-
                     <div className="space-y-4 py-5">
                         <Toggle 
                             title="Spracheingabe" 
@@ -77,6 +76,11 @@ const Settings = () => {
                             description="Zeigt die Vorhersage über den Tag kumulativ an" 
                             value={user?.settings.cumulativePrediction} 
                             onChange={cumulativePrediction => changeUser({settings: { ...user.settings, cumulativePrediction }})} />
+                        <Toggle 
+                            title="Hoher Kontrast"
+                            description="Erhöht die Kontraste der Benutzeroberfläche" 
+                            value={user?.settings.highContrast} 
+                            onChange={highContrast => changeUser({settings: { ...user.settings, highContrast }})} />
                     </div>
 
                     <hr />
