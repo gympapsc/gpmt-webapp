@@ -152,7 +152,15 @@ const Aside = ({ showMenu, setShowMenu }) => {
             <div className="p-2 md:p-3 grid grid-cols-2 gap-2 md:gap-3 mb-8">
                 <Link href="/app">
                     <a className="col-span-2 p-3 bg-white rounded-xl border border-gray-200">
-                        <h3 className="text-sm font-semibold">Chat &bull; <span className="text-gray-600 high-contrast:text-gray-800">{formatDay(new Date(messages[0]?.timestamp))}</span></h3>
+                        <div className="flex flex-row justify-between items-center">
+                            <h3 className="text-sm font-semibold">Chat</h3>
+                            <div className="text-xs text-gray-600 high-contrast:text-gray-800">
+                                <span className="text-gray-600 high-contrast:text-gray-800">{formatDay(new Date(messages[0]?.timestamp))}</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                                </svg>
+                            </div>
+                        </div>
                         <p className="text-gray-600 high-contrast:text-gray-800">{shorten(messages[0]?.text, 40) || "..."}</p>
                     </a>
                 </Link>
@@ -192,7 +200,14 @@ const Aside = ({ showMenu, setShowMenu }) => {
                 </div>
                 <Link href="/app/overview">
                     <a className="col-span-2 h-64 rounded-xl bg-white p-3 flex flex-col border border-gray-200 high-contrast:border-gray-300">
-                        <h3 className="text-sm font-semibold flex-grow-0">Miktion</h3>
+                        <div className="flex flex-row justify-between items-center">
+                            <h3 className="text-sm font-semibold">Miktion</h3>
+                            <div className="text-xs text-gray-600 high-contrast:text-gray-800">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                                </svg>
+                            </div>
+                        </div>
                         <div className="w-full h-full mt-3 flex-grow">
                             <MicturitionChart data={micturition || []} />
                         </div>
@@ -200,7 +215,14 @@ const Aside = ({ showMenu, setShowMenu }) => {
                 </Link>
                 <Link href="/app/overview">
                     <a className="col-span-2 h-64 rounded-xl bg-white p-3 flex flex-col border border-gray-200 high-contrast:border-gray-300">
-                        <h3 className="text-sm font-semibold">Trinken</h3>
+                        <div className="flex flex-row justify-between items-center">
+                            <h3 className="text-sm font-semibold">Trinken</h3>
+                            <div className="text-xs text-gray-600 high-contrast:text-gray-800">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                                </svg>
+                            </div>
+                        </div>
                         <div className="w-full h-full mt-3 flex-grow">
                             <DrinkingChart data={drinking || []} />
                         </div>
@@ -208,7 +230,14 @@ const Aside = ({ showMenu, setShowMenu }) => {
                 </Link>
                 <Link href="#">
                     <a className="col-span-2 h-64 rounded-xl bg-white p-3 flex flex-col border border-gray-200 high-contrast:border-gray-300">
-                        <h3 className="text-sm font-semibold">Stress</h3>
+                        <div className="flex flex-row justify-between items-center">
+                            <h3 className="text-sm font-semibold">Stress</h3>
+                            <div className="text-xs text-gray-600 high-contrast:text-gray-800">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                                </svg>
+                            </div>
+                        </div>
                         <div className="w-full h-full mt-3 flex-grow">
                             <StressChart data={stress || []} />
                         </div>
