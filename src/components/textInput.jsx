@@ -10,7 +10,7 @@ const TextInput = ({label, value, onChange, placeholder}) => {
                 type="text"
                 id={label}
                 value={value}
-                placeholder={placeholder}
+                placeholder={placeholder || ""}
                 onChange={e => onChange(e.target.value)}
                 />
         </>

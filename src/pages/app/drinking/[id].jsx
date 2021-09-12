@@ -8,6 +8,7 @@ import Shell from "../../../components/shell"
 import { deleteDrinking, getDrinking, updateDrinking } from "../../../actions"
 import DateTimeInput from "../../../components/datetimeInput"
 import { useDrinking } from "../../../hooks"
+import TextInput from "../../../components/textInput"
 
 
 const DrinkingEdit = () => {
@@ -31,6 +32,13 @@ const DrinkingEdit = () => {
         dispatch(updateDrinking({
             ...entry,
             date
+        }))
+    }
+
+    const changeType = type => {
+        dispatch(updateDrinking({
+            ...entry,
+            type
         }))
     }
 
@@ -71,6 +79,9 @@ const DrinkingEdit = () => {
                                     onBlur={e => changeAmount(e.target.value / 1000)}
                                     title="Trinkmenge"
                                     />
+                            </div>
+                            <div className="col-span-full">
+                                <TextInput label="Trinken" value={entry?.type || ""} onChange={changeType}/>
                             </div>
                             <div className="col-span-full">
                                 <DateTimeInput label="Datum" value={entry?.date || new Date()} onChange={changeDate} />

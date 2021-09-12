@@ -34,6 +34,13 @@ const NutritionEdit = () => {
         }))
     }
 
+    const changeType = type => {
+        dispatch(updateNutrition({
+            ...entry,
+            type
+        }))
+    }
+
     let deleteEntry = e => {
         e.preventDefault()
         dispatch(deleteNutrition(id))
@@ -61,6 +68,9 @@ const NutritionEdit = () => {
                                     onBlur={e => changeMass(e.target.value / 1000)}
                                     title="Gegessene Menge"
                                     />
+                            </div>
+                            <div className="col-span-full">
+                                <TextInput label="Essen" value={entry?.type || ""} onChange={changeType}/>
                             </div>
                             <div className="col-span-full">
                                 <DateTimeInput label="Datum" value={entry?.date || new Date()} onChange={changeDate} />
