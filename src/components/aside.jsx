@@ -33,6 +33,7 @@ const cumulativeData = (d, selector) => {
 
 const Aside = ({ showMenu, setShowMenu }) => {
     let formatTime = d3.timeFormat("%H:%M")
+    let formatDaytime = d3.timeFormat("%A, %H:%M")
     let formatDay = d3.timeFormat("%A")
 
     let startDate = new Date()
@@ -59,11 +60,111 @@ const Aside = ({ showMenu, setShowMenu }) => {
         left: isMobile ? (showMenu ? 0 : -384) : 0
     })
 
+    const scroll = e => {
+
+    }
+
     return (
         <animated.aside
             style={props}
-            className={`${showMenu && isMobile ? "shadow-2xl md:shadow-none" : ""} max-w-full z-30 absolute bottom-0 md:right-auto w-96 h-full overflow-x-hidden bg-gray-100 high-contrast:bg-gray-200 overflow-y-scroll border-r border-gray-300 high-contrast:border-gray-400`}>
-            <header className="px-3 md:px-4 pb-2 md:pb-0 md:h-10 w-full flex flex-row justify-between bg-gray-100 high-contrast:bg-gray-200 mt-4">
+            onScroll={scroll}
+            className={`${showMenu && isMobile ? "shadow-2xl md:shadow-none" : ""} max-w-full z-30 absolute bottom-0 md:right-auto w-96 h-full overflow-x-hidden bg-gray-100 high-contrast:bg-gray-200 overflow-y-scroll border-r border-gray-300 high-contrast:border-gray-400 flex flex-col`}>
+            <div className="p-2 md:p-3 grid grid-cols-2 gap-2 md:gap-3 mb-8">
+                <Link href="/app">
+                    <a className="col-span-2 p-3 bg-white rounded-xl border border-gray-200">
+                        <div className="flex flex-row justify-between items-center">
+                            <h3 className="text-sm font-semibold">Chat</h3>
+                            <div className="text-xs text-gray-600 high-contrast:text-gray-800">
+                                <span className="text-gray-600 high-contrast:text-gray-800">{formatDaytime(new Date(messages[0]?.timestamp))}</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                                </svg>
+                            </div>
+                        </div>
+                        <p className="text-gray-600 high-contrast:text-gray-800">{shorten(messages[0]?.text, 40) || "..."}</p>
+                    </a>
+                </Link>
+                <Link href="/app/overview" id="micturition_widget">
+                    <a className={`
+                        col-span-1 h-32 text-white rounded-xl bg-gradient-to-l 
+                        ${Math.round(prediction.find(p => p.date.getHours() === currDate.getHours())?.prediction * 100) < 50 ? "from-green-500 to-green-600" : "from-red-400 to-red-500"} 
+                        flex flex-col p-3
+                    `}>
+                        <h3 className="text-sm font-semibold">Miktion</h3>
+                        <div className="mt-auto">
+                            <h5 className="text-xs font-semibold -mb-1 tracking-wide opacity-90 high-contrast:opacity-100">{formatTime(currDate)}</h5>
+                            <h4 className="text-2xl md:text-2xl font-bold">{
+                                prediction.length ?
+                                Math.round(prediction.find(p => p.date.getHours() === currDate.getHours())?.prediction * 100)
+                                : "--"
+                            }<span className="text-xl">%</span></h4>
+                        </div>
+                    </a>
+                </Link>
+                <Link href="/app/overview">
+                    <a className="col-span-1 h-32 rounded-xl bg-white flex flex-col p-3 border border-gray-200 high-contrast:border-gray-300">
+                        <h3 className="text-sm font-semibold">Nächste Miktion</h3>
+                        <div className="mt-auto">
+                            <h5 className="text-gray-600 text-xs font-semibold -mb-1 tracking-wide">{formatDay(cumulativeData(prediction, "prediction").find(p => p?.prediction > 1)?.date || new Date())}</h5>
+                            <h4 className="text-2xl md:text-2xl font-bold">
+                                {formatTime(cumulativeData(prediction, "prediction").find(p => p?.prediction > 1)?.date || new Date())}
+                            </h4>
+                        </div>
+                    </a>
+                </Link>
+                <div className="col-span-2">
+                    <div className="p-3 h-96">
+                        <h3 className="text-sm md:text-md font-semibold">Heute</h3>
+                        <Clock data={prediction}></Clock>
+                    </div>
+                </div>
+                <Link href="/app/overview">
+                    <a className="col-span-2 h-64 rounded-xl bg-white p-3 flex flex-col border border-gray-200 high-contrast:border-gray-300">
+                        <div className="flex flex-row justify-between items-center">
+                            <h3 className="text-sm font-semibold">Miktion</h3>
+                            <div className="text-xs text-gray-600 high-contrast:text-gray-800">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div className="w-full h-full mt-3 flex-grow">
+                            <MicturitionChart data={micturition || []} />
+                        </div>
+                    </a>
+                </Link>
+                <Link href="/app/overview">
+                    <a className="col-span-2 h-64 rounded-xl bg-white p-3 flex flex-col border border-gray-200 high-contrast:border-gray-300">
+                        <div className="flex flex-row justify-between items-center">
+                            <h3 className="text-sm font-semibold">Trinken</h3>
+                            <div className="text-xs text-gray-600 high-contrast:text-gray-800">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div className="w-full h-full mt-3 flex-grow">
+                            <DrinkingChart data={drinking || []} />
+                        </div>
+                    </a>
+                </Link>
+                {/* <Link href="#">
+                    <a className="col-span-2 h-64 rounded-xl bg-white p-3 flex flex-col border border-gray-200 high-contrast:border-gray-300">
+                        <div className="flex flex-row justify-between items-center">
+                            <h3 className="text-sm font-semibold">Stress</h3>
+                            <div className="text-xs text-gray-600 high-contrast:text-gray-800">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div className="w-full h-full mt-3 flex-grow">
+                            <StressChart data={stress || []} />
+                        </div>
+                    </a>
+                </Link> */}
+            </div>
+            <header className="px-3 md:p-4 pb-4 md:pb-2 w-full flex flex-row justify-between bg-gray-100 high-contrast:bg-gray-200 mt-4 md:mt-0 md:sticky md:top-0 backdrop-filter backdrop-blur-lg bg-opacity-80 order-first">
                 {
                     isMobile &&
                     <button onClick={() => setShowMenu(false)} className="w-8 h-8 flex flex-row justify-center items-center">
@@ -149,101 +250,6 @@ const Aside = ({ showMenu, setShowMenu }) => {
                     </div>
                 }
             </header>
-            <div className="p-2 md:p-3 grid grid-cols-2 gap-2 md:gap-3 mb-8">
-                <Link href="/app">
-                    <a className="col-span-2 p-3 bg-white rounded-xl border border-gray-200">
-                        <div className="flex flex-row justify-between items-center">
-                            <h3 className="text-sm font-semibold">Chat</h3>
-                            <div className="text-xs text-gray-600 high-contrast:text-gray-800">
-                                <span className="text-gray-600 high-contrast:text-gray-800">{formatDay(new Date(messages[0]?.timestamp))}</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-                                </svg>
-                            </div>
-                        </div>
-                        <p className="text-gray-600 high-contrast:text-gray-800">{shorten(messages[0]?.text, 40) || "..."}</p>
-                    </a>
-                </Link>
-                <Link href="/app/overview" id="micturition_widget">
-                    <a className={`
-                        col-span-1 h-32 text-white rounded-xl bg-gradient-to-l 
-                        ${Math.round(prediction.find(p => p.date.getHours() === currDate.getHours())?.prediction * 100) < 50 ? "from-green-500 to-green-600" : "from-red-400 to-red-500"} 
-                        flex flex-col p-3
-                    `}>
-                        <h3 className="text-sm font-semibold">Miktion</h3>
-                        <div className="mt-auto">
-                            <h5 className="text-xs font-semibold -mb-1 tracking-wide opacity-90 high-contrast:opacity-100">{formatTime(currDate)}</h5>
-                            <h4 className="text-2xl md:text-2xl font-bold">{
-                                prediction.length ?
-                                Math.round(prediction.find(p => p.date.getHours() === currDate.getHours())?.prediction * 100)
-                                : "--"
-                            }<span className="text-xl">%</span></h4>
-                        </div>
-                    </a>
-                </Link>
-                <Link href="/app/overview">
-                    <a className="col-span-1 h-32 rounded-xl bg-white flex flex-col p-3 border border-gray-200 high-contrast:border-gray-300">
-                        <h3 className="text-sm font-semibold">Nächste Miktion</h3>
-                        <div className="mt-auto">
-                            <h5 className="text-gray-600 text-xs font-semibold -mb-1 tracking-wide">{formatDay(cumulativeData(prediction, "prediction").find(p => p?.prediction > 1)?.date || new Date())}</h5>
-                            <h4 className="text-2xl md:text-2xl font-bold">
-                                {formatTime(cumulativeData(prediction, "prediction").find(p => p?.prediction > 1)?.date || new Date())}
-                            </h4>
-                        </div>
-                    </a>
-                </Link>
-                <div className="col-span-2">
-                    <div className="p-3 h-96">
-                        <h3 className="text-sm md:text-md font-semibold">Heute</h3>
-                        <Clock data={prediction}></Clock>
-                    </div>
-                </div>
-                <Link href="/app/overview">
-                    <a className="col-span-2 h-64 rounded-xl bg-white p-3 flex flex-col border border-gray-200 high-contrast:border-gray-300">
-                        <div className="flex flex-row justify-between items-center">
-                            <h3 className="text-sm font-semibold">Miktion</h3>
-                            <div className="text-xs text-gray-600 high-contrast:text-gray-800">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-                                </svg>
-                            </div>
-                        </div>
-                        <div className="w-full h-full mt-3 flex-grow">
-                            <MicturitionChart data={micturition || []} />
-                        </div>
-                    </a>
-                </Link>
-                <Link href="/app/overview">
-                    <a className="col-span-2 h-64 rounded-xl bg-white p-3 flex flex-col border border-gray-200 high-contrast:border-gray-300">
-                        <div className="flex flex-row justify-between items-center">
-                            <h3 className="text-sm font-semibold">Trinken</h3>
-                            <div className="text-xs text-gray-600 high-contrast:text-gray-800">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-                                </svg>
-                            </div>
-                        </div>
-                        <div className="w-full h-full mt-3 flex-grow">
-                            <DrinkingChart data={drinking || []} />
-                        </div>
-                    </a>
-                </Link>
-                <Link href="#">
-                    <a className="col-span-2 h-64 rounded-xl bg-white p-3 flex flex-col border border-gray-200 high-contrast:border-gray-300">
-                        <div className="flex flex-row justify-between items-center">
-                            <h3 className="text-sm font-semibold">Stress</h3>
-                            <div className="text-xs text-gray-600 high-contrast:text-gray-800">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-                                </svg>
-                            </div>
-                        </div>
-                        <div className="w-full h-full mt-3 flex-grow">
-                            <StressChart data={stress || []} />
-                        </div>
-                    </a>
-                </Link>
-            </div>
         </animated.aside>
     )
 }

@@ -42,10 +42,20 @@ const StressEdit = () => {
         router.push("/app")
     }
 
+    let saveEntry = e => {
+        
+    }
+
     return (
         <Secure>
             <Aside />
-            <Shell title={"Stresseintrag"} className="bg-gray-50">
+            <Shell title={"Stresseintrag"} className="bg-gray-50" actionButton={
+                <button
+                    onClick={saveEntry} 
+                    className="text-blue-500 self-center inline-flex flex-row">
+                    <span className="ml-auto font-medium">Speichern</span>
+                </button>
+            }>
                 <div className="flex flex-col px-3 w-full lg:w-3/4 xl:w-2/3 mx-auto space-y-4 my-5">
                     <form className="mt-3 space-y-4">
                         <div className="col-span-full">

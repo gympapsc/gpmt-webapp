@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useRef } from "react"
 import { useRouter } from "next/router"
 import { useSelector, useDispatch } from "react-redux"
 
@@ -13,47 +13,46 @@ import TextInput from "../../../components/textInput"
 
 const DrinkingEdit = () => {
     let router = useRouter()
+    let slider = useRef(null)
     let {id} = router.query
 
     let dispatch = useDispatch()
     let entry = useDrinking(new Date())
         .find(d => d._id === id)
-    let [amount, setAmount] = useState(entry?.amount || 0)
+        
+    let [amount, setAmount] = useState(entry?.amount)
+    let [type, setType] = useState(entry?.type)
+    let [date, setDate] = useState(entry?.date)
     
-
-    const changeAmount = amount => {
-        dispatch(updateDrinking({
-            ...entry,
-            amount
-        }))
-    }
-
-    const changeDate = date => {
-        dispatch(updateDrinking({
-            ...entry,
-            date
-        }))
-    }
-
-    const changeType = type => {
-        dispatch(updateDrinking({
-            ...entry,
-            type
-        }))
-    }
-
     let deleteEntry = e => {
         e.preventDefault()
         dispatch(deleteDrinking(id))
         router.push("/app")
     }
 
+    let saveEntry = e => {
+        e.preventDefault()
+        dispatch(updateDrinking({
+            ...entry,
+            type,
+            amount,
+            date
+        }))
+        router.push("/app")
+    }
+
     return (
         <>
             <Aside />
-            <Shell title={"Trinkeintrag"} className="bg-gray-50">
-                <div className="flex flex-col px-3 w-full lg:w-3/4 xl:w-2/3 mx-auto my-5 space-y-4">
-                    <form className="mt-3 space-y-4">
+            <Shell title={"Trinkeintrag"} className="bg-gray-50" actionButton={
+                <button
+                    onClick={saveEntry} 
+                    className="text-blue-500 self-center inline-flex flex-row">
+                    <span className="ml-auto font-medium">Speichern</span>
+                </button>
+            }>
+                <div className="flex flex-col px-3 w-full lg:w-3/4 xl:w-2/3 mx-auto space-y-4 h-full">
+                    <form className="pt-3 space-y-4 flex flex-col h-full">
                         <div className="space-y-5">
                             <div className="col-span-full">
                                 <label className="text-xs text-gray-600 uppercase" htmlFor="amount">Menge</label>
@@ -64,7 +63,7 @@ const DrinkingEdit = () => {
                                         value={amount * 1000}
                                         min="0"
                                         max="1000"
-                                        onChange={e => {setAmount(e.target.value / 1000); changeAmount(e.target.value / 1000)}}
+                                        onChange={e => setAmount(e.target.value / 1000)}
                                     />
                                     <span className="text-sm">ml</span>
                                 </div>
@@ -74,21 +73,21 @@ const DrinkingEdit = () => {
                                     id="amount"
                                     min="0"
                                     max="1000"
-                                    value={amount * 1000}
+                                    defaultValue={amount * 1000}
                                     onChange={e => setAmount(e.target.value / 1000)}
-                                    onBlur={e => changeAmount(e.target.value / 1000)}
+                                    ref={slider}
                                     title="Trinkmenge"
                                     />
                             </div>
                             <div className="col-span-full">
-                                <TextInput label="Trinken" value={entry?.type || ""} onChange={changeType}/>
+                                <TextInput label="Trinken" defaultValue={type || ""} onChange={setType}/>
                             </div>
                             <div className="col-span-full">
-                                <DateTimeInput label="Datum" value={entry?.date || new Date()} onChange={changeDate} />
+                                <DateTimeInput label="Datum" value={date || new Date()} onChange={setDate} />
                             </div>
                         </div>
 
-                        <div className="flex flex-row w-full">
+                        <div className="flex flex-row w-full mt-auto">
                             <button
                                 onClick={deleteEntry}
                                 className="py-2 w-full text-center text-white bg-red-600 rounded-lg font-medium">

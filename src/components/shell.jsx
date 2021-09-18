@@ -6,7 +6,7 @@ import Aside from "../components/aside"
 import { useUser } from "../hooks"
 
 
-const Shell = ({children, title, className, onScroll}) => {
+const Shell = ({children, title, className, onScroll, actionButton}) => {
 
     let [showMenu, setShowMenu] = useState(false)
     let user = useUser()
@@ -30,7 +30,10 @@ const Shell = ({children, title, className, onScroll}) => {
             <animated.div
                 style={props}>
                 <main onClick={e => toggleMenu(e, false)} className={`absolute z-0 top-0 left-0 md:left-96 right-0 bottom-0 flex flex-col overflow-y-scroll ${className}`}>
-                    <header className="sticky px-3 bg-gray-50 py-1 md:py-2 top-0 right-0 grid grid-cols-3 w-full border-b high-contrast:border-gray-400 bg-opacity-60 backdrop-filter backdrop-blur-lg">
+                    <div className="order-last flex-grow">
+                        {children}
+                    </div>
+                    <header className="sticky px-3 bg-gray-50 py-1 md:py-2 top-0 right-0 grid grid-cols-3 w-full border-b high-contrast:border-gray-400 bg-opacity-60 backdrop-filter backdrop-blur-lg flex-grow-0">
                         <div className="flex flex-col justify-center items-center">
                             <button onClick={e => toggleMenu(e, !showMenu)} className="text-blue-500 md:invisible self-start flex flex-row items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -44,13 +47,11 @@ const Shell = ({children, title, className, onScroll}) => {
                                 {title}
                             </h3>
                         </div>
+                            { actionButton }
                         <div>
+
                         </div>
-                        {/* <button className="text-blue-500 md:invisible self-center flex flex-row">
-                            <span>Übersicht</span>
-                        </button> */}
                     </header>
-                    {children}
                 </main>
             </animated.div>
         </div>
