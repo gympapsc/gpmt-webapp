@@ -61,4 +61,3 @@ export const createSpeechConfig = (token, region) => {
 }
 
 export const delay = (ms) => new Promise((res, rej) => setTimeout(() => res(), ms))
- 
