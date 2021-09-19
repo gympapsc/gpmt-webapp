@@ -54,8 +54,8 @@ describe("redux action reducer", () => {
         expect(state.micturition).toContainEqual(micturition)
     })
 
-    it("should add drinking", () => {
-        const drinking = {
+    it("should add hydration", () => {
+        const hydration = {
             _id: "9876543210",
             amount: 400,
             date: new Date(),
@@ -64,17 +64,17 @@ describe("redux action reducer", () => {
         }
         const action = {
             type: "ADD_DRINKING",
-            payload: drinking            
+            payload: hydration            
         }
         const initialState = { 
             messages: null,
-            drinking: null,
+            hydration: null,
             user: null 
         }
         
         const state = reducer(initialState, action)
 
-        expect(state.drinking).toContainEqual(drinking)
+        expect(state.hydration).toContainEqual(hydration)
     })
 
     it("should add photo", () => {
@@ -212,8 +212,8 @@ describe("redux action reducer", () => {
         expect(state.micturitionPredictions).toStrictEqual(predictions)
     })
 
-    it("should set drinking", () => {
-        const drinking = [{
+    it("should set hydration", () => {
+        const hydration = [{
             _id: "0123456789",
             amount: 100,
             date: new Date(),
@@ -223,17 +223,17 @@ describe("redux action reducer", () => {
         const action = {
             type: "SET_DRINKING",
             payload: {
-                entries: drinking
+                entries: hydration
             }
         }
         const initialState = {
-            drinking: null,
+            hydration: null,
             user: null 
         }
         
         const state = reducer(initialState, action)
 
-        expect(state.drinking).toStrictEqual(drinking)
+        expect(state.hydration).toStrictEqual(hydration)
     })
 
     it("should set micturition", () => {
@@ -340,7 +340,7 @@ describe("redux action reducer", () => {
         )
     })
 
-    it("should update drinking", () => {
+    it("should update hydration", () => {
         let now = new Date()
         const action = {
             type: "UPDATE_DRINKING",
@@ -350,7 +350,7 @@ describe("redux action reducer", () => {
             }
         }
         const initialState = {
-            drinking: [{
+            hydration: [{
                 _id: "0123456789",
                 amount: 300,
                 date: now,
@@ -362,7 +362,7 @@ describe("redux action reducer", () => {
         
         const state = reducer(initialState, action)
 
-        expect(state.drinking.find(d => d._id === "0123456789")).toStrictEqual(
+        expect(state.hydration.find(d => d._id === "0123456789")).toStrictEqual(
             {
                 _id: "0123456789",
                 amount: 200,
@@ -418,7 +418,7 @@ describe("redux action reducer", () => {
         )
     })
 
-    it("should delete drinking", () => {
+    it("should delete hydration", () => {
         const action = {
             type: "DELETE_DRINKING",
             payload: {
@@ -426,7 +426,7 @@ describe("redux action reducer", () => {
             }
         }
         const initialState = {
-            drinking: [{
+            hydration: [{
                 _id: "0123456789",
                 amount: 300,
                 date: new Date(),
@@ -438,7 +438,7 @@ describe("redux action reducer", () => {
         
         const state = reducer(initialState, action)
 
-        expect(state.drinking.length).toBe(0)
+        expect(state.hydration.length).toBe(0)
     })
 
     it("should delete micturition", () => {

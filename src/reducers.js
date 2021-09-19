@@ -6,7 +6,7 @@ const initialState = {
     micturition: null,
     nutrition: null,
     stress: null,
-    drinking: null,
+    hydration: null,
     photos: null,
     medication: null,
     micturitionPredictions: null
@@ -51,8 +51,8 @@ const reducer = (state=initialState, action) => {
         case "ADD_DRINKING":
                 return {
                     ...state,
-                    drinking: [
-                        ...(state.drinking || []),
+                    hydration: [
+                        ...(state.hydration || []),
                         action.payload
                     ]
             }
@@ -90,7 +90,7 @@ const reducer = (state=initialState, action) => {
         case "SET_DRINKING":
             return {
                 ...state,
-                drinking: action.payload.entries
+                hydration: action.payload.entries
             }
         case "SET_USER":
             return {
@@ -150,10 +150,10 @@ const reducer = (state=initialState, action) => {
         case "UPDATE_DRINKING":
             return {
                 ...state,
-                drinking: [
-                    ...state.drinking.filter(d => d._id !== action.payload._id),
+                hydration: [
+                    ...state.hydration.filter(d => d._id !== action.payload._id),
                     {
-                        ...state.drinking.find(d => d._id === action.payload._id),
+                        ...state.hydration.find(d => d._id === action.payload._id),
                         ...action.payload
                     }
                 ]
@@ -194,7 +194,7 @@ const reducer = (state=initialState, action) => {
         case "DELETE_DRINKING":
             return {
                 ...state,
-                drinking: state.drinking.filter(d => d._id !== action.payload._id)
+                hydration: state.hydration.filter(d => d._id !== action.payload._id)
             }
         case "DELETE_MICTURITION":
             return {
@@ -226,7 +226,7 @@ const reducer = (state=initialState, action) => {
                 ...state,
                 user: {
                     ...state.user,
-                    avgDrinkingAmount: action.payload.avgDrinkingAmount
+                    avgHydrationAmount: action.payload.avgHydrationAmount
                 }
             }
         case "SET_MICTURITION_FREQUENCY":

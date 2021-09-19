@@ -2,7 +2,7 @@ import React from "react"
 import { Provider } from "react-redux"
 import { render, fireEvent, waitFor, screen } from "@testing-library/react"
 
-import DrinkingEdit from "../../src/pages/app/drinking/[id]"
+import HydrationEdit from "../../src/pages/app/hydration/[id]"
 import store from "../../src/store"
 import api from "../../src/api/http"
 
@@ -12,7 +12,7 @@ jest.mock("next/router")
 
 let eid = "123456789"
 
-describe("/app/drinking edit page", () => {
+describe("/app/hydration edit page", () => {
 
     beforeAll(() => {
         useRouter.mockImplementation(() => {
@@ -32,7 +32,7 @@ describe("/app/drinking edit page", () => {
     it("should render after sign in", async () => {
         render(
             <Provider store={store}>
-                <DrinkingEdit />
+                <HydrationEdit />
             </Provider>
         )
 
@@ -45,7 +45,7 @@ describe("/app/drinking edit page", () => {
     it("should render entry date, time and amount input", async () => {
         render(
             <Provider store={store}>
-                <DrinkingEdit />
+                <HydrationEdit />
             </Provider>
         )
 
@@ -63,7 +63,7 @@ describe("/app/drinking edit page", () => {
     it("should change entry date and time", async () => {
         render(
             <Provider store={store}>
-                <DrinkingEdit />
+                <HydrationEdit />
             </Provider>
         )
 
@@ -81,15 +81,15 @@ describe("/app/drinking edit page", () => {
             }
         })
 
-        expect(store.getState().drinking.find(d => d._id === eid)).toBeDefined()
-        expect(store.getState().drinking.find(d => d._id === eid).date.getFullYear()).toEqual(2012)
-        expect(store.getState().drinking.find(d => d._id === eid).date.getHours()).toEqual(12)
+        expect(store.getState().hydration.find(d => d._id === eid)).toBeDefined()
+        expect(store.getState().hydration.find(d => d._id === eid).date.getFullYear()).toEqual(2012)
+        expect(store.getState().hydration.find(d => d._id === eid).date.getHours()).toEqual(12)
     })
 
     it("should change entry amount", async () => {
         render(
             <Provider store={store}>
-                <DrinkingEdit />
+                <HydrationEdit />
             </Provider>
         )
 
@@ -102,20 +102,20 @@ describe("/app/drinking edit page", () => {
         })
         fireEvent.blur(screen.getByTitle(/Trinkmenge/i))
 
-        expect(store.getState().drinking.find(d => d._id === eid)).toBeDefined()
-        await waitFor(() => expect(store.getState().drinking.find(d => d._id === eid).amount).toEqual(200))
+        expect(store.getState().hydration.find(d => d._id === eid)).toBeDefined()
+        await waitFor(() => expect(store.getState().hydration.find(d => d._id === eid).amount).toEqual(200))
     })
 
     it("should delete entry", async () => {
         render(
             <Provider store={store}>
-                <DrinkingEdit />
+                <HydrationEdit />
             </Provider>
         )
 
         await waitFor(() => screen.getAllByText("Übersicht"))
 
         fireEvent.click(screen.getByText(/Löschen/i))
-        await waitFor(() => expect(store.getState().drinking.find(e => e._id === eid)).toBeUndefined())
+        await waitFor(() => expect(store.getState().hydration.find(e => e._id === eid)).toBeUndefined())
     })
 })

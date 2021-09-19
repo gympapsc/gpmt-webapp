@@ -28,7 +28,7 @@ let data = {
         date: new Date(2020, 0, 1, 10, 0),
         level: 2
     }],
-    drinking: [{
+    hydration: [{
         _id: "123456789",
         timestamp: new Date().valueOf(),
         updatedAt: new Date().valueOf(),
@@ -192,11 +192,11 @@ export const handlers = [
         }
     }),
     
-    rest.get(`${url}/drinking`, (req, res, ctx) => {
+    rest.get(`${url}/hydration`, (req, res, ctx) => {
         if(req.cookies["authToken"] === "testing@taylor.com") {
             return res(
                 ctx.json({
-                    entries: data.drinking
+                    entries: data.hydration
                 })
             )
         } else {
@@ -208,17 +208,17 @@ export const handlers = [
             )
         }
     }),
-    rest.put(`${url}/drinking/:id`, (req, res, ctx) => {
+    rest.put(`${url}/hydration/:id`, (req, res, ctx) => {
         let { id } = req.params
         let {
             date,
             amount
         } = req.body
         if(req.cookies["authToken"] === "testing@taylor.com") {
-            data.drinking = [
-                ...data.drinking.filter(m => m._id !== id),
+            data.hydration = [
+                ...data.hydration.filter(m => m._id !== id),
                 {
-                    ...data.drinking.find(m => m._id === id),
+                    ...data.hydration.find(m => m._id === id),
                     date: new Date(date),
                     amount,
                     updatedAt: new Date().valueOf()
@@ -238,10 +238,10 @@ export const handlers = [
             )
         }
     }),
-    rest.delete(`${url}/drinking/:id`, (req, res, ctx) => {
+    rest.delete(`${url}/hydration/:id`, (req, res, ctx) => {
         let { id } = req.params
         if(req.cookies["authToken"] === "testing@taylor.com") {
-            data.drinking = data.drinking.filter(d => d._id !== id)
+            data.hydration = data.hydration.filter(d => d._id !== id)
             return res(
                 ctx.json({
                     ok: true

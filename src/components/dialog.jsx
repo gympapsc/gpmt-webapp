@@ -1,9 +1,9 @@
 import React, {Fragment} from "react"
 import Link from "next/link"
 import PropTypes from "prop-types"
-import { useDrinking, useMessages, useMicturition, usePhotos, useStress } from "../hooks"
+import { useHydration, useMessages, useMicturition, usePhotos, useStress } from "../hooks"
 import { Menu, Transition } from "@headlessui/react"
-import { deleteDrinking, deleteMicturition } from "../actions"
+import { deleteHydration, deleteMicturition } from "../actions"
 
 const WEEKDAY = [
     "Sonntag",
@@ -270,8 +270,8 @@ MicturitionEntry.propTypes = {
     id: PropTypes.string
 }
 
-const DrinkingEntry = ({amount, id, type}) => (
-    <Link href={`/app/drinking/${id}`}>
+const HydrationEntry = ({amount, id, type}) => (
+    <Link href={`/app/hydration/${id}`}>
         <a href="#" className="text-md text-white bg-pink-200 w-48 md:52 rounded-xl py-2 px-3 self-center focus:ring-2 focus:outline-none focus:ring-pink-800 focus:ring-offset-1">
             <div className="flex flex-row justify-between">
                 <h6 className="text-xs font-semibold text-pink-900 text-opacity-80 high-contrast:text-opacity-100 tracking-wider uppercase">{type || "Trinken"}</h6>
@@ -298,7 +298,7 @@ const DrinkingEntry = ({amount, id, type}) => (
                                             rounded-sm
                                             ${ active ? "bg-blue-700 text-white" : "bg-white text-gray-900"}
                                             `}>
-                                            <Link href={`/app/drinking/${id}`}>
+                                            <Link href={`/app/hydration/${id}`}>
                                                 <a className={`
                                                     text-sm px-2 py-2 flex w-full items-center group
                                                 `}
@@ -315,7 +315,7 @@ const DrinkingEntry = ({amount, id, type}) => (
                                 <Menu.Item>
                                     {({active}) => (
                                         <button
-                                            onClick={e => deleteDrinking(id) + e.stopPropagation()} 
+                                            onClick={e => deleteHydration(id) + e.stopPropagation()} 
                                             className={`
                                                 ${ active ? "bg-red-600 text-white" : "bg-white text-gray-900"}
                                                 text-sm px-2 py-2 flex w-full items-center group rounded-sm
@@ -338,7 +338,7 @@ const DrinkingEntry = ({amount, id, type}) => (
     </Link>
 )
 
-DrinkingEntry.propTypes = {
+HydrationEntry.propTypes = {
     amount: PropTypes.number,
     id: PropTypes.string
 }
@@ -385,7 +385,7 @@ const DialogEntry = ({entry: { type, payload}}) => {
         case "MICTURITION":
             return <MicturitionEntry date={payload.date} id={payload._id} />
         case "DRINKING":
-            return <DrinkingEntry amount={payload.amount} id={payload._id} type={payload.type}/>
+            return <HydrationEntry amount={payload.amount} id={payload._id} type={payload.type}/>
         case "BOT_MESSAGE":
             return <BotMessage text={payload.text} />
         case "USER_MESSAGE":
@@ -423,7 +423,7 @@ const addDateLabels = entries => {
 const Dialog = ({startDate, children}) => {
     let micturitionEntries = useMicturition(startDate)
         .map(e => ({ payload: e, type: "MICTURITION"}))
-    let drinkingEntries = useDrinking(startDate)
+    let hydrationEntries = useHydration(startDate)
         .map(e => ({ payload: e, type: "DRINKING"}))
     let photos = usePhotos(startDate)
         .map(p => ({ payload: p, type: "PHOTO" }))
@@ -434,7 +434,7 @@ const Dialog = ({startDate, children}) => {
 
     let dialog = [
         ...micturitionEntries,
-        ...drinkingEntries,
+        ...hydrationEntries,
         ...stressEntries,
         ...messages,
         ...photos

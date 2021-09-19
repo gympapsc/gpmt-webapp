@@ -9,9 +9,9 @@ import Clock from "../visualisations/clock"
 import BarChart from "../visualisations/barChart"
 import LineChart from "../visualisations/lineChart"
 
-import { useDrinking, useMessages, useMicturition, useMicturitionPredictions, useStress } from "../hooks"
+import { useHydration, useMessages, useMicturition, useMicturitionPredictions, useStress } from "../hooks"
 import { signoutUser } from "../actions"
-import DrinkingChart from "../visualisations/drinkingChart"
+import HydrationChart from "../visualisations/hydrationChart"
 import MicturitionChart from "../visualisations/micturitionChart"
 import StressChart from "../visualisations/stressChart"
 import { shorten } from "../utils"
@@ -44,7 +44,7 @@ const Aside = ({ showMenu, setShowMenu }) => {
         .sort((a, b) => b.timestamp - a.timestamp)
 
     let micturition = useMicturition(startDate)
-    let drinking = useDrinking(startDate)
+    let hydration = useHydration(startDate)
     let prediction = useMicturitionPredictions(startDate)
     let stress = useStress(startDate)
 
@@ -137,7 +137,7 @@ const Aside = ({ showMenu, setShowMenu }) => {
                             </div>
                         </div>
                         <div className="w-full h-full mt-3 flex-grow">
-                            <DrinkingChart data={drinking || []} />
+                            <HydrationChart data={hydration || []} />
                         </div>
                     </a>
                 </Link>

@@ -5,19 +5,19 @@ import { useSelector, useDispatch } from "react-redux"
 import Aside from "../../../components/aside"
 import Secure from "../../../components/secure"
 import Shell from "../../../components/shell"
-import { deleteDrinking, getDrinking, updateDrinking } from "../../../actions"
+import { deleteHydration, getHydration, updateHydration } from "../../../actions"
 import DateTimeInput from "../../../components/datetimeInput"
-import { useDrinking } from "../../../hooks"
+import { useHydration } from "../../../hooks"
 import TextInput from "../../../components/textInput"
 
 
-const DrinkingEdit = () => {
+const HydrationEdit = () => {
     let router = useRouter()
     let slider = useRef(null)
     let {id} = router.query
 
     let dispatch = useDispatch()
-    let entry = useDrinking(new Date())
+    let entry = useHydration(new Date())
         .find(d => d._id === id)
         
     let [amount, setAmount] = useState(entry?.amount)
@@ -26,13 +26,13 @@ const DrinkingEdit = () => {
     
     let deleteEntry = e => {
         e.preventDefault()
-        dispatch(deleteDrinking(id))
+        dispatch(deleteHydration(id))
         router.push("/app")
     }
 
     let saveEntry = e => {
         e.preventDefault()
-        dispatch(updateDrinking({
+        dispatch(updateHydration({
             ...entry,
             type,
             amount,
@@ -101,10 +101,10 @@ const DrinkingEdit = () => {
     )
 }
 
-const SecureDrinkingEdit = () => (
+const SecureHydrationEdit = () => (
     <Secure>
-        <DrinkingEdit></DrinkingEdit>
+        <HydrationEdit></HydrationEdit>
     </Secure>
 )
 
-export default SecureDrinkingEdit
+export default SecureHydrationEdit
