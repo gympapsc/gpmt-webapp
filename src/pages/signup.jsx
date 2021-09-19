@@ -313,7 +313,6 @@ const Signup = () => {
                                             })
                                         }
                                         />
-                                    <span className="text-xs text-red-500">{errors.birthDay?.message}&nbsp;</span>
                                 </div>
                                 <div>
                                     <input
@@ -329,7 +328,6 @@ const Signup = () => {
                                             })
                                         }
                                         />
-                                    <span className="text-xs text-red-500">{errors.birthMonth?.message}&nbsp;</span>
                                 </div>
                                 <div>
                                     <input
@@ -342,8 +340,8 @@ const Signup = () => {
                                                 required: "Dein Geburtsjahr ist erfoderlich",
                                                 validate: {
                                                     minimumAge: value => {
-                                                        let year = new Date().getFullYear()
-                                                        return parseInt(value) < year || "Du muss mindestens ein Jahr alt sein"
+                                                        let year = new Date().getFullYear() - 17
+                                                        return parseInt(value) < year || "Du musst mindestens 18 Jahre alt sein"
                                                     },
                                                     maximumAge: value => {
                                                         let year = new Date().getFullYear()
@@ -353,11 +351,11 @@ const Signup = () => {
                                             })
                                         }
                                         />
-                                    <span className="text-xs text-red-500">{errors.birthYear?.message}&nbsp;</span>
                                 </div>
                             </div>
-                        </div>
+                            <span className="text-xs text-red-500">{errors.birthDay?.message || errors.birthMonth?.message || errors.birthYear?.message}&nbsp;</span>
                         <div className="col-span-full md:col-span-3">
+                        </div>
                             <label
                                 className="text-gray-600 text-sm md:text-md"  
                                 htmlFor="passwort">

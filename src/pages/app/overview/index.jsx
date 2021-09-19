@@ -137,21 +137,21 @@ const MicturitionOverview = () => {
                         <div className="space-y-4 py-6 md:py-8 bg-white w-full">
                             <div className="grid sm:grid-cols-3 px-3 sm:px-5 my-2 sm:my-4 max-w-screen-xl mx-auto space-y-3 sm:space-y-0" style={{maxWidth: "700"}}>
                                 <div className="sm:mr-auto">
-                                    <h6 className="uppercase text-xs md:text-sm font-semibold tracking-wide text-gray-600 sm:mb-2">Miktionsfrequenz</h6>
+                                    <h6 className="uppercase text-xs font-semibold tracking-wide text-gray-600 sm:mb-2">Miktionsfrequenz</h6>
                                     <h2 className="text-xl font-bold ">
                                         &#8960; {Math.round(user?.micturitionFrequency * 1000) / 1000}
                                         {" "}<span className="text-sm md:text-base text-gray-600 font-semibold">pro Tag</span>
                                     </h2>
                                 </div>
                                 <div className="sm:mx-auto">
-                                    <h6 className="uppercase text-xs md:text-sm font-semibold tracking-wide text-gray-600 sm:mb-2">Trinkmenge</h6>
+                                    <h6 className="uppercase text-xs font-semibold tracking-wide text-gray-600 sm:mb-2">Trinkmenge</h6>
                                     <h2 className="text-xl font-bold">
                                         &#8960; {Math.round(user?.avgDrinkingAmount * 1000) / 1000 || "--"} L 
                                         {" "}<span className="text-sm md:text-base text-gray-600 font-semibold"> pro Tag</span>
                                     </h2>
                                 </div>
                                 <div className="sm:ml-auto">
-                                    <h6 className="uppercase text-xs md:text-sm font-semibold tracking-wide text-gray-600 sm:mb-2">Miktionsfrequenz</h6>
+                                    <h6 className="uppercase text-xs font-semibold tracking-wide text-gray-600 sm:mb-2">Miktionsfrequenz</h6>
                                     <h2 className="text-xl font-bold ">
                                         &#8960; {Math.round(user?.micturitionFrequency * 1000) / 1000} 
                                         {" "}<span className="text-sm md:text-base text-gray-600 font-semibold">pro Tag</span>

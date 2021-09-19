@@ -34,6 +34,8 @@ const cumulativeData = (d, selector) => {
 const Aside = ({ showMenu, setShowMenu }) => {
     let formatTime = d3.timeFormat("%H:%M")
     let formatDaytime = d3.timeFormat("%A, %H:%M")
+    let formatDaytimeShort = d3.timeFormat("%a, %H:%M")
+
     let formatDay = d3.timeFormat("%A")
 
     let startDate = new Date()
@@ -84,38 +86,29 @@ const Aside = ({ showMenu, setShowMenu }) => {
                         <p className="text-gray-600 high-contrast:text-gray-800">{shorten(messages[0]?.text, 40) || "..."}</p>
                     </a>
                 </Link>
-                <Link href="/app/overview" id="micturition_widget">
-                    <a className={`
-                        col-span-1 h-32 text-white rounded-xl bg-gradient-to-l 
-                        ${Math.round(prediction.find(p => p.date.getHours() === currDate.getHours())?.prediction * 100) < 50 ? "from-green-500 to-green-600" : "from-red-400 to-red-500"} 
-                        flex flex-col p-3
-                    `}>
-                        <h3 className="text-sm font-semibold">Miktion</h3>
-                        <div className="mt-auto">
-                            <h5 className="text-xs font-semibold -mb-1 tracking-wide opacity-90 high-contrast:opacity-100">{formatTime(currDate)}</h5>
-                            <h4 className="text-2xl md:text-2xl font-bold">{
-                                prediction.length ?
-                                Math.round(prediction.find(p => p.date.getHours() === currDate.getHours())?.prediction * 100)
-                                : "--"
-                            }<span className="text-xl">%</span></h4>
-                        </div>
-                    </a>
-                </Link>
-                <Link href="/app/overview">
-                    <a className="col-span-1 h-32 rounded-xl bg-white flex flex-col p-3 border border-gray-200 high-contrast:border-gray-300">
-                        <h3 className="text-sm font-semibold">Nächste Miktion</h3>
-                        <div className="mt-auto">
-                            <h5 className="text-gray-600 text-xs font-semibold -mb-1 tracking-wide">{formatDay(cumulativeData(prediction, "prediction").find(p => p?.prediction > 1)?.date || new Date())}</h5>
-                            <h4 className="text-2xl md:text-2xl font-bold">
-                                {formatTime(cumulativeData(prediction, "prediction").find(p => p?.prediction > 1)?.date || new Date())}
-                            </h4>
-                        </div>
-                    </a>
-                </Link>
                 <div className="col-span-2">
                     <div className="p-3 h-96">
-                        <h3 className="text-sm md:text-md font-semibold">Heute</h3>
                         <Clock data={prediction}></Clock>
+                    </div>
+                </div>
+                <div id="micturition_widget" className="p-2">
+                    <h3 className="text-xs font-semibold uppercase text-gray-600">{formatDaytime(currDate)}</h3>
+                    <div className="mt-1">
+                        <h4 
+                            className={`text-lg md:text-xl font-bold tracking-wider ${Math.round(prediction.find(p => p.date.getHours() === currDate.getHours())?.prediction * 100) < 50 ? "text-green-700" : "text-red-600"} `}>{
+                            prediction.length ?
+                            Math.round(prediction.find(p => p.date.getHours() === currDate.getHours())?.prediction * 100)
+                            : "--"
+                        }
+                        <span className="text-base">%</span></h4>
+                    </div>
+                </div>
+                <div className="p-2">
+                    <h3 className="text-xs font-semibold uppercase text-gray-600">Nächste Miktion</h3>
+                    <div className="mt-1">
+                        <h4 className="text-lg md:text-xl font-bold">
+                            {formatDaytimeShort(cumulativeData(prediction, "prediction").find(p => p?.prediction > 1)?.date || new Date())}
+                        </h4>
                     </div>
                 </div>
                 <Link href="/app/overview">
