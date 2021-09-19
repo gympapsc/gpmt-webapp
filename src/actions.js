@@ -138,9 +138,9 @@ const processEntries = async (entries, dispatch, getState) => {
                 dispatch(addStress(new Date(entry.date), new Date(entry.timestamp).valueOf(), entry.level, entry._id))
                 break
             case "ADD_DRINKING":
-                dispatch(addDrinking(new Date(entry.date), new Date(entry.timestamp).valueOf(), entry.amount, entry._id))
-                e = getState().drinking
-                dispatch(setAvgDrinkingAmount(avgDrinkingAmount(e)))
+                dispatch(addHydration(new Date(entry.date), new Date(entry.timestamp).valueOf(), entry.amount, entry._id))
+                e = getState().hydration
+                dispatch(setAvgHydrationAmount(avgHydrationAmount(e)))
                 break
             case "ADD_NUTRITION":
                 dispatch(addNutrition(new Date(entry.date), new Date(entry.timestamp).valueOf(), entry.mass, entry.type, entry._id))
@@ -196,7 +196,7 @@ export const addStress = (date, timestamp, level, _id) => ({
     }
 })
 
-export const addDrinking = (date, timestamp, amount, _id) => ({
+export const addHydration = (date, timestamp, amount, _id) => ({
     type: "ADD_DRINKING",
     payload: {
         date,
@@ -241,7 +241,7 @@ export const setNutrition = entries => ({
     }
 })
 
-export const setDrinking = entries => ({
+export const setHydration = entries => ({
     type: "SET_DRINKING",
     payload: {
         entries
@@ -291,10 +291,10 @@ export const setSpeechToken = (token, region) => ({
     }
 })
 
-export const setAvgDrinkingAmount = (amount) => ({
+export const setAvgHydrationAmount = (amount) => ({
     type: "SET_AVG_DRINKING_AMOUNT",
     payload: {
-        avgDrinkingAmount: amount
+        avgHydrationAmount: amount
     }
 })
 
@@ -370,18 +370,18 @@ export const loadMicturitionPredictions = startDate => async (dispatch, getState
     }
 }
 
-export const loadDrinking = startDate => async (dispatch, getState, { api }) => {
-    if(!api._pending["drinking"]) {
-        api._pending["drinking"] = true
-        let { data: { entries }} = await api.getDrinking(startDate)
+export const loadHydration = startDate => async (dispatch, getState, { api }) => {
+    if(!api._pending["hydration"]) {
+        api._pending["hydration"] = true
+        let { data: { entries }} = await api.getHydration(startDate)
         entries = entries.map(e => ({
             ...e,
             date: new Date(e.date),
             timestamp: new Date(e.timestamp).valueOf()
         }))
-        dispatch(setDrinking(entries))
-        dispatch(setAvgDrinkingAmount(avgDrinkingAmount(entries)))
-        api._pending["drinking"] = false
+        dispatch(setHydration(entries))
+        dispatch(setAvgHydrationAmount(avgHydrationAmount(entries)))
+        api._pending["hydration"] = false
     }
 }
 
@@ -421,8 +421,8 @@ export const loadPhotos = (startDate) => async (dispatch, getState, { api }) => 
     Update Data
 */
 
-export const updateDrinking = d => async (dispatch, getState, { api }) => {
-    let {data: { ok }} = await api.updateDrinking(d)
+export const updateHydration = d => async (dispatch, getState, { api }) => {
+    let {data: { ok }} = await api.updateHydration(d)
 
     if(ok) {
         dispatch({
@@ -491,8 +491,8 @@ export const updateUser = u => async (dispatch, getState, { api }) => {
     Delete Data
 */
 
-export const deleteDrinking = (_id) => async (dispatch, getState, { api }) => {
-    await api.deleteDrinking(_id)
+export const deleteHydration = (_id) => async (dispatch, getState, { api }) => {
+    await api.deleteHydration(_id)
 
     dispatch({
         type: "DELETE_DRINKING",
@@ -551,7 +551,7 @@ export const deleteStress = (_id) =>  async (dispatch, getState, { api }) => {
     Utilities
 */
 
-const avgDrinkingAmount = (entries) => {
+const avgHydrationAmount = (entries) => {
     let now = d3.timeDay.ceil(new Date().valueOf())
     let endDate = d3.timeDay.floor(Math.min(...entries.map(e => e.date.valueOf())))
 

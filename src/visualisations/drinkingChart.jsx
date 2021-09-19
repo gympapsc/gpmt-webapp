@@ -1,7 +1,7 @@
 import React, {useRef, useEffect} from "react"
 import * as d3 from "d3"
 
-const DrinkingChart = ({data, tooltip, range}) => {
+const HydrationChart = ({data, tooltip, range}) => {
     let element = useRef(null)
 
     useEffect(() => {
@@ -160,4 +160,4 @@ const DrinkingChart = ({data, tooltip, range}) => {
     )
 }
 
-export default DrinkingChart
+export default HydrationChart

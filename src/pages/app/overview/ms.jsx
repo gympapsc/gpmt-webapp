@@ -7,16 +7,16 @@ import { SelectorIcon, CheckIcon } from "@heroicons/react/solid"
 
 import {
     deleteMicturition,
-    deleteDrinking,
+    deleteHydration,
     deleteStress
 } from "../../../actions"
 
 import Secure from "../../../components/secure"
 import Shell from "../../../components/shell"
 import LineChart from "../../../visualisations/lineChart"
-import { useDrinking, useMicturition, useUser, useMicturitionPredictions, usePhotos, useStress} from "../../../hooks"
+import { useHydration, useMicturition, useUser, useMicturitionPredictions, usePhotos, useStress} from "../../../hooks"
 import MicturitionChart from "../../../visualisations/micturitionChart"
-import DrinkingChart from "../../../visualisations/drinkingChart"
+import HydrationChart from "../../../visualisations/hydrationChart"
 
 
 const timeRanges = {
@@ -108,19 +108,19 @@ const MicturitionOverview = () => {
     
     let micturition = useMicturition(new Date())
         .map(m => ({type:"micturition", ...m}))
-    let drinking = useDrinking(new Date())
-        .map(d => ({type: "drinking", ...d}))
+    let hydration = useHydration(new Date())
+        .map(d => ({type: "hydration", ...d}))
     let stress = useStress(new Date())
         .map(s => ({type: "stress", ...s}))
     let photos = usePhotos(new Date())
-    let entries = [...micturition, ...drinking, ...stress]
+    let entries = [...micturition, ...hydration, ...stress]
         .sort((a, b) => b.timestamp - a.timestamp)
 
     const deleteEntry = (type, _id) => () => {
         if(type === "micturition") {
             dispatch(deleteMicturition(_id))
-        } else if(type === "drinking") {
-            dispatch(deleteDrinking(_id))
+        } else if(type === "hydration") {
+            dispatch(deleteHydration(_id))
         } else if(type === "stress") {
             dispatch(deleteStress(_id))
         }
@@ -173,7 +173,7 @@ const MicturitionOverview = () => {
                                         </div>
                                         <div
                                             className="w-full h-36 lg:h-48 row-span-1">
-                                            <DrinkingChart data={drinking} range={timeRange}/>
+                                            <HydrationChart data={hydration} range={timeRange}/>
                                         </div>
                                     </div>
                                 </div>

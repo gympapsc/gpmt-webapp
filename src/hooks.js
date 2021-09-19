@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { authenticateUser, loadDrinking, loadMessages, loadMicturition, loadPhotos, loadStress, loadMicturitionPredictions, setSpeechToken} from "./actions"
+import { authenticateUser, loadHydration, loadMessages, loadMicturition, loadPhotos, loadStress, loadMicturitionPredictions, setSpeechToken} from "./actions"
 import api from "./api/http"
 import * as speechsdk from "microsoft-cognitiveservices-speech-sdk"
 import { createSpeechConfig } from "./utils"
@@ -31,17 +31,17 @@ export function useMedication(startDate) {
     return medication || []
 }
 
-export function useDrinking(startDate) {
+export function useHydration(startDate) {
     let dispatch = useDispatch()
-    let drinking = useSelector(s => s.drinking)
+    let hydration = useSelector(s => s.hydration)
 
     useEffect(() => {
-        if(typeof window !== "undefined" && drinking === null) {
-            dispatch(loadDrinking(startDate))
+        if(typeof window !== "undefined" && hydration === null) {
+            dispatch(loadHydration(startDate))
         }
     })
 
-    return drinking || []
+    return hydration || []
 }
 
 export function useMessages(startDate) {
