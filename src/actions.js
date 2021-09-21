@@ -1,6 +1,5 @@
 import { redirect, tts, createSpeechConfig, delay } from "./utils"
 import * as d3 from "d3"
-import api from "./api/http"
 
 export const signupUser = ({
     firstname, 
@@ -128,22 +127,23 @@ const processEntries = async (entries, dispatch, getState) => {
     let state = getState()
     let e
     for(let entry of entries) {
+        let payload = entry.payload
         switch(entry.type) {
             case "ADD_MICTURITION":
-                dispatch(addMicturition(new Date(entry.date), new Date(entry.timestamp).valueOf(), entry._id))
+                dispatch(addMicturition(new Date(payload.date), new Date(payload.timestamp).valueOf(), payload._id))
                 e = getState().micturition
                 dispatch(setMicturitionFrequency(avgMicturitionFrequency(e)))
                 break
             case "ADD_STRESS":
-                dispatch(addStress(new Date(entry.date), new Date(entry.timestamp).valueOf(), entry.level, entry._id))
+                dispatch(addStress(new Date(payload.date), new Date(payload.timestamp).valueOf(), payload.level, payload._id))
                 break
-            case "ADD_DRINKING":
-                dispatch(addHydration(new Date(entry.date), new Date(entry.timestamp).valueOf(), entry.amount, entry._id))
+            case "ADD_HYDRATION":
+                dispatch(addHydration(new Date(payload.date), new Date(payload.timestamp).valueOf(), payload.amount, payload._id, payload.type))
                 e = getState().hydration
                 dispatch(setAvgHydrationAmount(avgHydrationAmount(e)))
                 break
             case "ADD_NUTRITION":
-                dispatch(addNutrition(new Date(entry.date), new Date(entry.timestamp).valueOf(), entry.mass, entry.type, entry._id))
+                dispatch(addNutrition(new Date(payload.date), new Date(payload.timestamp).valueOf(), payload.mass, payload.type, payload._id))
                 break
         }
     }
@@ -196,13 +196,14 @@ export const addStress = (date, timestamp, level, _id) => ({
     }
 })
 
-export const addHydration = (date, timestamp, amount, _id) => ({
-    type: "ADD_DRINKING",
+export const addHydration = (date, timestamp, amount, _id, type) => ({
+    type: "ADD_HYDRATION",
     payload: {
         date,
         timestamp,
         amount,
-        _id
+        _id,
+        type
     }
 })
 
@@ -242,7 +243,7 @@ export const setNutrition = entries => ({
 })
 
 export const setHydration = entries => ({
-    type: "SET_DRINKING",
+    type: "SET_HYDRATION",
     payload: {
         entries
     }
@@ -292,7 +293,7 @@ export const setSpeechToken = (token, region) => ({
 })
 
 export const setAvgHydrationAmount = (amount) => ({
-    type: "SET_AVG_DRINKING_AMOUNT",
+    type: "SET_AVG_HYDRATION_AMOUNT",
     payload: {
         avgHydrationAmount: amount
     }
@@ -426,7 +427,7 @@ export const updateHydration = d => async (dispatch, getState, { api }) => {
 
     if(ok) {
         dispatch({
-            type: "UPDATE_DRINKING",
+            type: "UPDATE_HYDRATION",
             payload: d
         })
     }
@@ -495,7 +496,7 @@ export const deleteHydration = (_id) => async (dispatch, getState, { api }) => {
     await api.deleteHydration(_id)
 
     dispatch({
-        type: "DELETE_DRINKING",
+        type: "DELETE_HYDRATION",
         payload: {
             _id
         }

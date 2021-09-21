@@ -63,7 +63,7 @@ describe("redux action reducer", () => {
             updatedAt: new Date().valueOf()
         }
         const action = {
-            type: "ADD_DRINKING",
+            type: "ADD_HYDRATION",
             payload: hydration            
         }
         const initialState = { 
@@ -221,7 +221,7 @@ describe("redux action reducer", () => {
             updatedAt: new Date().valueOf(),
         }]
         const action = {
-            type: "SET_DRINKING",
+            type: "SET_HYDRATION",
             payload: {
                 entries: hydration
             }
@@ -343,7 +343,7 @@ describe("redux action reducer", () => {
     it("should update hydration", () => {
         let now = new Date()
         const action = {
-            type: "UPDATE_DRINKING",
+            type: "UPDATE_HYDRATION",
             payload: {
                 _id: "0123456789",
                 amount: 200
@@ -420,7 +420,7 @@ describe("redux action reducer", () => {
 
     it("should delete hydration", () => {
         const action = {
-            type: "DELETE_DRINKING",
+            type: "DELETE_HYDRATION",
             payload: {
                 _id: "0123456789"
             }

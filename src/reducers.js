@@ -48,7 +48,7 @@ const reducer = (state=initialState, action) => {
                     action.payload
                 ]
             }
-        case "ADD_DRINKING":
+        case "ADD_HYDRATION":
                 return {
                     ...state,
                     hydration: [
@@ -87,7 +87,7 @@ const reducer = (state=initialState, action) => {
                 ...state,
                 micturitionPredictions: action.payload.predictions
             }
-        case "SET_DRINKING":
+        case "SET_HYDRATION":
             return {
                 ...state,
                 hydration: action.payload.entries
@@ -147,7 +147,7 @@ const reducer = (state=initialState, action) => {
                     }
                 ]
             }
-        case "UPDATE_DRINKING":
+        case "UPDATE_HYDRATION":
             return {
                 ...state,
                 hydration: [
@@ -191,7 +191,7 @@ const reducer = (state=initialState, action) => {
                     }
                 ]
             }
-        case "DELETE_DRINKING":
+        case "DELETE_HYDRATION":
             return {
                 ...state,
                 hydration: state.hydration.filter(d => d._id !== action.payload._id)
@@ -221,7 +221,7 @@ const reducer = (state=initialState, action) => {
                 ...state,
                 connected: action.payload.status
             }
-        case "SET_AVG_DRINKING_AMOUNT":
+        case "SET_AVG_HYDRATION_AMOUNT":
             return {
                 ...state,
                 user: {

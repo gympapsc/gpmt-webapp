@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { authenticateUser, loadHydration, loadMessages, loadMicturition, loadPhotos, loadStress, loadMicturitionPredictions, setSpeechToken} from "./actions"
+import { authenticateUser, loadHydration, loadNutrition, loadMessages, loadMicturition, loadPhotos, loadStress, loadMicturitionPredictions, setSpeechToken} from "./actions"
 import api from "./api/http"
 import * as speechsdk from "microsoft-cognitiveservices-speech-sdk"
 import { createSpeechConfig } from "./utils"

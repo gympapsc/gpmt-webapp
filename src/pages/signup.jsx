@@ -354,8 +354,8 @@ const Signup = () => {
                                 </div>
                             </div>
                             <span className="text-xs text-red-500">{errors.birthDay?.message || errors.birthMonth?.message || errors.birthYear?.message}&nbsp;</span>
-                        <div className="col-span-full md:col-span-3">
                         </div>
+                        <div className="col-span-full md:col-span-3">
                             <label
                                 className="text-gray-600 text-sm md:text-md"  
                                 htmlFor="passwort">
