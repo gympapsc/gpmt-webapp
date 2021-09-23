@@ -313,11 +313,7 @@ export const setMicturitionFrequency = (frequency) => ({
 export const loadMessages = (startDate) => async (dispatch, getState, { api }) => {
     if(!api._pending["messages"]) {
         api._pending["messages"] = true
-        let { data: { messages }} = await api.getMessages(startDate)
-        messages = messages.map(e => ({
-            ...e,
-            timestamp: new Date(e.timestamp).valueOf()
-        }))
+        let messages = await api.getMessages(startDate)
         dispatch(setMessages(messages))
 
         if(messages.length === 0) {
@@ -331,12 +327,7 @@ export const loadMessages = (startDate) => async (dispatch, getState, { api }) =
 export const loadNutrition = startDate => async (dispatch, getState, { api }) => {
     if(!api._pending["nutrition"]) {
         api._pending["nutrition"] = true
-        let { data: { entries }} = await api.getNutrition(startDate)
-        entries = entries.map(e => ({
-            ...e,
-            date: new Date(e.date),
-            timestamp: new Date(e.timestamp).valueOf()
-        }))
+        let entries = await api.getNutrition(startDate)
         dispatch(setNutrition(entries))
         api._pending["nutrition"] = false
     }
@@ -345,12 +336,7 @@ export const loadNutrition = startDate => async (dispatch, getState, { api }) =>
 export const loadMicturition = startDate => async (dispatch, getState, { api }) => {
     if(!api._pending["micturition"]) {
         api._pending["micturition"] = true
-        let { data: { entries }} = await api.getMicturition(startDate)
-        entries = entries.map(e => ({
-            ...e,
-            date: new Date(e.date),
-            timestamp: new Date(e.timestamp).valueOf()
-        }))
+        let entries = await api.getMicturition(startDate)
         dispatch(setMicturition(entries))
         dispatch(setMicturitionFrequency(avgMicturitionFrequency(entries)))
         api._pending["micturition"] = false
@@ -360,12 +346,7 @@ export const loadMicturition = startDate => async (dispatch, getState, { api }) 
 export const loadMicturitionPredictions = startDate => async (dispatch, getState, { api }) => {
     if(!api._pending["micturitionPrediction"]) {
         api._pending["micturitionPrediction"] = true
-        let { data: { forecast }} = await api.getMicturitionPrediction(startDate)
-        forecast = forecast.map(e => ({
-            ...e,
-            date: new Date(e.date),
-            timestamp: new Date(e.timestamp).valueOf()
-        }))
+        let forecast = await api.getMicturitionPrediction(startDate)
         api._pending["micturitionPrediction"] = false
         dispatch(setMicturitionPredictions(forecast))
     }
@@ -374,12 +355,7 @@ export const loadMicturitionPredictions = startDate => async (dispatch, getState
 export const loadHydration = startDate => async (dispatch, getState, { api }) => {
     if(!api._pending["hydration"]) {
         api._pending["hydration"] = true
-        let { data: { entries }} = await api.getHydration(startDate)
-        entries = entries.map(e => ({
-            ...e,
-            date: new Date(e.date),
-            timestamp: new Date(e.timestamp).valueOf()
-        }))
+        let entries = await api.getHydration(startDate)
         dispatch(setHydration(entries))
         dispatch(setAvgHydrationAmount(avgHydrationAmount(entries)))
         api._pending["hydration"] = false
@@ -389,13 +365,7 @@ export const loadHydration = startDate => async (dispatch, getState, { api }) =>
 export const loadStress = startDate => async (dispatch, getState, { api }) => {
     if(!api._pending["stress"]) {
         api._pending["stress"] = true
-        let { data: { entries }} = await api.getStress(startDate)
-        entries = entries.map(e => ({
-            ...e,
-            date: new Date(e.date),
-            // TODO Fix missing timestamp
-            timestamp: new Date(e.timestamp).valueOf()
-        }))
+        let entries = await api.getStress(startDate)
         dispatch(setStress(entries))
         api._pending["stress"] = false
     }

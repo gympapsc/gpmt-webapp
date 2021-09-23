@@ -21,12 +21,10 @@ const HydrationEdit = () => {
     let entry = useHydration(new Date())
         .find(d => d._id === id)
         
-    let [amount, setAmount] = useState(entry?.amount)
-    let [type, setType] = useState(entry?.type)
-    let [date, setDate] = useState(entry?.date)
+    let updateEntry = e => {
+        entry = e
+    }
 
-    console.log(entry)
-    
     let deleteEntry = e => {
         e.preventDefault()
         dispatch(deleteHydration(id))
@@ -36,13 +34,11 @@ const HydrationEdit = () => {
     let saveEntry = e => {
         e.preventDefault()
         dispatch(updateHydration({
-            ...entry,
-            type,
-            amount,
-            date
+            ...entry
         }))
         router.push("/app")
     }
+
 
     return (
         <>
@@ -65,10 +61,10 @@ const HydrationEdit = () => {
                                         <input
                                             type="number" 
                                             className="text-2xl font-semibold inline w-20 bg-transparent text-left"
-                                            value={amount * 1000}
+                                            value={entry?.amount * 1000}
                                             min="0"
                                             max="1000"
-                                            onChange={e => setAmount(e.target.value / 1000)}
+                                            onChange={e => updateEntry({amount: e.target.value / 1000})}
                                         />
                                         <span className="text-sm">ml</span>
                                     </div>
@@ -78,17 +74,17 @@ const HydrationEdit = () => {
                                         id="amount"
                                         min="0"
                                         max="1000"
-                                        value={amount * 1000}
+                                        value={entry?.amount * 1000}
                                         onChange={e => setAmount(e.target.value / 1000)}
                                         ref={slider}
                                         title="Trinkmenge"
                                         />
                                 </div>
                                 <div className="col-span-full">
-                                    <TextInput label="Trinken" value={entry?.type || ""} onChange={setType}/>
+                                    <TextInput label="Trinken" value={entry?.type} onChange={() => {}}/>
                                 </div>
                                 <div className="col-span-full">
-                                    <DateTimeInput label="Datum" value={entry?.date || new Date()} onChange={setDate} />
+                                    <DateTimeInput label="Datum" value={entry?.date} onChange={() => {}} />
                                 </div>
                             </div>
 

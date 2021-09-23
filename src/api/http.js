@@ -19,16 +19,50 @@ const api = {
     startConversation: () => client.post("/conversation/bonjour"),
     utterMessage: text => client.post("/conversation/utter", { text }),
 
-    getNutrition: () => client.get("/nutrition"),
-    getMessages: () => client.get("/conversation"),
-    getMicturition: () => client.get("/micturition"),
-    getMicturitionPrediction: () => client.get("/micturition/forecast"),
-    getHydration: () => client.get("/hydration"),
-    getStress: () => client.get("/stress"),
+    getNutrition: () => client.get("/nutrition")
+        .then(res => res.data.entries.map(e => ({
+            ...e,
+            date: new Date(e.date),
+            timestamp: new Date(e.timestamp).valueOf()
+        }))),
+    getMessages: () => client.get("/conversation")
+        .then(res => res.data.messages.map(e => ({
+            ...e,
+            timestamp: new Date(e.timestamp).valueOf()
+        }))),
+    getMicturition: () => client.get("/micturition")
+        .then(res => res.data.entries.map(e => ({
+            ...e,
+            date: new Date(e.date),
+            timestamp: new Date(e.timestamp).valueOf()
+        }))),
+    getMicturitionPrediction: () => client.get("/micturition/forecast")
+        .then(res => res.data.forecast.map(e => ({
+            ...e,
+            date: new Date(e.date),
+            timestamp: new Date(e.timestamp).valueOf()
+        }))),
+    getHydration: () => client.get("/hydration")
+        .then(res => res.data.entries.map(e => ({
+            ...e,
+            date: new Date(e.date),
+            timestamp: new Date(e.timestamp).valueOf()
+        }))),
+    getStress: () => client.get("/stress")
+        .then(res => res.data.entries.map(e => ({
+            ...e,
+            date: new Date(e.date),
+            timestamp: new Date(e.timestamp).valueOf()
+        }))),
     getPhotos: () => client.get("/photo"),
     getUserInfo: () => client.get("/user"),
     getSpeechToken: () => client.get("/speech/token"),
-    getMedication: () => client.get("/medication"),
+    getMedication: () => client.get("/medication")
+        .then(res => res.data.entries.map(e => ({
+            ...e,
+            date: new Date(e.date),
+            timestamp: new Date(e.timestamp).valueOf()
+        }))),
     
     updateMicturition: update => client.put(`/micturition/${update._id}`, update),
     updateHydration: update => client.put(`/hydration/${update._id}`, update),

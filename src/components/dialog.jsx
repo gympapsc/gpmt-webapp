@@ -152,7 +152,7 @@ const MicturitionEntry = ({date, _id, timestamp}) => (
         <a className="text-md text-white bg-indigo-200 w-48 md:w-52 rounded-xl py-2 px-3 self-center focus:ring-2 focus:outline-none focus:ring-indigo-800 focus:ring-offset-1">
             <div className="flex flex-row justify-between">
                 <h6 className="text-xs font-semibold text-indigo-900 text-opacity-80 high-contrast:text-opacity-100 tracking-wider uppercase">Miktion</h6>
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-gray-600">
                     {formatDaytimeShort(new Date(timestamp))}
                 </span>
             </div>
