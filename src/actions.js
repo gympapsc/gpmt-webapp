@@ -217,6 +217,17 @@ export const addPhoto = (timestamp, id, name, url) => ({
     }
 })
 
+export const addNutrition = (date, timestamp, mass, type, id) => ({
+    type: "ADD_NUTRITION",
+    payload: {
+        timestamp,
+        date,
+        mass,
+        type,
+        id
+    }
+})
+
 /*
     Set Data
 */

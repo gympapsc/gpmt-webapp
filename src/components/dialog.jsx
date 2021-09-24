@@ -271,7 +271,7 @@ const Dialog = ({startDate, children}) => {
         .map(e => ({ payload: e, type: "HYDRATION"}))
     let photos = usePhotos(startDate)
         .map(p => ({ payload: p, type: "PHOTO" }))
-    let nutriitonEntries = useNutrition(startDate)
+    let nutritonEntries = useNutrition(startDate)
         .map(e => ({ payload: e, type: "NUTRITION"}))
     let stressEntries = useStress(startDate)
         .map(s => ({ payload: s, type: "STRESS"}))
@@ -281,6 +281,7 @@ const Dialog = ({startDate, children}) => {
     let dialog = [
         ...micturitionEntries,
         ...hydrationEntries,
+        ...nutritonEntries,
         ...stressEntries,
         ...messages,
         ...photos
